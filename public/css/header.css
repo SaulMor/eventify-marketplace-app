@@ -1,4 +1,8 @@
 /* Global Styles */
+:root {
+    --header-height: 110px; /* Total height of the header */
+}
+
 body {
     display: flex;
     flex-direction: column;
