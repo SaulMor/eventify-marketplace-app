@@ -1,0 +1,373 @@
+/* public/styles/css/createListing.css */
+
+/* General Page Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.listing-page {
+    padding: 20px;
+    padding-top: calc(var(--header-height) + 20px); /* Dynamic padding based on header height */
+    width: 100%; /* Full width */
+    font-family: 'Lao Muang Khong', sans-serif;
+    background-color: #ffffff; /* Optional: Add a background color */
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Changed from space-between to flex-start */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* Space between title and link */
+}
+
+.page-header h1 {
+    font-size: 4rem;
+    font-weight: normal;
+    margin: 0; /* Remove top margin */
+}
+
+.upload-draft-link {
+    font-size: 1rem;
+    color: #E9C071;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.upload-draft-link:hover {
+    color: #D4A63C;
+}
+
+.header-divider,
+.section-divider {
+    height: 2px;
+    background-color: #000000;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 100%; 
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .page-header {
+        flex-direction: column; 
+        align-items: flex-start; 
+    }
+    
+    .upload-draft-link {
+        margin-top: 10px; 
+    }
+}
+
+/* Listing Details Section */
+.listing-details-section {
+    margin-bottom: 40px;
+}
+
+.listing-details-section h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+/* Two-Column Form Layout */
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px; 
+}
+
+.form-column {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    gap: 20px; 
+}
+
+/* Form Group Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f2f2f2; 
+    font-size: 1rem;
+}
+
+.form-group input::placeholder,
+.form-group select::placeholder,
+.form-group textarea::placeholder {
+    color: #999;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #E9C071; 
+    background-color: #fff; 
+}
+
+/* Helper Text Styles */
+.helper-text {
+    font-size: 0.9rem; 
+    color: #666; 
+    margin-top: 5px; 
+    line-height: 1.4; 
+    font-style: italic; 
+}
+
+.form-group input:focus + .helper-text,
+.form-group textarea:focus + .helper-text,
+.form-group select:focus + .helper-text {
+    color: #333; 
+}
+
+/* Horizontal Form Group Styles */
+.horizontal-group .input-helper-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px; 
+}
+
+.horizontal-group .helper-text {
+    flex: 1; 
+    text-align: left; 
+}
+
+.horizontal-group input,
+.horizontal-group select,
+.horizontal-group textarea {
+    flex: 0 0 50%; 
+    max-width: 300px; 
+}
+
+/* Optional: Adjust textarea height */
+.horizontal-group textarea {
+    height: 100px; 
+    resize: vertical;
+}
+
+/* Photo Upload Section */
+.photo-upload-section {
+    margin-bottom: 40px;
+}
+
+.photo-upload-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.photo-upload-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; 
+    margin-bottom: 10px;
+}
+
+.photo-upload-label {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #333;
+}
+
+.upload-button {
+    padding: 10px 20px;
+    background-color: #E9C071;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upload-button:hover {
+    background-color: #D4A63C;
+}
+
+/* Helper Text */
+.helper-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    font-style: italic;
+}
+
+/* Thumbnails Preview Section */
+.photo-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.photo-thumbnails .thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Dragover State for Photo Upload Section */
+.photo-upload-section.dragover {
+    background-color: #f0f8ff; 
+    border: 2px dashed #E9C071;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Buttons */
+.form-buttons {
+    display: flex;
+    justify-content: center; 
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%; 
+}
+
+button {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Submit Listing Button */
+.submit-btn {
+    background-color: #E9C071;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
+}
+
+.submit-btn:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); 
+    transform: translateY(-2px); 
+    opacity: 0.9; 
+}
+
+/* Save as Draft Button */
+.draft-btn {
+    background-color: #E9C071;
+    color: rgb(0, 0, 0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
+}
+
+.draft-btn:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); 
+    transform: translateY(-2px); 
+    opacity: 0.9; 
+}
+
+/* Error Message Styling */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .form-row {
+        gap: 20px; 
+    }
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column; 
+    }
+
+    .form-column {
+        gap: 15px; 
+    }
+
+    .helper-text {
+        font-size: 0.85rem; 
+    }
+
+    /* Photo Upload Section Adjustments */
+    .photo-upload-section label.upload-placeholder {
+        max-width: 100%;
+        padding: 30px;
+    }
+
+    .photo-preview img {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* Adjustments for Photo Upload Container on Smaller Screens */
+    .photo-upload-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .upload-button {
+        width: 100%; 
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .listing-page {
+        padding: 15px;
+        padding-top: calc(var(--header-height) + 10px); 
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem; 
+    }
+
+    .upload-draft-link {
+        font-size: 0.9rem;
+    }
+
+    section h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+        max-width: 300px; 
+    }
+
+    .photo-upload-section label.upload-placeholder {
+        padding: 20px;
+    }
+
+    .photo-upload-section label.upload-placeholder p {
+        font-size: 1rem;
+    }
+
+    .upload-button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .photo-thumbnails .thumbnail {
+        width: 70px;
+        height: 70px;
+    }
+}
