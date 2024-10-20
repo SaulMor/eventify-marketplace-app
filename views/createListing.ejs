@@ -1,0 +1,369 @@
+<!-- views/createListing.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create a New Listing - Eventify</title>
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/createListing.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+
+    <%- include('partials/header') %> <!-- Header partial -->
+
+    <main class="listing-page">
+      <!-- Top Header Section -->
+      <div class="page-header">
+        <h1>Create a New Listing</h1>
+        <a href="/listing/drafts" class="upload-draft-link"
+          >Or Upload Saved Draft</a
+        >
+      </div>
+      <div class="header-divider"></div>
+
+      <% if (typeof error !== 'undefined') { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+
+      <!-- Photo Upload Section -->
+      <section class="photo-upload-section">
+        <h2>Photo Upload</h2>
+
+        <!-- Label and Upload Button Container -->
+        <div class="photo-upload-container">
+          <label for="photos" class="photo-upload-label"
+            >Upload photos of listing</label
+          >
+          <button type="button" class="upload-button">Upload Photos</button>
+          <input
+            type="file"
+            id="photos"
+            name="photos"
+            multiple
+            accept="image/*"
+            style="display: none"
+            aria-describedby="photos-helper"
+          />
+        </div>
+
+        <!-- Helper Text -->
+        <p class="helper-text" id="photos-helper">
+          Upload clear images to showcase your listing effectively. Maximum of 5
+          photos.
+        </p>
+
+        <!-- Thumbnails Preview Section -->
+        <div class="photo-thumbnails">
+          
+        </div>
+      </section>
+
+      <!-- Listing Details Section -->
+      <section class="listing-details-section">
+        <h2>Listing Details</h2>
+        <div class="section-divider"></div>
+
+        <form
+          action="/listing/create"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-row">
+            <!-- Left Column -->
+            <div class="form-column">
+              <!-- Title Field -->
+              <div class="form-group horizontal-group">
+                <label for="title">Add Title of Listing</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="title-helper">
+                    Give your listing a clear, descriptive name (e.g., Rustic
+                    Wedding Lantern).
+                  </p>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="*Add title of listing"
+                    required
+                    aria-describedby="title-helper"
+                  />
+                </div>
+              </div>
+
+              <!-- Description Field -->
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  placeholder="*Provide a detailed description"
+                  required
+                  aria-describedby="description-helper"
+                ></textarea>
+                <p class="helper-text" id="description-helper">
+                    Provide detailed information about the item, including dimensions, material, and special features.
+                </p>
+              </div>
+
+              <!-- Category Field -->
+              <div class="form-group horizontal-group">
+                <label for="category">Category</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="category-helper">
+                    Choose the event type or category that best fits your item (e.g., Wedding, Birthday, Halloween).
+                  </p>
+                  <select
+                    id="category"
+                    name="category"
+                    aria-describedby="category-helper"
+                  >
+                    <option value="">Select Category</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="birthday">Birthday</option>
+                    <!-- Add more categories as needed -->
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+              <!-- Location Field -->
+              <div class="form-group horizontal-group">
+                <label for="location">Location</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="location-helper">
+                    Enter the location where the item is available for pickup or delivery.
+                  </p>
+                  <input
+                    type="text"
+                    id="location"
+                    name="location"
+                    placeholder="Enter Location"
+                    aria-describedby="location-helper"
+                  />
+                </div>
+              </div>
+
+              <!-- Condition Field -->
+              <div class="form-group horizontal-group">
+                <label for="condition">Condition</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="condition-helper">
+                    Select the current condition of your item.
+                  </p>
+                  <select
+                    id="condition"
+                    name="condition"
+                    aria-describedby="condition-helper"
+                  >
+                    <option value="">Select Condition</option>
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Price Field -->
+              <div class="form-group horizontal-group">
+                <label for="price">Price</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="price-helper">
+                    Enter the price in dollars (e.g., 25 for $25).
+                  </p>
+                  <input
+                    type="text"
+                    id="price"
+                    name="price"
+                    placeholder="*Set Price"
+                    required
+                    aria-describedby="price-helper"
+                  />
+                </div>
+              </div>
+
+              <!-- Handmade Field -->
+              <div class="form-group horizontal-group">
+                <label for="handmade">Handmade</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="handmade-helper">
+                    Indicate whether your listing is handmade.
+                  </p>
+                  <select
+                    id="handmade"
+                    name="handmade"
+                    aria-describedby="handmade-helper"
+                  >
+                    <option value="">Select Option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Details Section -->
+          <section class="additional-details-section">
+            <h2>Additional Details</h2>
+            <div class="section-divider"></div>
+
+            <div class="form-row">
+              <!-- Quantity Field -->
+              <div class="form-group horizontal-group">
+                <label for="quantity">Quantity</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="quantity-helper">
+                    Specify the number of items available.
+                  </p>
+                  <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    placeholder="Enter quantity"
+                    aria-describedby="quantity-helper"
+                  />
+                </div>
+              </div>
+
+              <!-- Delivery Options Field -->
+              <div class="form-group horizontal-group">
+                <label for="delivery">Delivery Options</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="delivery-helper">
+                    Choose your preferred delivery method.
+                  </p>
+                  <select
+                    id="delivery"
+                    name="delivery"
+                    aria-describedby="delivery-helper"
+                  >
+                    <option value="">Select Option</option>
+                    <option value="pickup">Pickup</option>
+                    <option value="delivery">Delivery</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Color Field -->
+              <div class="form-group horizontal-group">
+                <label for="color">Color</label>
+                <div class="input-helper-wrapper">
+                  <p class="helper-text" id="color-helper">
+                    Specify the color options available for your listing.
+                  </p>
+                  <input
+                    type="text"
+                    id="color"
+                    name="color"
+                    placeholder="Select Color"
+                    aria-describedby="color-helper"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Buttons -->
+          <div class="form-buttons">
+            <button type="submit" class="submit-btn">Submit Listing</button>
+            <button
+              type="button"
+              class="draft-btn"
+              onclick="alert('Save as Draft feature is coming soon!')"
+            >
+              Save as Draft (Coming Soon)
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <%- include('partials/footer') %>     <!-- Footer partial -->
+
+    <!-- JavaScript for interactivity, thumbnail clicks and file uploads -->
+    <script>
+      // Handle the "Upload Photos" button click
+      const uploadButton = document.querySelector(".upload-button");
+      const photoInput = document.getElementById("photos");
+      const photoThumbnails = document.querySelector(".photo-thumbnails");
+      const maxPhotos = 5; // Maximum number of photos to preview
+
+      uploadButton.addEventListener("click", () => {
+        photoInput.click();
+      });
+
+      photoInput.addEventListener("change", () => {
+        const files = Array.from(photoInput.files);
+        // Limit the number of files to maxPhotos
+        const filesToUpload = files.slice(0, maxPhotos);
+        photoThumbnails.innerHTML = ""; // Clear existing thumbnails
+
+        filesToUpload.forEach((file) => {
+          if (!file.type.startsWith("image/")) return; // Skip non-image files
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.alt = "Photo Preview";
+            img.classList.add("thumbnail");
+            photoThumbnails.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      // Drag and Drop Functionality
+      const photoUploadSection = document.querySelector(
+        ".photo-upload-section"
+      );
+
+      photoUploadSection.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        photoUploadSection.classList.add("dragover");
+      });
+
+      photoUploadSection.addEventListener("dragleave", (e) => {
+        e.preventDefault();
+        photoUploadSection.classList.remove("dragover");
+      });
+
+      photoUploadSection.addEventListener("drop", (e) => {
+        e.preventDefault();
+        photoUploadSection.classList.remove("dragover");
+        const files = Array.from(e.dataTransfer.files);
+        // Limit the number of files to maxPhotos
+        const filesToUpload = files.slice(0, maxPhotos);
+        photoThumbnails.innerHTML = ""; // Clear existing thumbnails
+
+        filesToUpload.forEach((file) => {
+          if (!file.type.startsWith("image/")) return; // Skip non-image files
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.alt = "Photo Preview";
+            img.classList.add("thumbnail");
+            photoThumbnails.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+    </script>
+  </body>
+</html>
