@@ -1,0 +1,218 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lao Muang Khong', Arial, sans-serif;
+    background-color: #f7f7f7;
+}
+
+.cart-container {
+    width: 85%;
+    margin: 50px auto;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.cart-icon {
+    font-size: 1.2rem;
+    margin-left: 5px;
+}
+
+.cart {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Item Section Styling */
+.item-section {
+    width: 65%;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.item-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.username {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.item-content {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.item-info {
+    display: flex;
+    align-items: flex-start;
+}
+
+.item-image {
+    margin-right: 20px;
+}
+
+.item-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.stock-info {
+    color: red;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.item-title {
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.save-for-later,
+.remove-item {
+    background: none;
+    border: none;
+    color: #0073e6;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-right: 15px;
+}
+
+.save-for-later:hover,
+.remove-item:hover {
+    color: #005bb5;
+}
+
+.shipping-info {
+    font-size: 0.9rem;
+}
+
+.shipping-info .free-shipping {
+    color: green;
+    font-weight: bold;
+}
+
+.item-footer {
+    margin-top: 10px;
+}
+
+.contact-seller {
+    text-decoration: underline;
+    color: #0073e6;
+    font-size: 0.9rem;
+}
+
+.contact-seller:hover {
+    color: #005bb5;
+}
+
+/* Payment Section Styling */
+.payment-section {
+    width: 30%;
+    padding: 10px;
+}
+
+.payment-section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.payment-methods {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.payment-methods label {
+    display: flex;
+    align-items: center;
+}
+
+.payment-logo {
+    width: 50px;
+    height: auto;
+}
+
+.price-details {
+    margin-bottom: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    margin: 5px 0;
+}
+
+.price {
+    font-weight: bold;
+}
+
+.total-price {
+    color: #e67e00;
+    font-size: 1.4rem;
+}
+
+.buy-now {
+    background-color: #e67e00;
+    color: white;
+    padding: 12px 20px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.buy-now:hover {
+    background-color: #d16000;
+}

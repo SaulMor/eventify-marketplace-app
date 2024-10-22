@@ -9,7 +9,9 @@ body {
     min-height: 100vh;
     height: 100%;
     margin: 0;
+    padding-top: var(--header-height); /* Add padding equal to the header height */
 }
+
 
 .eventify-header {
     position: fixed;
@@ -326,3 +328,5 @@ body {
         font-size: 16px; /* Adjust font size */
     }
 }
+
+

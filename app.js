@@ -104,6 +104,14 @@ app.get('/contact', (req, res) => {
     res.render('contact'); // Ensure this matches the filename in your views directory
 });
 
+app.get('/cart', (req, res) => {
+    res.render('cart'); // Make sure this matches the EJS file in 'views' folder
+});
+
+app.get('/createListing', (req, res) => {
+    res.render('createListing'); // Make sure this matches the EJS file in 'views' folder
+});
+
 // Start your server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
