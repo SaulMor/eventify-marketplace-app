@@ -1,0 +1,175 @@
+/* ============================= */
+/*          Universal Styles     */
+/* ============================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lao Muang Khong', Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ============================= */
+/*         Main Container        */
+/* ============================= */
+.container {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    width: 90%;
+    margin: 20px auto;
+    flex-grow: 1;
+    min-height: 700px; /* Set a minimum height to make the box taller */
+    padding: 20px; 
+}
+
+/* ============================= */
+/*          Sidebar Styles       */
+/* ============================= */
+.sidebar {
+    background-color: #e0e0e0;
+    width: 250px;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+.sidebar h2 {
+    font-size: 20px; /* Increased font size for better readability */
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 15px 0; /* Increased padding for better spacing */
+    font-size: 16px; /* Increased font size */
+    color: #333;
+    cursor: pointer; /* Indicate that it's clickable */
+    transition: background-color 0.2s; /* Smooth transition for hover effect */
+}
+
+.sidebar ul li:hover {
+    background-color: #d0d0d0; /* Highlight on hover */
+}
+
+.sidebar ul li.active {
+    background-color: #aaa;
+    font-weight: bold;
+}
+
+/* ============================= */
+/*      Order Details Section    */
+/* ============================= */
+.order-details {
+    padding: 20px;
+    flex-grow: 1;
+}
+
+/* ============================= */
+/*        Scrollable Section      */
+/* ============================= */
+.scrollable-section {
+    max-height: 500px; /* Set a max height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding-right: 10px; /* Space for scrollbar */
+}
+
+/* ============================= */
+/*           Breadcrumb          */
+/* ============================= */
+.breadcrumb {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 20px;
+}
+
+/* ============================= */
+/*          Order Card          */
+/* ============================= */
+.order-card {
+    display: flex;
+    justify-content: space-between;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 20px; 
+    border-radius: 6px;
+    margin-bottom: 20px;
+    min-height: 200px; 
+    align-items: center;
+}
+
+/* ============================= */
+/*       Order Info Section      */
+/* ============================= */
+.order-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-right: 20px; 
+}
+
+.order-img {
+    border-radius: 6px;
+    width: 120px; 
+    height: 120px; 
+    object-fit: cover;
+    margin-right: 15px; 
+}
+
+.order-text h3 {
+    font-size: 20px; 
+    margin-bottom: 10px; 
+}
+
+.order-text p {
+    font-size: 16px; 
+    color: #555;
+    margin-bottom: 5px;
+}
+
+/* ============================= */
+/*        Buttons Styling        */
+/* ============================= */
+.track-btn, .rate-btn {
+    background-color: #caa853;
+    color: #fff;
+    border: none;
+    padding: 12px 20px; 
+    border-radius: 4px;
+    font-size: 16px; 
+    cursor: not-allowed;
+    margin-right: 10px; 
+}
+
+.track-btn {
+    margin-bottom: 10px; 
+}
+
+/* ============================= */
+/*      Order Meta Section       */
+/* ============================= */
+.order-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-meta p {
+    font-size: 16px; 
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.free {
+    color: green;
+    font-weight: bold;
+}

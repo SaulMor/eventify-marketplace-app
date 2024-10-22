@@ -1,3 +1,6 @@
+/* ============================= */
+/*          Universal Styles     */
+/* ============================= */
 * {
     margin: 0;
     padding: 0;
@@ -6,213 +9,238 @@
 
 body {
     font-family: 'Lao Muang Khong', Arial, sans-serif;
-    background-color: #f7f7f7;
+    background-color: #f7f7f7; /* Light background color for the body */
 }
 
+/* ============================= */
+/*        Cart Container         */
+/* ============================= */
 .cart-container {
-    width: 85%;
-    margin: 50px auto;
+    width: 85%; /* Width of the cart container */
+    margin: 50px auto; /* Center the cart container with margin */
 }
 
 h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    font-weight: 600;
-    color: #333;
+    font-size: 2rem; /* Font size for the main heading */
+    margin-bottom: 20px; /* Space below the heading */
+    font-weight: 600; /* Font weight for boldness */
+    color: #333; /* Dark text color */
 }
 
 .cart-icon {
-    font-size: 1.2rem;
-    margin-left: 5px;
+    font-size: 1.2rem; /* Font size for the cart icon */
+    margin-left: 5px; /* Space between heading and icon */
 }
 
+/* ============================= */
+/*         Cart Styling          */
+/* ============================= */
 .cart {
-    display: flex;
-    justify-content: space-between;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex; /* Flexbox layout for the cart */
+    justify-content: space-between; /* Space between item and payment sections */
+    background-color: #fff; /* White background for the cart */
+    padding: 20px; /* Padding inside the cart */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
 }
 
-/* Item Section Styling */
+/* ============================= */
+/*        Item Section Styling    */
+/* ============================= */
 .item-section {
-    width: 65%;
-    padding: 10px;
-    border-right: 1px solid #ddd;
+    width: 65%; /* Width for the item section */
+    padding: 10px; /* Padding inside item section */
+    border-right: 1px solid #ddd; /* Right border for separation */
 }
 
 .item-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+    display: flex; /* Flex layout for the header */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 15px; /* Space below the header */
 }
 
 .profile-image {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
+    width: 50px; /* Width of the profile image */
+    height: 50px; /* Height of the profile image */
+    border-radius: 50%; /* Circular image */
+    margin-right: 10px; /* Space between image and username */
 }
 
 .username {
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.2rem; /* Font size for username */
+    font-weight: bold; /* Bold text for username */
 }
 
+/* ============================= */
+/*        Item Content Styling    */
+/* ============================= */
 .item-content {
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
+    margin-bottom: 20px; /* Space below item content */
+    display: flex; /* Flex layout for item content */
+    justify-content: space-between; /* Space between info and actions */
 }
 
 .item-info {
-    display: flex;
-    align-items: flex-start;
+    display: flex; /* Flex layout for item info */
+    align-items: flex-start; /* Align items at the start */
 }
 
 .item-image {
-    margin-right: 20px;
+    margin-right: 20px; /* Space between image and details */
 }
 
 .item-image img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    width: 100px; /* Width of the item image */
+    height: 100px; /* Height of the item image */
+    object-fit: cover; /* Cover the area without distortion */
+    border: 1px solid #ddd; /* Border around the image */
+    border-radius: 5px; /* Rounded corners */
 }
 
 .item-details {
-    display: flex;
-    flex-direction: column;
+    display: flex; /* Flex layout for details */
+    flex-direction: column; /* Stack details vertically */
 }
 
 .stock-info {
-    color: red;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
+    color: red; /* Color for stock information */
+    font-weight: bold; /* Bold text */
+    display: block; /* Block display */
+    margin-bottom: 5px; /* Space below stock info */
 }
 
 .item-title {
-    font-size: 1.4rem;
-    margin-bottom: 5px;
+    font-size: 1.4rem; /* Font size for item title */
+    margin-bottom: 5px; /* Space below item title */
 }
 
 .item-price {
-    font-size: 1.4rem;
-    font-weight: bold;
-    color: #333;
+    font-size: 1.4rem; /* Font size for item price */
+    font-weight: bold; /* Bold text for price */
+    color: #333; /* Dark color for price */
 }
 
+/* ============================= */
+/*        Item Actions Styling    */
+/* ============================= */
 .item-actions {
-    display: flex;
-    align-items: center;
-    margin-top: 15px;
+    display: flex; /* Flex layout for actions */
+    align-items: center; /* Center items vertically */
+    margin-top: 15px; /* Space above actions */
 }
 
 .save-for-later,
 .remove-item {
-    background: none;
-    border: none;
-    color: #0073e6;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-decoration: underline;
-    margin-right: 15px;
+    background: none; /* No background */
+    border: none; /* No border */
+    color: #0073e6; /* Link color */
+    font-size: 0.9rem; /* Font size for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    text-decoration: underline; /* Underline text */
+    margin-right: 15px; /* Space between buttons */
 }
 
 .save-for-later:hover,
 .remove-item:hover {
-    color: #005bb5;
+    color: #005bb5; /* Darker color on hover */
 }
 
 .shipping-info {
-    font-size: 0.9rem;
+    font-size: 0.9rem; /* Font size for shipping info */
 }
 
 .shipping-info .free-shipping {
-    color: green;
-    font-weight: bold;
+    color: green; /* Green color for free shipping */
+    font-weight: bold; /* Bold text */
 }
 
 .item-footer {
-    margin-top: 10px;
+    margin-top: 10px; /* Space above footer */
 }
 
 .contact-seller {
-    text-decoration: underline;
-    color: #0073e6;
-    font-size: 0.9rem;
+    text-decoration: underline; /* Underline text */
+    color: #0073e6; /* Link color */
+    font-size: 0.9rem; /* Font size for contact link */
 }
 
 .contact-seller:hover {
-    color: #005bb5;
+    color: #005bb5; /* Darker color on hover */
 }
 
-/* Payment Section Styling */
+/* ============================= */
+/*        Payment Section        */
+/* ============================= */
 .payment-section {
-    width: 30%;
-    padding: 10px;
+    width: 30%; /* Width for the payment section */
+    padding: 10px; /* Padding inside payment section */
 }
 
 .payment-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-    color: #333;
+    font-size: 1.5rem; /* Font size for payment section heading */
+    margin-bottom: 15px; /* Space below heading */
+    font-weight: 600; /* Bold heading */
+    color: #333; /* Dark text color */
 }
 
+/* ============================= */
+/*        Payment Methods        */
+/* ============================= */
 .payment-methods {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    display: flex; /* Flex layout for payment methods */
+    justify-content: space-between; /* Space between logos */
+    margin-bottom: 20px; /* Space below payment methods */
 }
 
 .payment-methods label {
-    display: flex;
-    align-items: center;
+    display: flex; /* Flex layout for label */
+    align-items: center; /* Center items vertically */
 }
 
 .payment-logo {
-    width: 50px;
-    height: auto;
+    width: 50px; /* Width for payment logo */
+    height: auto; /* Automatic height */
 }
 
+/* ============================= */
+/*        Price Details         */
+/* ============================= */
 .price-details {
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Space below price details */
 }
 
 .price-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.1rem;
-    margin: 5px 0;
+    display: flex; /* Flex layout for price rows */
+    justify-content: space-between; /* Space between label and price */
+    font-size: 1.1rem; /* Font size for price rows */
+    margin: 5px 0; /* Vertical spacing for rows */
 }
 
 .price {
-    font-weight: bold;
+    font-weight: bold; /* Bold text for prices */
 }
 
 .total-price {
-    color: #e67e00;
-    font-size: 1.4rem;
+    color: #e67e00; /* Color for total price */
+    font-size: 1.4rem; /* Font size for total price */
 }
 
+/* ============================= */
+/*          Buy Now Button       */
+/* ============================= */
 .buy-now {
-    background-color: #e67e00;
-    color: white;
-    padding: 12px 20px;
-    width: 100%;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s;
+    background-color: #e67e00; /* Button background color */
+    color: white; /* Text color */
+    padding: 12px 20px; /* Padding inside button */
+    width: 100%; /* Full width */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1.1rem; /* Font size for button text */
+    cursor: pointer; /* Pointer cursor on hover */
+    text-align: center; /* Center text */
+    transition: background-color 0.3s; /* Smooth transition on hover */
 }
 
 .buy-now:hover {
-    background-color: #d16000;
+    background-color: #d16000; /* Darker background on hover */
 }
