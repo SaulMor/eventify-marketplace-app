@@ -2,10 +2,11 @@
 
 const express = require('express');
 const router = express.Router();
+const Listing = require('./models/Listing'); 
 
 // Placeholder for database operations
 // Replace with actual database integration 
-const listings = []; // This should be replaced with database logic
+// const listings = []; // This should be replaced with database logic (Solved)
 
 // GET Route: Render the Create Listing Form
 router.get('/create', (req, res) => {
@@ -21,7 +22,7 @@ router.post('/create', (req, res) => {
         return res.status(400).render('createListing', { error: 'Please fill in all required fields.' });
     }
 
-    // Create a new listing object
+    // Create a new listing object 
     const newListing = {
         id: listings.length + 1, // Replace with a proper unique ID 
         title,
@@ -34,7 +35,6 @@ router.post('/create', (req, res) => {
         delivery,
         color,
         photos: req.files ? req.files.photos : [], // Handle file uploads if implemented
-        createdAt: new Date()
     };
 
     // Save the listing to database

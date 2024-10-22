@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <!-- Including header partials-->
+    <%- include('partials/header') %>
+    <main class="profile-section">
+        <div class="profile">
+            <div class="profile-info">
+                <div class="profile-pic"></div>
+                <div class="user-details">
+                    <h2><%= user.name %></h2> 
+                    <div class="rating">★★★★★</div>
+                </div>
+                <button class="settings-btn">Settings</button>
+            </div>
+            <div class="categories">
+                <h3>Categories</h3>
+                <ul>
+                    <li>Holidays</li>
+                    <li>Personal & Family</li>
+                    <li>Color</li>
+                </ul>
+            </div>
+        </div>
+        <div class="listing-sec">
+            <div class="listings">
+                <div class="listing-cards">
+                    <img src="/media/images/wedding.png" alt="Wedding Listing">
+                    <div class="listing-info"> 
+                        <h4>Listing 1</h4>
+                        <p>$14 | Brand: None</p>
+                        <div class="ratings">*****</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main> 
+<%- include('partials/footer') %> <!-- Include the footer partial -->
+    
+</body>
+</html>

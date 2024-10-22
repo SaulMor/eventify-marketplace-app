@@ -1,0 +1,130 @@
+/* General body styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Righteous', sans-serif;
+    background-color: #E9C071; 
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; 
+    overflow: hidden;
+}
+
+header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.brand-logo {
+    width: 150px; 
+    height: 75%;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    color: #000;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Input fields */
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 2rem;
+    border: 2px solid #000;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Righteous', sans-serif;
+}
+
+input::placeholder {
+    color: #888;
+}
+
+/* Button styles */
+.login-btn {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 0.6rem 2rem; 
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Righteous', sans-serif;
+    font-size: 1rem;
+    margin-right: 10px;
+    float: left;
+}
+
+.login-btn:hover {
+    background-color: #357ABD;
+}
+
+/* Links and text */
+.forgot-password {
+    float: right;
+    font-size: 0.9rem;
+    font-weight: normal;
+    text-decoration: none;
+    color: #000;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.signup-link {
+    font-size: 0.9rem;
+    font-weight: normal;
+    color: hsl(0, 0%, 100%);
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+/* Form container styling */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: transparent;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Background circle design */
+body::before, body::after {
+    content: "";
+    position: absolute;
+    background: linear-gradient(0deg, rgba(12,12,12,0.25) 0%, rgba(255,255,255,0.25) 100%);
+    border-radius: 50%;
+}
+
+body::before {
+    width: 600px;
+    height: 600px;
+    top: 10%;
+    right: 5%;  
+    transform: translate(50%, -50%);
+    z-index: -1;
+}
+
+body::after {
+    width: 400px;
+    height: 400px;
+    bottom: 10%;
+    left: 5%; 
+    transform: translate(-50%, 50%);
+    z-index: -1;
+}

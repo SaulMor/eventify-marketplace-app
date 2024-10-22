@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - Eventify</title>
+    <link rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+    <header>
+        <img src="/media/images/brandlogo.png" alt="eventify brand logo" class="brand-logo">
+    </header>
+    
+    <main>
+        <div class="signup-container">
+            <h1 class="signup-title">Create an Account</h1>
+            <form action="/signup" method="POST">
+                <input type="text" id="name" name="name" required placeholder="Full Name">
+                <input type="email" id="email" name="email" required placeholder="Email">
+                <input type="password" id="password" name="password" required placeholder="Password">
+                <div class="form-options">
+                    <button type="submit" class="signup-btn">Sign Up</button>
+                </div>
+            </form>
+            <p>Already have an account? <a href="/auth/login" class="login-link">Login here</a></p>
+        </div>
+    </main>
+</body>
+</html>

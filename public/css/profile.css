@@ -1,0 +1,106 @@
+/* General Styles for Profile Page */
+.profile-section {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+/* Profile Info Section */
+.profile-info {
+    position: relative; /* Added to allow positioning of settings button */
+    width: 250px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-details {
+    margin-top: 10px;
+}
+
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* Settings Button Positioned at Top Right */
+.settings-btn {
+    position: absolute;
+    top: auto;  /* Adjusted to position below the header */
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Categories Section */
+.categories {
+    margin-top: auto;
+    margin-bottom: 70px;
+}
+
+.categories h3 {
+    font-weight: bold;
+}
+
+.categories ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.categories li {
+    margin: 5px 0;
+    color: #666;
+}
+
+/* Listing Section */
+.listing-sec {
+    margin-top: 20px; /* Added margin above the listings */
+    flex: 1;          /* Take the remaining space */
+    display: flex;
+    justify-content: flex-end; /* Align listing to the right */
+}
+
+.listings {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-end; /* Align listings to the right */
+}
+
+.listing-cards {
+    margin-top: auto; 
+    margin-bottom: 70px;
+    width: 200px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.listing-cards img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.listing-info {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.listing-info h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.listing-info p {
+    font-size: 14px;
+    color: #888;
+}
