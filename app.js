@@ -4,10 +4,11 @@ const mongoose = require('mongoose');
 const session = require('express-session'); 
 const bcrypt = require('bcrypt'); 
 const User = require('./models/User'); 
+const Listing = require('./models/Listing');
 const { error } = require('console');
 const userRoute = require('./routes/user');
 const authRoute = require('./routes/auth');
-const listingRoute = require('./routes/listing');
+const listingRoute = require('./routes/listing'); 
 
 const app = express();
 // MongoDB Connecion 
@@ -51,9 +52,9 @@ app.get('/signup', async (req, res) => {
 //     res.render('profile'); // Render profile.ejs
 // });  
 // using userRoute, authRoutes, and lsiting Routes
-app.use(userRoute);
-app.use(authRoute);
-app.use(listingRoute);
+app.use('/user', userRoute);
+app.use('/auth', authRoute);
+app.use('/listing', listingRoute);
 
 app.get('/contact', (req, res) => {
     res.render('contact'); // Ensure this matches the filename in your views directory

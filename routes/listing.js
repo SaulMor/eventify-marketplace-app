@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing'); 
 const User = require('../models/User');
+const multer = require('multer');
+const upload = multer();
 
 
 // Placeholder for database operations
@@ -9,13 +11,15 @@ const User = require('../models/User');
 // const listings = []; // This should be replaced with database logic (Solved)
 
 // GET Route: Render the Create Listing Form
-router.get('/create', (req, res) => {
+router.get('/create',  (req, res) => {
     res.render('createListing'); 
 });
 
 // POST Route: Handle Form Submission
-router.post('/create', async (req, res) => {
-    try{ const { title, location, description, condition, category, price, quantity, delivery, color } = req.body;
+router.post('/create', upload.none(), async (req, res) => { 
+    console.log(req.body); // checking for erros i'm facing
+    try { 
+        const { title, price, description, condition, category, location, quantity, delivery, color } = req.body;
 
     // Basic validation (extend as needed)
     if (!title || !description || !price) {
@@ -25,14 +29,14 @@ router.post('/create', async (req, res) => {
     // Create a new listing object 
     const newListing =  new Listing({
         title,
-        location,
+        location: location || '',
         description,
-        condition,
-        category,
+        condition: condition || '',
+        category: category || '',
         price,
-        quantity,
-        delivery,
-        color,
+        quantity: quantity || 1, // default quantity to 1 if not provided by user
+        delivery: delivery || 'pick up',
+        color: color || '',
         photos: req.files ? req.files.photos : [], // Handle file uploads if implemented
         userId: req.session.userId // assigning listing to associated user
     });
@@ -40,8 +44,8 @@ router.post('/create', async (req, res) => {
     // Save the listing to database
     await newListing.save();
 
-    // Redirect to the listing detail page or another appropriate page (profile)
-    res.redirect(`/user/profile`);
+    // Redirect to the listing detail page or another appropriate page (Home page)
+    res.redirect('/');
 } catch (err) { 
     console.log(err); 
     res.status(500).send("Create Listing Error")
