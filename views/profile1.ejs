@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/profile1.css">
+</head>
+<body>
+
+    <!-- Including header partial -->
+    <%- include('partials/header') %> 
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px;"> <!-- Add padding to account for fixed header height -->
+        <!-- Banner Image -->
+        <div class="banner">
+            <img src="/public/media/images/user.png" alt="Banner Image">
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-info">
+            <div class="profile-image">
+                <i class="fa-solid fa-user-circle"></i>
+            </div>
+            <div class="profile-details">
+                <!-- Stars above username -->
+                <div class="profile-rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star-half"></i>
+                </div>
+                <h2><%= user.username || 'Username Is Something' %></h2> <!-- Dynamically display username -->
+            </div>
+            <!-- Settings Icon -->
+            <div class="settings">
+                <i class="fa fa-cog"></i>
+            </div>
+        </div>
+
+        <!-- Search and Sort Bar -->
+        <div class="search-sort">
+            <input type="text" class="search-input" placeholder="Search...">
+            <div class="sort-by">
+                <label for="sort">Sort by: </label>
+                <select id="sort">
+                    <option value="relevance">Relevance</option>
+                    <option value="price">Price</option>
+                    <option value="rating">Rating</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="index-main-wrapper">
+            <div class="container"> <!-- New container div -->
+                <!-- Sidebar Filter Section -->
+                <div class="filters">
+                    <!-- Categories Section -->
+                    <h3>Categories <span class="toggle-btn">—</span></h3>
+                    <div class="category-wrapper">
+                        <div class="category-group">
+                            <h4>Holidays</h4>
+                            <label><input type="checkbox" name="holiday" value="Christmas"> Christmas</label>
+                            <label><input type="checkbox" name="holiday" value="Easter"> Easter</label>
+                            <label><input type="checkbox" name="holiday" value="Halloween"> Halloween</label>
+                            <label><input type="checkbox" name="holiday" value="Hanukkah"> Hanukkah</label>
+                            <label><input type="checkbox" name="holiday" value="MothersFathers"> Mother's/Father's Day</label>
+                            <label><input type="checkbox" name="holiday" value="NewYears"> New Year's</label>
+                            <label><input type="checkbox" name="holiday" value="StPatricks"> St. Patrick's Day</label>
+                            <label><input type="checkbox" name="holiday" value="Thanksgiving"> Thanksgiving</label>
+                            <label><input type="checkbox" name="holiday" value="Valentines"> Valentine's Day</label>
+                        </div>
+                    
+                        <div class="category-group">
+                            <h4>Personal & Family</h4>
+                            <label><input type="checkbox" name="personal" value="BabyShowers"> Baby Showers</label>
+                            <label><input type="checkbox" name="personal" value="Birthdays"> Birthdays</label>
+                            <label><input type="checkbox" name="personal" value="Funerals"> Funerals</label>
+                            <label><input type="checkbox" name="personal" value="Graduations"> Graduations</label>
+                            <label><input type="checkbox" name="personal" value="Weddings"> Weddings</label>
+                        </div>
+                    </div>
+                
+                    <!-- Colors Section -->
+                    <h3>Color <span class="toggle-btn">—</span></h3>
+                    <div class="color-group">
+                        <div class="color-circle" style="background-color: black;"></div>
+                        <div class="color-circle" style="background-color: white;"></div>
+                        <div class="color-circle" style="background-color: red;"></div>
+                        <div class="color-circle" style="background-color: orange;"></div>
+                        <div class="color-circle" style="background-color: yellow;"></div>
+                        <div class="color-circle" style="background-color: green;"></div>
+                        <div class="color-circle" style="background-color: blue;"></div>
+                        <div class="color-circle" style="background-color: purple;"></div>
+                        <div class="color-circle" style="background-color: pink;"></div>
+                        <div class="color-circle" style="background-color: gray;"></div>
+                        <div class="color-circle" style="background-color: brown;"></div>
+                        <div class="color-circle" style="background-color: lightgray;"></div>
+                    </div>
+                
+                    <!-- Price Section -->
+                    <h3>Price <span class="toggle-btn">—</span></h3>
+                    <div class="price-wrapper">
+                        <label><input type="radio" name="price" value="all"> All Prices</label>
+                        <label><input type="radio" name="price" value="under25"> Under $25</label>
+                        <label><input type="radio" name="price" value="25-50"> $25 - $50</label>
+                        <label><input type="radio" name="price" value="50-75"> $50 - $75</label>
+                        <label><input type="radio" name="price" value="100+"> $100+</label>
+                
+                        <div class="custom-price">
+                            <h4>Custom</h4>
+                            <div class="price-inputs">
+                                <input type="number" name="min-price" placeholder="Min Price" min="0">
+                                <span>TO</span>
+                                <input type="number" name="max-price" placeholder="Max Price" min="0">
+                                <button class="filter-apply">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- Product List -->
+                <div class="product-list">
+                    <% if (listings.length > 0) { %>
+                        <% listings.forEach(listing => { %>
+                            <div class="product">
+                                <img src="<%= listing.imageUrl || 'https://via.placeholder.com/150' %>" alt="Product Image">
+                                <div class="product-details">
+                                    <p><%= listing.description %></p>
+                                    <p>$<%= listing.price %></p>
+                                    <p>Brand: <%= listing.brand || 'None' %></p>
+                                    <p><%= user.username %></p> <!-- Assuming user data includes username -->
+                                    <div class="product-rating">
+                                        <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
+                                            <i class="fa fa-star"></i>
+                                        <% } %>
+                                        <% if (listing.rating % 1 !== 0) { %>
+                                            <i class="fa fa-star-half"></i>
+                                        <% } %>
+                                        <% for (let i = Math.ceil(listing.rating); i < 5; i++) { %>
+                                            <i class="fa fa-star"></i>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p>No listings found.</p>
+                    <% } %>
+                </div>
+            </div>
+        </div>            
+    </main>
+
+    <!-- Including footer partial -->
+    <%- include('partials/footer') %>
+
+</body>
+</html>
