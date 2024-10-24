@@ -1,5 +1,5 @@
 # Dependencies
-node_modules/
+ejs-eventify/node_modules/
 
 # Environment Variables
 .env
