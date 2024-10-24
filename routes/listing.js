@@ -45,7 +45,7 @@ router.post('/create', upload.none(), async (req, res) => {
     await newListing.save();
 
     // Redirect to the listing detail page or another appropriate page (Home page)
-    res.redirect('/');
+    res.redirect('/user/profile1');
 } catch (err) { 
     console.log(err); 
     res.status(500).send("Create Listing Error")

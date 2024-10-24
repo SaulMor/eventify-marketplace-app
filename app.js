@@ -74,18 +74,18 @@ app.get('/orderActivity', (req, res) => {
 
 
 // Profile route (dynamic user data)
-app.get('/profile1', async (req, res) => {
-    try {
-        // Fetch a user and listings as an example (replace with dynamic logic)
-        const user = await User.findOne();  // Replace with logic to find the logged-in user
-        const listings = await Listing.find();  // Replace with logic to fetch the user's listings
+// app.get('/profile1', async (req, res) => {
+//     try {
+//         // Fetch a user and listings as an example (replace with dynamic logic)
+//         const user = await User.findOne();  // Replace with logic to find the logged-in user
+//         const listings = await Listing.find();  // Replace with logic to fetch the user's listings
         
-        res.render('profile1', { user, listings });
-    } catch (error) {
-        console.error('Error fetching profile data:', error);
-        res.status(500).send('Server Error');
-    }
-});
+//         res.render('profile1', { user, listings });
+//     } catch (error) {
+//         console.error('Error fetching profile data:', error);
+//         res.status(500).send('Server Error');
+//     }
+// });
 
 // Start your server
 const PORT = process.env.PORT || 3000;

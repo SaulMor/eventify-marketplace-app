@@ -38,7 +38,7 @@
                     <i class="fa fa-star"></i>
                     <i class="fa fa-star-half"></i>
                 </div>
-                <h2><%= user.username || 'Username Is Something' %></h2> <!-- Dynamically display username -->
+                <h2><%= user.name || 'Username Is Something' %></h2> <!-- Dynamically display username -->
             </div>
             <!-- Settings Icon -->
             <div class="settings">
@@ -137,7 +137,7 @@
                                     <p><%= listing.description %></p>
                                     <p>$<%= listing.price %></p>
                                     <p>Brand: <%= listing.brand || 'None' %></p>
-                                    <p><%= user.username %></p> <!-- Assuming user data includes username -->
+                                    <p><%= user.name %></p> <!-- Assuming user data includes username -->
                                     <div class="product-rating">
                                         <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
                                             <i class="fa fa-star"></i>
