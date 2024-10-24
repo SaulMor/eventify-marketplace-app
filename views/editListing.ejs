@@ -1,0 +1,147 @@
+<!-- views/editListing.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Existing Listing - Eventify</title>
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/editListing.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<%- include('partials/header') %> <!-- Include header partial -->
+
+<main>
+    <div class="listing-page">
+        <div class="page-header">
+            <h1>Edit Existing Listing</h1>
+        </div>
+        <div class="section-divider"></div>
+
+        <% if (error) { %>
+            <div class="error-message"><%= error %></div>
+        <% } %>
+
+        <form action="/listing/edit/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="form-row">
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="title">Title *</label>
+                        <input type="text" id="title" name="title" value="<%= listing.title %>" required>
+                        <div class="helper-text">Enter the title of your listing.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" value="<%= listing.location %>">
+                        <div class="helper-text">Enter the location where the item is available.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Select a category</option>
+                            <option value="wedding" <%= listing.category === 'wedding' ? 'selected' : '' %>>Wedding</option>
+                            <option value="birthday" <%= listing.category === 'birthday' ? 'selected' : '' %>>Birthday</option>
+                            <option value="party" <%= listing.category === 'party' ? 'selected' : '' %>>Party</option>
+                            <option value="other" <%= listing.category === 'other' ? 'selected' : '' %>>Other</option>
+                        </select>
+                        <div class="helper-text">Select the category that best fits your listing.</div>
+                    </div>
+                </div>
+
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="price">Price ($) *</label>
+                        <input type="number" id="price" name="price" value="<%= listing.price %>" required>
+                        <div class="helper-text">Enter the price of your item.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number" id="quantity" name="quantity" value="<%= listing.quantity %>" min="1">
+                        <div class="helper-text">Enter the available quantity.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="condition">Condition *</label>
+                        <select id="condition" name="condition" required>
+                            <option value="">Select condition</option>
+                            <option value="new" <%= listing.condition === 'new' ? 'selected' : '' %>>New</option>
+                            <option value="used" <%= listing.condition === 'used' ? 'selected' : '' %>>Used</option>
+                        </select>
+                        <div class="helper-text">Select the condition of your item.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" name="description" rows="5" required><%= listing.description %></textarea>
+                <div class="helper-text">Provide a detailed description of your item.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="delivery">Delivery Method</label>
+                <select id="delivery" name="delivery">
+                    <option value="pickup" <%= listing.delivery === 'pickup' ? 'selected' : '' %>>Pickup</option>
+                    <option value="delivery" <%= listing.delivery === 'delivery' ? 'selected' : '' %>>Delivery</option>
+                </select>
+                <div class="helper-text">Select how the item can be delivered.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="color">Color</label>
+                <input type="text" id="color" name="color" value="<%= listing.color %>">
+                <div class="helper-text">Enter the color of the item. For multiple colors, separate them with commas.</div>
+            </div>
+
+            <div class="form-group">
+                <label for="handmade">Handmade</label>
+                <select id="handmade" name="handmade">
+                    <option value="yes" <%= listing.handmade === 'yes' ? 'selected' : '' %>>Yes</option>
+                    <option value="no" <%= listing.handmade === 'no' ? 'selected' : '' %>>No</option>
+                </select>
+                <div class="helper-text">Is the item handmade?</div>
+            </div>
+
+            <div class="photo-upload-section">
+                <h2>Update Photos</h2>
+                <div class="photo-upload-container">
+                    <label for="photos" class="photo-upload-label">Upload New Photos:</label>
+                    <input type="file" id="photos" name="photos" multiple accept="image/*">
+                </div>
+                <div class="photo-thumbnails">
+                    <% if (listing.photos && listing.photos.length > 0) { %>
+                        <% listing.photos.forEach(photo => { %>
+                            <img src="<%= photo %>" alt="Listing Photo" class="thumbnail">
+                        <% }); %>
+                    <% } else { %>
+                        <p>No photos uploaded yet.</p>
+                    <% } %>
+                </div>
+                <div class="helper-text">You can upload up to 5 photos. Uploading new photos will replace existing ones.</div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="submit-btn">Update Listing</button>
+                <a href="/profile" class="reset-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include('partials/footer') %> <!-- Include footer partial -->
+
+</body>
+</html>
