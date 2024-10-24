@@ -3,36 +3,56 @@
         <!-- Header top section -->
         <div class="header-top">
             <div class="brand-logo-container">
-                <button class="brand-logo-button" onclick="location.href='/';">
+                <button class="brand-logo-button" onclick="location.href='/'" aria-label="Home">
                     <img src="/media/images/brandlogo.png" alt="Eventify brand logo">
                 </button>
             </div>
+
             <!-- Search bar -->
             <div class="header-search-container">
-                <form action="#" method="GET" class="header-search-form">
-                    <input type="text" name="query" class="header-search-box" placeholder="Search for anything">
-                    <button type="submit" class="header-search-button"><i class="fa fa-search"></i></button>
+                <form action="/search" method="GET" class="header-search-form">
+                    <input type="text" name="query" class="header-search-box" placeholder="Search for anything" required>
+                    <button type="submit" class="header-search-button" aria-label="Search">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </form>
             </div>
+
             <!-- User icons -->
             <div class="user-icon-wrapper">
-                <button onclick="location.href='/orderActivity'"> <!-- Updated this button -->
-                    <img src="/media/images/circledollar.png" alt="Circle Dollar" class="header-icon">
+                <button onclick="location.href='/orderActivity'" aria-label="Order Activity">
+                    <img src="/media/images/circledollar.png" alt="Order Activity" class="header-icon">
                 </button>
-                <button>
-                    <img src="/media/images/heart.png" alt="Likes" class="header-icon">
+                <button onclick="location.href='/favorites'" aria-label="Favorites">
+                    <img src="/media/images/heart.png" alt="Favorites" class="header-icon">
                 </button>
-                <button>
+                <button onclick="location.href='/notifications'" aria-label="Notifications">
                     <img src="/media/images/notifications.png" alt="Notifications" class="header-icon">
                 </button>
-                <button>
+
+                <!-- Profile Icon with Dropdown Trigger -->
+                <button id="profile-icon" class="header-icon-button" onclick="toggleProfileDropdown(event)" aria-label="User Profile">
                     <img src="/media/images/user.png" alt="User Profile" class="header-icon">
                 </button>
-                <button>
-                    <img src="/media/images/cart.png" alt="User Cart" class="header-user-cart" onclick="location.href='/cart'">
+
+                <!-- Profile Dropdown -->
+                <div id="profileDropdown" class="profile-dropdown">
+                    <p class="username">Username</p>
+                    <div class="dropdown-items">
+                        <button onclick="location.href='/user/profile1'" aria-label="View Profile">View Profile</button>
+                        <button aria-label="TBD">TBD</button>
+                        <button onclick="location.href='/help'" aria-label="Help Center">Help Center</button>
+                        <button onclick="location.href='/settings'" aria-label="Account Settings">Account Settings</button>
+                        <button onclick="logout()" aria-label="Log out">Log out</button>
+                    </div>
+                </div>
+
+                <button onclick="location.href='/cart'" aria-label="User Cart">
+                    <img src="/media/images/cart.png" alt="User Cart" class="header-user-cart">
                 </button>
             </div>
         </div>
+
         <!-- Header bottom section -->
         <div class="header-bottom">
             <div class="header-categories-container">
@@ -47,12 +67,14 @@
                 <a href="#">Seasonal</a>
                 <a href="#">Wedding</a>
             </div>
+
             <div class="header-sell-container">
-                <button class="header-sell-button" onclick="location.href='/createListing'">
+                <button class="header-sell-button" onclick="location.href='/createListing'" aria-label="Sell">
                     <img src="/media/images/sell.png" alt="Sell">
                 </button>
             </div>
         </div>
+
         <!-- Dropdown for smaller screens -->
         <div class="header-dropdown">
             <select class="category-dropdown">
@@ -70,3 +92,5 @@
         </div>
     </div>
 </header>
+
+<script src="/js/header.js"></script>

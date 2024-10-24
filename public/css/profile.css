@@ -1,22 +1,61 @@
-/* General Styles for Profile Page */
-.profile-section {
-    display: flex;
-    justify-content: space-between;
+/* General Page Styles */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.profile-page {
     padding: 20px;
+    padding-top: calc(var(--header-height) + 20px);
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+    text-align: center;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 20px; /* Space between title and link */
+}
+
+.page-header h1 {
+    font-size: 4rem;
+    font-weight: normal;
+    margin: 0;
+}
+
+.header-divider, .section-divider {
+    height: 2px;
+    background-color: #000000;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 /* Profile Info Section */
-.profile-info {
-    position: relative; /* Added to allow positioning of settings button */
-    width: 250px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.profile-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    width: 100%;
 }
 
-.user-details {
-    margin-top: 10px;
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .profile-pic {
@@ -24,83 +63,156 @@
     height: 100px;
     background-color: #e0e0e0;
     border-radius: 50%;
-    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Settings Button Positioned at Top Right */
+.user-details h2 {
+    font-size: 2rem;
+    font-weight: normal;
+    margin: 0;
+}
+
 .settings-btn {
-    position: absolute;
-    top: auto;  /* Adjusted to position below the header */
-    right: 0;
     background-color: #ffffff;
     border: 1px solid #cccccc;
-    padding: 5px 10px;
+    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    align-self: flex-end;
+}
+
+.settings-btn:hover {
+    background-color: #f0f0f0;
 }
 
 /* Categories Section */
 .categories {
-    margin-top: auto;
-    margin-bottom: 70px;
+    flex: 1;
+    max-width: 300px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .categories h3 {
+    font-size: 1.5rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .categories ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 10px;
 }
 
 .categories li {
     margin: 5px 0;
-    color: #666;
+    color: #333;
+    padding-left: 10px;
+    cursor: pointer;
 }
 
-/* Listing Section */
+/* Listings Section */
 .listing-sec {
-    margin-top: 20px; /* Added margin above the listings */
-    flex: 1;          /* Take the remaining space */
-    display: flex;
-    justify-content: flex-end; /* Align listing to the right */
-}
-
-.listings {
+    flex: 2;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: flex-end; /* Align listings to the right */
+    margin-top: 20px;
 }
 
-.listing-cards {
-    margin-top: auto; 
-    margin-bottom: 70px;
-    width: 200px;
-    padding: 15px;
+.search-sort {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.sort-by {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sort-by select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.listings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.listing-card {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
 }
 
-.listing-cards img {
+.listing-card img {
     width: 100%;
     border-radius: 5px;
 }
 
-.listing-info {
-    margin-top: 10px;
-    text-align: center;
-}
-
 .listing-info h4 {
-    font-size: 16px;
+    font-size: 1.5rem;
     margin-bottom: 5px;
 }
 
 .listing-info p {
-    font-size: 14px;
+    font-size: 1rem;
     color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .listing-sec {
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-info {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .categories {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .listing-card {
+        padding: 10px;
+    }
+
+    .listing-info h4 {
+        font-size: 1.2rem;
+    }
+
+    .listing-info p {
+        font-size: 0.9rem;
+    }
 }

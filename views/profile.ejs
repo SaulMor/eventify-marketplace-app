@@ -13,14 +13,19 @@
     <link rel="stylesheet" href="/css/profile.css">
 </head>
 <body>
-    <!-- Including header partials-->
+    <!-- Including header partials -->
     <%- include('partials/header') %>
-    <main class="profile-section">
-        <div class="profile">
+    <main class="profile-page">
+        <header class="page-header">
+            <h1>Profile</h1>
+        </header>
+        <div class="profile-container">
             <div class="profile-info">
-                <div class="profile-pic"></div>
+                <div class="profile-pic">
+                    <img src="<%= user.profilePicture || '/media/images/user.png' %>" alt="Profile Picture">
+                </div>
                 <div class="user-details">
-                    <h2><%= user.name %></h2> 
+                    <h2><%= user.name %></h2>
                     <div class="rating">★★★★★</div>
                 </div>
                 <button class="settings-btn">Settings</button>
@@ -35,19 +40,31 @@
             </div>
         </div>
         <div class="listing-sec">
-            <div class="listings">
-                <div class="listing-cards">
-                    <img src="/media/images/wedding.png" alt="Wedding Listing">
-                    <div class="listing-info"> 
-                        <h4>Listing 1</h4>
-                        <p>$14 | Brand: None</p>
-                        <div class="ratings">*****</div>
-                    </div>
+            <div class="search-sort">
+                <input type="text" class="search-bar" placeholder="Search listings...">
+                <div class="sort-by">
+                    <label for="sort">Sort by:</label>
+                    <select id="sort">
+                        <option value="price">Price</option>
+                        <option value="date">Date</option>
+                    </select>
                 </div>
             </div>
+            <div class="listings">
+                <% listings.forEach(listing => { %>
+                    <div class="listing-card">
+                        <img src="<%= listing.image || '/media/images/wedding.png' %>" alt="Listing Image">
+                        <div class="listing-info">
+                            <h4><%= listing.title %></h4>
+                            <p>$<%= listing.price %> | Brand: None</p>
+                            <div class="ratings">*****</div>
+                            <a href="/listing/<%= listing._id %>">View Listing</a>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
         </div>
-    </main> 
-<%- include('partials/footer') %> <!-- Include the footer partial -->
-    
+    </main>
+    <%- include('partials/footer') %> <!-- Include the footer partial -->
 </body>
 </html>
