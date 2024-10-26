@@ -7,10 +7,10 @@
 
 .listing-page {
     padding: 20px;
-    padding-top: calc(var(--header-height) + 20px); /* Dynamic padding based on header height */
+    padding-top: 20px; /* Dynamic padding based on header height */
     width: 100%; /* Full width */
     font-family: 'Lao Muang Khong', sans-serif;
-    background-color: #ffffff; /* Optional: Add a background color */
+    background-color: #ffffff; 
 }
 
 .page-header {
@@ -24,7 +24,7 @@
 .page-header h1 {
     font-size: 4rem;
     font-weight: normal;
-    margin: 0; /* Remove top margin */
+    margin: 0; 
 }
 
 .header-divider,
