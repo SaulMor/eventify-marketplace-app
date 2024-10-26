@@ -27,22 +27,36 @@
         </div>
         <div class="header-divider"></div>
 
-        <div class="photo-upload-section">
-            <h2>Update Photos</h2>
-            <div class="photo-upload-container">
-                <label for="photos" class="photo-upload-label">Upload New Photos:</label>
-                <input type="file" id="photos" name="photos" multiple accept="image/*">
-            </div>
-            <div class="photo-thumbnails">
-                <% if (listing.photos && listing.photos.length > 0) { %>
-                    <% listing.photos.forEach(photo => { %>
-                        <img src="<%= photo %>" alt="Listing Photo" class="thumbnail">
-                    <% }); %>
-                <% } else { %>
-                    <p>No photos uploaded yet.</p>
-                <% } %>
-            </div>
-            <div class="helper-text">You can upload up to 5 photos. Uploading new photos will replace existing ones.</div>
+        <!-- Label and Upload Button Container -->
+        <h2>Photo Upload</h2>
+        <div class="photo-upload-container">
+            <label for="photos" class="photo-upload-label">Upload photos of listing</label>
+            <button type="button" class="upload-button" id="uploadPhotosBtn">Upload Photos</button>
+            <input
+                type="file"
+                id="photos"
+                name="photos"
+                multiple
+                accept="image/*"
+                style="display: none"
+                aria-describedby="photos-helper"
+            />
+        </div>
+    
+        <!-- Existing Photos Thumbnails -->
+        <div class="photo-thumbnails">
+            <% if (listing.photos && listing.photos.length > 0) { %>
+                <% listing.photos.forEach(photo => { %>
+                    <img src="<%= photo %>" alt="Listing Photo" class="thumbnail">
+                <% }); %>
+            <% } else { %>
+                <p>No photos uploaded yet.</p>
+            <% } %>
+        </div>
+        
+        <!-- Helper Text -->
+        <div class="helper-text" id="photos-helper">
+            You can upload up to 5 photos. Uploading new photos will replace existing ones.
         </div>
        
 <!-- Listing Details Section -->
