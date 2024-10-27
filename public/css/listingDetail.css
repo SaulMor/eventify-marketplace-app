@@ -1,50 +1,372 @@
 /* public/css/listingDetail.css */
 
-.listing-detail-page {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    font-family: 'Lao Muang Khong', sans-serif;
+/* Global Box-Sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* General styling */
+body {
+    font-family: 'Lao Muang Khong', sans-serif;
+    font-weight: normal;
+    background-color: #ffffff;
+}
+
+main {
+    padding-top: 20px; 
+    width: 100%; 
+}
+
+/* Breadcrumb styling */
+.breadcrumb {
+    font-size: 1.2rem;
+    margin-bottom: 30px; 
+}
+
+.breadcrumb a {
+    text-decoration: none;
+    color: #000000;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Listing detail container */
+.listing-detail-container {
+    display: flex;
+    gap: 20px; 
+    width: 100%; 
+    margin: 0; 
+    padding: 10px; 
+    background-color: #fff;
+    border-radius: 10px;
+    align-items: flex-start; 
+}
+
+/* Thumbnails */
+.product-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+}
+
+.thumbnail {
+    width: 100px; 
+    height: 100px; 
+    object-fit: cover;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+}
+
+/* Main product image */
+.product-main-image {
+    flex: 2; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-image {
+    max-width: 800px; 
+    width: 100%; 
+    height: auto; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Product information */
+.product-info {
+    flex: 3;
+    padding-left: 10px;
+}
+
+/* Seller Info Section */
+.seller-info {
+    display: flex;
+    align-items: center;       /* Vertically centers the items */
+    justify-content: flex-start; /* Aligns items to the start */
+    gap: 20px;                 /* Adds space between profile info and rating */
+    margin-top: 20px;          /* Adds space above the seller info section */
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between profile pic and seller name */
+}
+
+.profile-pic {
+    width: 50px; 
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+    border: 2px solid #E9C071; /* Adds a border to the profile picture */
+}
+
+.seller-name {
+    font-size: 1.2rem;
+    font-weight: bold; 
     color: #333;
 }
 
-p {
+/* Product Rating */
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;                 
+    margin-left: auto;        
+}
+
+.product-rating i {
+    color: gold;
     font-size: 1.2rem;
-    margin-bottom: 10px;
+}
+
+.product-rating span {
+    font-size: 1rem;
     color: #555;
 }
 
-.photo-gallery {
+/* Headings and Text */
+h1 {
+    font-size: 2rem;
+    font-weight: normal;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Product Price */
+.product-price {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 15px;
+}
+
+/* Original Price */
+.original-price {
+    text-decoration: line-through;
+    color: #000000;
+    margin-left: 10px;
+}
+
+/* Product Brand (Category) */
+.product-brand {
+    font-size: 1.2rem;
+    color: #000000;
+}
+
+/* Listing Actions: Edit and See Offers Buttons */
+.listing-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; 
+    gap: 15px;
+    width: 100%; 
+}
+
+.edit-listing-btn,
+.see-offers-btn {
+    padding: 12px 20px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* "See Offers" Button Styling */
+.see-offers-btn {
+    background-color: #CBC9C9; 
+    color: #000000;
+    width: 50%;
+}
+
+/* "Edit Listing" Button Styling */
+.edit-listing-btn {
+    background-color: #E9C071; 
+    color: #000000;
+    width: 50%;
+}
+
+/* Button Hover Effects */
+.edit-listing-btn:hover {
+    background-color: #D4A63C; 
+}
+
+.see-offers-btn:hover {
+    background-color: #5a6268; 
+}
+
+/* Product Description */
+.product-description {
+    font-size: 1rem;
+    color: #000000;
+    margin-top: 10px;
+}
+
+/* Categories and Colors */
+.product-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 100px;
     margin-top: 20px;
 }
 
-.listing-photo {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.categories, .colors {
+    font-size: 1rem;
 }
 
-.create-new-link {
+.option-subheading {
+    font-weight: normal;
+    margin-bottom: 5px;
+    text-transform: uppercase; 
+}
+
+.option-box {
+    background-color: #f1f1f1;
+    padding: 5px 10px;
     display: inline-block;
-    margin-top: 30px;
-    padding: 10px 20px;
-    background-color: #E9C071;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
 }
 
-.create-new-link:hover {
-    background-color: #D4A63C;
+.colors {
+    display: flex;
+    flex-direction: column;
+}
+
+.color-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.color-box {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: not-allowed; /* Disabled */
+    background-color: #f1f1f1;
+    padding: 5px 10px;
+    border-radius: 4px; 
+    margin-bottom: 5px; 
+}
+
+.color-box input {
+    display: none; 
+}
+
+.color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #c9c8c8;
+    cursor: not-allowed; /* Disabled */
+}
+
+.color-name {
+    font-size: 1rem;
+    color: #000;
+}
+
+/* Hover Effect for Thumbnails */
+.thumbnail:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .listing-detail-container {
+        flex-direction: column;
+    }
+
+    .product-thumbnails {
+        flex: 1 1 100%;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+
+    .product-main-image {
+        flex: 1 1 100%;
+    }
+
+    .product-info {
+        flex: 1 1 100%;
+        padding-left: 0;
+    }
+
+    .product-image {
+        max-width: 100%;
+    }
+
+    /* Adjust option boxes for smaller screens */
+    .option-box, .color-box {
+        width: 100%; 
+        gap: 10px; 
+    }
+
+    /* Listing Actions: Make buttons full width */
+    .listing-actions {
+        flex-direction: column; 
+        gap: 10px;
+    }
+
+    .edit-listing-btn,
+    .see-offers-btn {
+        width: 100%; 
+    }
+}
+
+@media (max-width: 480px) {
+    .listing-detail-container {
+        padding: 10px;
+    }
+
+    main {
+        padding-top: 10px; /* Further reduced padding */
+    }
+
+    h1 {
+        font-size: 1.5rem; 
+    }
+
+    .upload-draft-link {
+        font-size: 0.9rem;
+    }
+
+    section h2 {
+        font-size: 1.2rem;
+    }
+
+    .form-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%;
+        max-width: 300px; 
+    }
+
+    .upload-button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .photo-thumbnails .thumbnail {
+        width: 70px;
+        height: 70px;
+    }
 }
