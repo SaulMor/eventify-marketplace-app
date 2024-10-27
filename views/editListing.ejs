@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/editListing.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,274 +21,279 @@
 
 <main>
     <div class="listing-page">
+        <!-- Page Header -->
         <div class="page-header">
             <h1>Edit Existing Listing</h1>
         </div>
         <div class="header-divider"></div>
 
-        <!-- Label and Upload Button Container -->
-        <h2>Photo Upload</h2>
-        <div class="photo-upload-container">
-            <label for="photos" class="photo-upload-label">Upload photos of listing</label>
-            <button type="button" class="upload-button" id="uploadPhotosBtn">Upload Photos</button>
-            <input
-                type="file"
-                id="photos"
-                name="photos"
-                multiple
-                accept="image/*"
-                style="display: none"
-                aria-describedby="photos-helper"
-            />
-        </div>
-    
-        <!-- Existing Photos Thumbnails -->
-        <div class="photo-thumbnails">
-            <% if (listing.photos && listing.photos.length > 0) { %>
-                <% listing.photos.forEach(photo => { %>
-                    <img src="<%= photo %>" alt="Listing Photo" class="thumbnail">
-                <% }); %>
-            <% } else { %>
-                <p>No photos uploaded yet.</p>
-            <% } %>
-        </div>
-        
-        <!-- Helper Text -->
-        <div class="helper-text" id="photos-helper">
-            You can upload up to 5 photos. Uploading new photos will replace existing ones.
-        </div>
-       
-<!-- Listing Details Section -->
-<section class="listing-details-section">
-    <h2>Listing Details</h2>
-    <div class="section-divider"></div>
+        <!-- Form Starts Here -->
+        <form action="/listing/edit/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data"> 
+            
+            <!-- Photo Upload Section -->
+            <section class="photo-upload-section">
+                <h2>Photo Upload</h2>
 
-        <form action="/listing/edit/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data" <!-- Important for file uploads -->
-      <div class="form-row">
-        <!-- Left Column -->
-        <div class="form-column">
-          <!-- Title Field -->
-          <div class="form-group horizontal-group">
-            <label for="title">Add Title of Listing</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="title-helper">
-                Give your listing a clear, descriptive name (e.g., Rustic Wedding Lantern).
-              </p>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                placeholder="*Add title of listing"
-                required
-                aria-describedby="title-helper"
-                value="<%= listing.title || '' %>"
-              />
+                <!-- Upload Button and File Input Container -->
+                <div class="photo-upload-container">
+                    <button type="button" class="upload-button" id="editUploadBtn">Upload Photos</button>
+                    <input
+                        type="file"
+                        id="editPhotos"
+                        name="photos"
+                        multiple
+                        accept="image/*"
+                        class="hidden-file-input"
+                        aria-describedby="photos-helper"
+                    />
+
+                    <!-- Thumbnails Preview Section -->
+                    <div class="photo-thumbnails">
+                        <!-- Dynamically Inserted Thumbnails via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Helper Text -->
+                <p class="helper-text" id="photos-helper">
+                    Upload clear images to showcase your listing effectively. Maximum of 5 photos.
+                </p>
+            </section>
+
+            <!-- Listing Details Section -->
+            <section class="listing-details-section">
+                <h2>Listing Details</h2>
+                <div class="section-divider"></div>
+
+                <div class="form-row">
+                    <!-- Left Column -->
+                    <div class="form-column">
+                        <!-- Title Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="title">Add Title of Listing</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="title-helper">
+                                    Give your listing a clear, descriptive name (e.g., Rustic Wedding Lantern).
+                                </p>
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="title"
+                                    placeholder="*Add title of listing"
+                                    required
+                                    aria-describedby="title-helper"
+                                    value="<%= listing.title || '' %>"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Description Field -->
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea
+                                id="description"
+                                name="description"
+                                placeholder="*Provide a detailed description"
+                                required
+                                aria-describedby="description-helper"
+                            ><%= listing.description || '' %></textarea>
+                            <p class="helper-text" id="description-helper">
+                                Provide detailed information about the item, including dimensions, material, and special features.
+                            </p>
+                        </div>
+
+                        <!-- Category Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="category">Category</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="category-helper">
+                                    Choose the event type or category that best fits your item (e.g., Wedding, Birthday, Halloween).
+                                </p>
+                                <select
+                                    id="category"
+                                    name="category"
+                                    aria-describedby="category-helper"
+                                >
+                                    <option value="">Select Category</option>
+                                    <option value="wedding" <%= listing.category === 'wedding' ? 'selected' : '' %>>Wedding</option>
+                                    <option value="birthday" <%= listing.category === 'birthday' ? 'selected' : '' %>>Birthday</option>
+                                    <option value="halloween" <%= listing.category === 'halloween' ? 'selected' : '' %>>Halloween</option>
+                                    <option value="academic" <%= listing.category === 'academic' ? 'selected' : '' %>>Academic</option>
+                                    <option value="corporate" <%= listing.category === 'corporate' ? 'selected' : '' %>>Corporate</option>
+                                    <option value="cultural" <%= listing.category === 'cultural' ? 'selected' : '' %>>Cultural</option>
+                                    <option value="entertainment" <%= listing.category === 'entertainment' ? 'selected' : '' %>>Entertainment</option>
+                                    <option value="holiday" <%= listing.category === 'holiday' ? 'selected' : '' %>>Holiday</option>
+                                    <option value="luxury" <%= listing.category === 'luxury' ? 'selected' : '' %>>Luxury</option>
+                                    <option value="seasonal" <%= listing.category === 'seasonal' ? 'selected' : '' %>>Seasonal</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="form-column">
+                        <!-- Location Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="location">Location</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="location-helper">
+                                    Enter the location where the item is available for pickup or delivery.
+                                </p>
+                                <input
+                                    type="text"
+                                    id="location"
+                                    name="location"
+                                    placeholder="Enter Location"
+                                    aria-describedby="location-helper"
+                                    value="<%= listing.location || '' %>"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Condition Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="condition">Condition</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="condition-helper">
+                                    Select the current condition of your item.
+                                </p>
+                                <select
+                                    id="condition"
+                                    name="condition"
+                                    aria-describedby="condition-helper"
+                                >
+                                    <option value="">Select Condition</option>
+                                    <option value="new" <%= listing.condition === 'new' ? 'selected' : '' %>>New</option>
+                                    <option value="used" <%= listing.condition === 'used' ? 'selected' : '' %>>Used</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Price Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="price">Price</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="price-helper">
+                                    Enter the price in dollars (e.g., 25 for $25).
+                                </p>
+                                <input
+                                    type="number"
+                                    id="price"
+                                    name="price"
+                                    placeholder="*Set Price"
+                                    required
+                                    aria-describedby="price-helper"
+                                    value="<%= listing.price || '' %>"
+                                    min="0"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Handmade Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="handmade">Handmade</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="handmade-helper">
+                                    Indicate whether your listing is handmade.
+                                </p>
+                                <select
+                                    id="handmade"
+                                    name="handmade"
+                                    aria-describedby="handmade-helper"
+                                >
+                                    <option value="">Select Option</option>
+                                    <option value="yes" <%= listing.handmade === 'yes' ? 'selected' : '' %>>Yes</option>
+                                    <option value="no" <%= listing.handmade === 'no' ? 'selected' : '' %>>No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Additional Details Section -->
+            <section class="additional-details-section">
+                <h2>Additional Details</h2>
+                <div class="section-divider"></div>
+
+                <div class="form-row">
+                    <!-- Quantity Field -->
+                    <div class="form-group horizontal-group">
+                        <label for="quantity">Quantity</label>
+                        <div class="input-helper-wrapper">
+                            <p class="helper-text" id="quantity-helper">
+                                Specify the number of items available.
+                            </p>
+                            <input
+                                type="number"
+                                id="quantity"
+                                name="quantity"
+                                placeholder="Enter quantity"
+                                aria-describedby="quantity-helper"
+                                min="1"
+                                value="<%= listing.quantity || 1 %>"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Delivery Options Field -->
+                    <div class="form-group horizontal-group">
+                        <label for="delivery">Delivery Options</label>
+                        <div class="input-helper-wrapper">
+                            <p class="helper-text" id="delivery-helper">
+                                Choose your preferred delivery method.
+                            </p>
+                            <select
+                                id="delivery"
+                                name="delivery"
+                                aria-describedby="delivery-helper"
+                            >
+                                <option value="">Select Option</option>
+                                <option value="pickup" <%= listing.delivery === 'pickup' ? 'selected' : '' %>>Pickup</option>
+                                <option value="delivery" <%= listing.delivery === 'delivery' ? 'selected' : '' %>>Delivery</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Color Field -->
+                    <div class="form-group horizontal-group">
+                        <label for="color">Color</label>
+                        <div class="input-helper-wrapper">
+                            <p class="helper-text" id="color-helper">
+                                Specify the color options available for your listing.
+                            </p>
+                            <input
+                                type="text"
+                                id="color"
+                                name="color"
+                                placeholder="Select Color"
+                                aria-describedby="color-helper"
+                                value="<%= listing.color || '' %>"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Buttons -->
+            <div class="form-buttons">
+                <button type="submit" class="submit-btn">Submit Changes</button>
+                <button
+                    type="button"
+                    class="draft-btn"
+                    onclick="alert('Save as Draft feature is coming soon!')"
+                >
+                    Save as Draft (Coming Soon)
+                </button>
             </div>
-          </div>
-
-          <!-- Description Field -->
-          <div class="form-group">
-            <label for="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="*Provide a detailed description"
-              required
-              aria-describedby="description-helper"
-            ><%= listing.description || '' %></textarea>
-            <p class="helper-text" id="description-helper">
-                Provide detailed information about the item, including dimensions, material, and special features.
-            </p>
-          </div>
-
-          <!-- Category Field -->
-          <div class="form-group horizontal-group">
-            <label for="category">Category</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="category-helper">
-                Choose the event type or category that best fits your item (e.g., Wedding, Birthday, Halloween).
-              </p>
-              <select
-                id="category"
-                name="category"
-                aria-describedby="category-helper"
-              >
-                <option value="">Select Category</option>
-                <option value="wedding" <%= listing.category === 'wedding' ? 'selected' : '' %>>Wedding</option>
-                <option value="birthday" <%= listing.category === 'birthday' ? 'selected' : '' %>>Birthday</option>
-                <option value="halloween" <%= listing.category === 'halloween' ? 'selected' : '' %>>Halloween</option>
-                <option value="academic" <%= listing.category === 'academic' ? 'selected' : '' %>>Academic</option>
-                <option value="corporate" <%= listing.category === 'corporate' ? 'selected' : '' %>>Corporate</option>
-                <option value="cultural" <%= listing.category === 'cultural' ? 'selected' : '' %>>Cultural</option>
-                <option value="entertainment" <%= listing.category === 'entertainment' ? 'selected' : '' %>>Entertainment</option>
-                <option value="holiday" <%= listing.category === 'holiday' ? 'selected' : '' %>>Holiday</option>
-                <option value="luxury" <%= listing.category === 'luxury' ? 'selected' : '' %>>Luxury</option>
-                <option value="seasonal" <%= listing.category === 'seasonal' ? 'selected' : '' %>>Seasonal</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column -->
-        <div class="form-column">
-          <!-- Location Field -->
-          <div class="form-group horizontal-group">
-            <label for="location">Location</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="location-helper">
-                Enter the location where the item is available for pickup or delivery.
-              </p>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder="Enter Location"
-                aria-describedby="location-helper"
-                value="<%= listing.location || '' %>"
-              />
-            </div>
-          </div>
-
-          <!-- Condition Field -->
-          <div class="form-group horizontal-group">
-            <label for="condition">Condition</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="condition-helper">
-                Select the current condition of your item.
-              </p>
-              <select
-                id="condition"
-                name="condition"
-                aria-describedby="condition-helper"
-              >
-                <option value="">Select Condition</option>
-                <option value="new" <%= listing.condition === 'new' ? 'selected' : '' %>>New</option>
-                <option value="used" <%= listing.condition === 'used' ? 'selected' : '' %>>Used</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Price Field -->
-          <div class="form-group horizontal-group">
-            <label for="price">Price</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="price-helper">
-                Enter the price in dollars (e.g., 25 for $25).
-              </p>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                placeholder="*Set Price"
-                required
-                aria-describedby="price-helper"
-                value="<%= listing.price || '' %>"
-                min="0"
-              />
-            </div>
-          </div>
-
-          <!-- Handmade Field -->
-          <div class="form-group horizontal-group">
-            <label for="handmade">Handmade</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="handmade-helper">
-                Indicate whether your listing is handmade.
-              </p>
-              <select
-                id="handmade"
-                name="handmade"
-                aria-describedby="handmade-helper"
-              >
-                <option value="">Select Option</option>
-                <option value="yes" <%= listing.handmade === 'yes' ? 'selected' : '' %>>Yes</option>
-                <option value="no" <%= listing.handmade === 'no' ? 'selected' : '' %>>No</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Additional Details Section -->
-      <section class="additional-details-section">
-        <h2>Additional Details</h2>
-        <div class="section-divider"></div>
-
-        <div class="form-row">
-          <!-- Quantity Field -->
-          <div class="form-group horizontal-group">
-            <label for="quantity">Quantity</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="quantity-helper">
-                Specify the number of items available.
-              </p>
-              <input
-                type="number"
-                id="quantity"
-                name="quantity"
-                placeholder="Enter quantity"
-                aria-describedby="quantity-helper"
-                min="1"
-                value="<%= listing.quantity || 1 %>"
-              />
-            </div>
-          </div>
-
-          <!-- Delivery Options Field -->
-          <div class="form-group horizontal-group">
-            <label for="delivery">Delivery Options</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="delivery-helper">
-                Choose your preferred delivery method.
-              </p>
-              <select
-                id="delivery"
-                name="delivery"
-                aria-describedby="delivery-helper"
-              >
-                <option value="">Select Option</option>
-                <option value="pickup" <%= listing.delivery === 'pickup' ? 'selected' : '' %>>Pickup</option>
-                <option value="delivery" <%= listing.delivery === 'delivery' ? 'selected' : '' %>>Delivery</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- Color Field -->
-          <div class="form-group horizontal-group">
-            <label for="color">Color</label>
-            <div class="input-helper-wrapper">
-              <p class="helper-text" id="color-helper">
-                Specify the color options available for your listing.
-              </p>
-              <input
-                type="text"
-                id="color"
-                name="color"
-                placeholder="Select Color"
-                aria-describedby="color-helper"
-                value="<%= listing.color || '' %>"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Buttons -->
-      <div class="form-buttons">
-        <button type="submit" class="submit-btn">Submit Changes</button>
-        <button
-          type="button"
-          class="draft-btn"
-          onclick="alert('Save as Draft feature is coming soon!')"
-        >
-          Save as Draft (Coming Soon)
-        </button>
-      </div>
-    </form>
+        </form>
+        <!-- Form Ends Here -->
     </div>
 </main>
 
 <%- include('partials/footer') %> <!-- Include footer partial -->
+
+<!-- External JavaScript for handling uploads and interactivity -->
+<script src="/js/uploadHandler.js"></script>
 
 </body>
 </html>
