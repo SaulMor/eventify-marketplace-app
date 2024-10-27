@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const maxPhotos = 5; // Maximum number of photos to preview
 
     uploadButtons.forEach(button => {
-        const fileInput = button.nextElementSibling; // Assuming input is immediately after button
+        const fileInput = button.nextElementSibling;
         const thumbnailsContainer = button.closest(".photo-upload-container").querySelector(".photo-thumbnails");
 
         if (button && fileInput) {
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Drag and Drop Functionality (if applicable)
+    // Drag and Drop Functionality
     const photoUploadSections = document.querySelectorAll(".photo-upload-section");
 
     photoUploadSections.forEach(section => {
