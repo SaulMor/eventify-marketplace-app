@@ -19,99 +19,130 @@
 
 <body>
 
-<%- include('partials/header') %> <!-- Include header partial -->
+    <%- include('partials/header') %> <!-- Include header partial -->
 
-<main>
-    <div class="breadcrumb">
-        <a href="/">Eventify</a> / <a href="/profile">Profile</a> / <a href="#">Listing Detail</a> / <%= listing.title %>
-    </div>
-    <div class="product-detail-container">
-        <!-- Left Section: Thumbnails -->
-        <div class="product-thumbnails">
-            <% listing.photos.forEach(function(photo) { %>
-                <img src="<%= photo %>" alt="Thumbnail" class="thumbnail">
-            <% }); %>
+    <main>
+        <div class="breadcrumb">
+            <a href="/">Eventify</a> / 
+            <a href="/user/profile1">Profile</a> / 
+            <a href="#">Listing Detail</a> / 
+            <%= listing.title %>
         </div>
+        <div class="listing-detail-container">
+            
+            <!-- Left Section: Thumbnails -->
+            <div class="product-thumbnails">
+                <% listing.photos.forEach(function(photo) { %>
+                    <img src="<%= photo %>" alt="Thumbnail" class="thumbnail">
+                <% }); %>
+            </div>
 
-        <!-- Middle Section: Main Product Image -->
-        <div class="product-main-image">
-            <% if (listing.photos && listing.photos.length > 0) { %>
-                <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image">
-            <% } else { %>
-                <img src="/media/images/default-listing.jpg" alt="Default Listing Image" class="product-image">
-            <% } %>
-        </div>
+            <!-- Middle Section: Main Product Image -->
+            <div class="product-main-image">
+                <% if (listing.photos && listing.photos.length > 0) { %>
+                    <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image">
+                <% } else { %>
+                    <img src="/media/images/default-listing.jpg" alt="Default Listing Image" class="product-image">
+                <% } %>
+            </div>
 
-        <!-- Right Section: Product Info -->
-        <div class="product-info">
-            <div class="seller-info">
-                <div class="profile-info">
-                    <img src="/media/images/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic">
-                    <span class="seller-name"><%= listing.user.name %></span>
+            <!-- Right Section: Product Info -->
+            <div class="product-info">
+                
+                <!-- Seller Info Section -->
+                <div class="seller-info">
+                    <div class="profile-info">
+                        <img src="/media/images/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic">
+                        <span class="seller-name"><%= listing.userId.name %></span>
+                    </div>
                     <div class="product-rating">
-                        <% for(let i = 0; i < 5; i++) { %>
-                            <i class="fas fa-star stars"></i>
+                        <% if (listing.rating && listing.rating > 0) { %>
+                            <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
+                                <i class="fas fa-star"></i>
+                            <% } %>
+                            <% if (listing.rating % 1 !== 0) { %>
+                                <i class="fas fa-star-half-alt"></i>
+                            <% } %>
+                            <% for (let i = Math.ceil(listing.rating); i < 5; i++) { %>
+                                <i class="far fa-star"></i>
+                            <% } %>
+                        <% } else { %>
+                            <span>No rating available</span>
                         <% } %>
                     </div>
                 </div>
-            </div>
 
-            <h1><%= listing.title %></h1>
-            <p class="product-price">$<%= listing.price %> <span class="original-price"><%= listing.originalPrice || '' %></span></p>
-            <p class="product-brand">Category: <%= listing.category %></p>
+                <!-- Listing Title -->
+                <h1><%= listing.title %></h1>
 
-            <!-- Buttons -->
-            <div class="product-buttons">
-                <button class="add-to-cart-btn">Add to Cart</button>
-                <button class="make-offer-btn">Make an Offer</button>
-            </div>
-            <button class="buy-now-btn">Buy Now</button>
+                <!-- Product Price -->
+                <p class="product-price">
+                    $<%= listing.price %> 
+                    <% if (listing.originalPrice) { %>
+                        <span class="original-price"><%= listing.originalPrice %></span>
+                    <% } %>
+                </p>
 
-            <!-- Like and Save Button -->
-            <div class="like-save-container">
-                <i class="fas fa-heart"></i> Like it and save it for later
-            </div>
+                <!-- Product Category -->
+                <p class="product-brand">Category: <%= listing.category %></p>
 
-            <!-- Product Description -->
-            <p class="product-description">
-                <%= listing.description %>
-            </p>
-
-            <!-- Categories and Colors -->
-            <div class="product-options">
-                <!-- Categories Section -->
-                <div class="categories">
-                    <div class="option-subheading">Categories:</div>
-                    <div class="option-box"><%= listing.category %></div>
-                </div>
-                
-                <!-- Colors Section -->
-                <div class="colors">
-                    <div class="option-subheading">Colors:</div>
-                    <div class="color-options">
-                        <% listing.color && listing.color !== 'N/A' ? listing.color.split(',').forEach(function(color) { %>
-                            <label class="color-box">
-                                <input type="radio" name="color" value="<%= color.trim() %>" aria-label="<%= color.trim() %>" disabled>
-                                <span class="color-circle <%= color.trim().toLowerCase() %>"></span>
-                                <span class="color-name"><%= color.trim() %></span>
-                            </label>
-                        <% }) : '<span>N/A</span>' %>
+                <!-- Listing Actions: Edit and See Offers Buttons -->
+                <% if (user && user._id.toString() === listing.userId._id.toString()) { %>
+                    <div class="listing-actions">
+                        <a href="/listing/edit/<%= listing._id %>" class="edit-listing-btn">Edit Listing</a>
+                        <a href="/listing/<%= listing._id %>/offers" class="see-offers-btn">See Offers</a>
                     </div>
+                <% } %>
+
+                <!-- Product Description -->
+                <p class="product-description">
+                    <%= listing.description %>
+                </p>
+
+                <!-- Categories and Colors -->
+                <div class="product-options">
+                    
+                    <!-- Categories Section -->
+                    <div class="categories">
+                        <div class="option-subheading">CATEGORIES</div>
+                        <div class="option-box"><%= listing.category %></div>
+                    </div>
+                    
+                    <!-- Colors Section -->
+                    <div class="colors">
+                        <div class="option-subheading">COLORS</div>
+                        <div class="color-options">
+                            <% if (listing.color && listing.color !== 'N/A') { %>
+                                <% listing.color.split(',').forEach(function(color) { %>
+                                    <label class="color-box">
+                                        <input 
+                                            type="radio" 
+                                            name="color" 
+                                            value="<%= color.trim() %>" 
+                                            aria-label="<%= color.trim() %>" 
+                                            disabled
+                                        >
+                                        <span 
+                                            class="color-circle" 
+                                            style="background-color: <%= color.trim() %>;" 
+                                            aria-hidden="true" 
+                                            title="<%= color.trim() %>"
+                                        ></span>
+                                        <span class="color-name"><%= color.trim() %></span>
+                                    </label>
+                                <% }); %>
+                            <% } else { %>
+                                <span>N/A</span>
+                            <% } %>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
-
-            <!-- Edit and See Offers Buttons (Visible Only to Listing Owner) -->
-            <% if (user && user._id.toString() === listing.user._id.toString()) { %>
-                <div class="listing-actions">
-                    <a href="/listing/edit/<%= listing._id %>" class="edit-listing-btn">Edit Listing</a>
-                    <a href="/listing/<%= listing._id %>/offers" class="see-offers-btn">See Offers</a>
-                </div>
-            <% } %>
         </div>
-    </div>
-</main>
+    </main>
 
-<%- include('partials/footer') %> <!-- Include footer partial -->
+    <%- include('partials/footer') %> <!-- Include footer partial -->
 
 </body>
 </html>
