@@ -16,10 +16,7 @@
     <main>
         <div class="signup-container">
             <h1 class="signup-title">Create an Account</h1>
-            
-            <!-- Flash Messages -->
-            
-
+        
             <form action="/auth/signup" method="POST" class="signup-form">
                 <input type="text" id="name" name="name" required placeholder="Full Name" value="<%= formData.name || '' %>">
                 <input type="email" id="email" name="email" required placeholder="Email" value="<%= formData.email || '' %>">
