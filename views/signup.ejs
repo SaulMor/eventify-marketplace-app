@@ -1,3 +1,5 @@
+<!-- views/signup.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,21 +10,26 @@
 </head>
 <body>
     <header>
-        <img src="/media/images/brandlogo.png" alt="eventify brand logo" class="brand-logo">
+        <img src="/media/images/brandlogo.png" alt="Eventify Brand Logo" class="brand-logo">
     </header>
     
     <main>
         <div class="signup-container">
             <h1 class="signup-title">Create an Account</h1>
-            <form action="/signup" method="POST">
-                <input type="text" id="name" name="name" required placeholder="Full Name">
-                <input type="email" id="email" name="email" required placeholder="Email">
+            
+            <!-- Flash Messages -->
+            
+
+            <form action="/auth/signup" method="POST" class="signup-form">
+                <input type="text" id="name" name="name" required placeholder="Full Name" value="<%= formData.name || '' %>">
+                <input type="email" id="email" name="email" required placeholder="Email" value="<%= formData.email || '' %>">
                 <input type="password" id="password" name="password" required placeholder="Password">
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password">
                 <div class="form-options">
                     <button type="submit" class="signup-btn">Sign Up</button>
                 </div>
             </form>
-            <p>Already have an account? <a href="/auth/login" class="login-link">Login here</a></p>
+            <p>Already have an account? <a href="/auth/login" class="login-link">Login here</a>.</p>
         </div>
     </main>
 </body>
