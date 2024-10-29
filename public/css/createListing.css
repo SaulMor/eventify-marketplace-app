@@ -1,4 +1,4 @@
-/* public/styles/css/createListing.css */
+/* public/css/createListing.css */
 
 /* General Page Styles */
 *, *::before, *::after {
@@ -24,7 +24,16 @@
 .page-header h1 {
     font-size: 4rem;
     font-weight: normal;
-    margin: 0; /* Remove top margin */
+    margin: 0; 
+}
+
+.header-divider,
+.section-divider {
+    height: 2px;
+    background-color: #000000;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 100%; 
 }
 
 .upload-draft-link {
@@ -36,15 +45,6 @@
 
 .upload-draft-link:hover {
     color: #D4A63C;
-}
-
-.header-divider,
-.section-divider {
-    height: 2px;
-    background-color: #000000;
-    margin: 20px 0;
-    width: 100%;
-    max-width: 100%; 
 }
 
 /* Responsive Adjustments */
@@ -169,6 +169,7 @@
     margin-bottom: 10px;
 }
 
+/* Label and Upload Button Container */
 .photo-upload-container {
     display: flex;
     align-items: center;
@@ -182,6 +183,7 @@
     color: #333;
 }
 
+/* Upload Button Styles */
 .upload-button {
     padding: 10px 20px;
     background-color: #E9C071;
@@ -214,6 +216,22 @@
 }
 
 .photo-thumbnails .thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Existing Photos Thumbnails */
+.existing-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.existing-photos .thumbnail {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -261,13 +279,14 @@ button {
 
 /* Save as Draft Button */
 .draft-btn {
-    background-color: #E9C071;
-    color: rgb(0, 0, 0);
+    background-color: #6c757d;
+    color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
     transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
 }
 
 .draft-btn:hover {
+    background-color: #5a6268; 
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); 
     transform: translateY(-2px); 
     opacity: 0.9; 
@@ -370,4 +389,9 @@ button {
         width: 70px;
         height: 70px;
     }
+}
+
+/* Utility Class to Hide Elements */
+.hidden-file-input {
+    display: none;
 }

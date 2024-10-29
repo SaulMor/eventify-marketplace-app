@@ -370,3 +370,8 @@ h1 {
         height: 70px;
     }
 }
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}

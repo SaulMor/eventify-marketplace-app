@@ -36,6 +36,16 @@
     max-width: 100%; 
 }
 
+.upload-draft-link {
+    font-size: 1rem;
+    color: #E9C071;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.upload-draft-link:hover {
+    color: #D4A63C;
+}
 
 /* Responsive Adjustments */
 @media (max-width: 600px) {
@@ -173,6 +183,7 @@
     color: #333;
 }
 
+/* Upload Button Styles */
 .upload-button {
     padding: 10px 20px;
     background-color: #E9C071;
@@ -212,6 +223,23 @@
     border: 1px solid #ccc;
 }
 
+
+/* Existing Photos Thumbnails */
+.existing-photos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.existing-photos .thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
 /* Dragover State for Photo Upload Section */
 .photo-upload-section.dragover {
     background-color: #f0f8ff; 
@@ -236,7 +264,7 @@ button {
     cursor: pointer;
 }
 
-/* Update Listing Button */
+/* Submit Listing Button */
 .submit-btn {
     background-color: #E9C071;
     color: rgb(0, 0, 0);
@@ -250,19 +278,17 @@ button {
     opacity: 0.9; 
 }
 
-/* Cancel Button */
-.reset-btn {
-    background-color: #CBC9C9;
-    color: rgb(0, 0, 0);
-    text-decoration: none;
-    padding: 15px 30px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
-    display: inline-block;
+/* Save as Draft Button */
+.draft-btn {
+    background-color: #6c757d;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+    transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
 }
 
-.reset-btn:hover {
-    background-color: #B8B8B8; 
+.draft-btn:hover {
+    background-color: #5a6268; 
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4); 
     transform: translateY(-2px); 
     opacity: 0.9; 
 }
@@ -364,4 +390,9 @@ button {
         width: 70px;
         height: 70px;
     }
+}
+
+/* Utility Class to Hide Elements */
+.hidden-file-input {
+    display: none;
 }
