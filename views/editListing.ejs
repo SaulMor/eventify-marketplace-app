@@ -17,7 +17,7 @@
 
 <body>
 
-<%- include('partials/header') %> <!-- Include header partial -->
+<%- include('partials/header') %> 
 
 <main>
     <div class="listing-page">
@@ -27,7 +27,6 @@
         </div>
         <div class="header-divider"></div>
 
-        <!-- Form Starts Here -->
         <form action="/listing/edit/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data"> 
             
             <!-- Photo Upload Section -->
@@ -286,11 +285,10 @@
                 </button>
             </div>
         </form>
-        <!-- Form Ends Here -->
     </div>
 </main>
 
-<%- include('partials/footer') %> <!-- Include footer partial -->
+<%- include('partials/footer') %> 
 
 <!-- External JavaScript for handling uploads and interactivity -->
 <script src="/js/uploadHandler.js"></script>
