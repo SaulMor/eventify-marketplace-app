@@ -1,0 +1,172 @@
+/* Main container */
+.messages-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* Breadcrumbs and Title */
+.breadcrumbs {
+    font-size: 0.9em;
+    color: #666; /* Changed to a darker gray for better contrast */
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #222; /* Darkened for better readability */
+}
+
+/* Tabs for Buyer and Seller Messages */
+.tabs {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: #e0e0e0; /* Lighter gray for background */
+    border: 1px solid #bbb; /* Slightly darker border */
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #222; /* Dark text for better contrast */
+    font-size: 1em;
+    outline: none;
+}
+
+.tab-button.active {
+    background-color: #2b8337; /* Darker blue for active state */
+    color: white;
+}
+
+/* Layout */
+.messages-content {
+    display: flex;
+    border: 1px solid #bbb; /* Darkened border */
+    border-radius: 10px;
+    overflow: hidden;
+    height: 500px;
+}
+
+/* Sidebar for contacts */
+.sidebar {
+    width: 25%;
+    background-color: #f5f5f5; /* Slightly off-white for sidebar */
+    border-right: 1px solid #bbb; /* Darkened border */
+    overflow-y: auto;
+}
+
+.contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact {
+    padding: 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    color: #222; /* Dark text for better contrast */
+}
+
+.contact:hover,
+.contact.active {
+    background-color: #7e8285; /* Darker blue for hover/active */
+    color: white;
+}
+
+/* Message thread area */
+.message-thread {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+}
+
+/* Chat header */
+.chat-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #222; /* Dark text */
+}
+
+/* Message content area */
+.message-thread-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px 15px;
+    border-radius: 8px;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+/* Notification, user, and response messages */
+.message.notification {
+    background-color: #e0e0e0; /* Light gray for notifications */
+    color: #222; /* Dark text */
+    align-self: center;
+}
+
+.message.user {
+    background-color: #2b8337; /* Darker blue for user messages */
+    color: white;
+    align-self: flex-end;
+}
+
+.message.response {
+    background-color: #f0f0f0; /* Light gray for responses */
+    color: #222; /* Dark text */
+    align-self: flex-start;
+}
+
+/* Input area */
+.message-input {
+    border-top: 1px solid #ddd;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5; /* Off-white for input area */
+}
+
+.message-input input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    font-size: 1em;
+    outline: none;
+}
+
+/* Scrollbar styles */
+.sidebar, .message-thread-content {
+    scrollbar-width: thin;
+    scrollbar-color: #bbb #f5f5f5; /* Darker scrollbar */
+}
+
+.sidebar::-webkit-scrollbar, .message-thread-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb, .message-thread-content::-webkit-scrollbar-thumb {
+    background-color: #bbb; /* Darker scrollbar thumb */
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track, .message-thread-content::-webkit-scrollbar-track {
+    background-color: #f5f5f5; /* Off-white for scrollbar track */
+}
