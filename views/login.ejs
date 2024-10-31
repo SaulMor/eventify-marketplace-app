@@ -1,3 +1,4 @@
+<!-- views/login.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,16 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Eventify</title>
     <link rel="stylesheet" href="/css/login.css">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 </head>
 <body>
     <header>
-        <img src="/media/images/brandlogo.png" alt="eventify brand logo" class="brand-logo">
+        <img src="/media/images/brandlogo.png" alt="Eventify Brand Logo" class="brand-logo">
     </header>
     
     <main>
         <div class="login-container">
             <h1 class="login-title">Login</h1>
-            <form action="/auth/login" method="POST">
+
+            <form id="login-form" class="login-form">
+                <!-- Include CSRF Token -->
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <input type="email" id="email" name="email" required placeholder="Email">
                 <input type="password" id="password" name="password" required placeholder="Password">
                 <div class="form-options">
@@ -25,5 +33,11 @@
             <p>Don't have an account? <a href="/auth/signup" class="signup-link">Create new</a></p>
         </div>
     </main>
+
+    <!-- Initialize Firebase (External Script) -->
+    <script src="/js/firebase-init.js"></script>
+
+    <!-- Include custom JavaScript for handling Firebase Authentication -->
+    <script src="/js/auth.js"></script>
 </body>
 </html>

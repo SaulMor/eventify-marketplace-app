@@ -2,16 +2,15 @@
 
 const express = require('express');
 const router = express.Router();
-const Listing = require('../models/Listing'); // Correct path to Listing model
-const User = require('../models/User'); // Import User model
-const Offer = require('../models/Offer'); // Import Offer model (ensure this exists)
-const ensureAuthenticated = require('../middleware/auth'); // Correct Import
-const multer = require('multer'); // For handling file uploads
+const Listing = require('../models/Listing');
+const User = require('../models/User');
+const Offer = require('../models/Offer');
+const ensureAuthenticated = require('../middleware/auth');
+const multer = require('multer');
 const path = require('path');
-const fs = require('fs'); // For file system operations
-const { body, validationResult } = require('express-validator'); // For input validation
+const fs = require('fs');
+const { body, validationResult } = require('express-validator');
 const mongoosePaginate = require('mongoose-paginate-v2');
-
 
 // Multer Configuration for Image Uploads
 const storage = multer.diskStorage({
@@ -19,7 +18,6 @@ const storage = multer.diskStorage({
         cb(null, 'public/uploads/'); // Ensure this directory exists
     },
     filename: function (req, file, cb) {
-        // Generate a unique filename using timestamp and original extension
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
@@ -47,11 +45,9 @@ const upload = multer({
 // Handle Multer Errors
 router.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
         req.flash('error', err.message);
         return res.redirect('back');
     } else if (err) {
-        // An unknown error occurred.
         req.flash('error', err.message || 'An unexpected error occurred.');
         return res.redirect('back');
     }
@@ -79,7 +75,6 @@ router.post('/create', ensureAuthenticated, upload.array('photos', 5), [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        // Collect error messages
         const errorMessages = errors.array().map(err => err.msg).join(' ');
         req.flash('error', errorMessages);
         return res.status(400).redirect('/listing/create');
@@ -95,6 +90,8 @@ router.post('/create', ensureAuthenticated, upload.array('photos', 5), [
             photos = req.files.map(file => `/uploads/${file.filename}`);
         } else {
             console.log('No files were uploaded.');
+            req.flash('error', 'No files were uploaded.');
+            return res.redirect('/listing/create');
         }
 
         // Create a new listing document
@@ -104,12 +101,12 @@ router.post('/create', ensureAuthenticated, upload.array('photos', 5), [
             category,
             location,
             condition,
-            handmade: req.body.handmade || 'no', // Default to 'no' if not provided
-            quantity: req.body.quantity || 1, // Default to 1 if not provided
-            delivery: req.body.delivery || 'pickup', // Default to 'pickup' if not provided
-            color: req.body.color || 'N/A', // Default to 'N/A' if not provided
+            handmade: req.body.handmade || 'no',
+            quantity: req.body.quantity || 1,
+            delivery: req.body.delivery || 'pickup',
+            color: req.body.color || 'N/A',
             photos,
-            userId: req.session.userId, // Correctly associate with the user
+            userId: req.session.user.id, // Correct association
             description
         });
 
@@ -144,13 +141,13 @@ router.get("/:id", ensureAuthenticated, async (req, res) => {
         }
 
         // Check if the logged-in user is the owner of the listing
-        if (listing.userId._id.toString() !== req.session.userId.toString()) {
+        if (listing.userId._id.toString() !== req.session.user.id.toString()) {
             req.flash("error", "You are not authorized to view this listing.");
             return res.redirect("/user/profile1");
         }
 
         // Fetch the current user's details
-        const currentUser = await User.findById(req.session.userId).lean();
+        const currentUser = await User.findById(req.session.user.id).lean();
 
         res.render("listingDetail", { listing, user: currentUser });
     } catch (error) {
@@ -172,7 +169,7 @@ router.get('/:id/offers', ensureAuthenticated, async (req, res) => {
         }
 
         // Check if the logged-in user is the owner of the listing
-        if (listing.userId._id.toString() !== req.session.userId.toString()) {
+        if (listing.userId._id.toString() !== req.session.user.id.toString()) {
             req.flash("error", "You are not authorized to view offers for this listing.");
             return res.redirect("/user/profile1");
         }
@@ -187,7 +184,7 @@ router.get('/:id/offers', ensureAuthenticated, async (req, res) => {
             req.flash('success', 'No offers received yet.');
         }
 
-        res.render('viewOffers', { listing, offers, user: await User.findById(req.session.userId).lean() });
+        res.render('viewOffers', { listing, offers, user: await User.findById(req.session.user.id).lean() });
     } catch (error) {
         console.error('Error fetching offers:', error);
         req.flash('error', 'An error occurred while fetching offers.');
@@ -211,7 +208,7 @@ router.get('/edit/:id', ensureAuthenticated, async (req, res) => {
         }
 
         // Check if the logged-in user is the owner of the listing
-        if (listing.userId.toString() !== req.session.userId.toString()) {
+        if (listing.userId.toString() !== req.session.user.id.toString()) {
             req.flash('error', 'You are not authorized to edit this listing.');
             return res.redirect('/user/profile1');
         }
@@ -238,7 +235,6 @@ router.put('/edit/:id', ensureAuthenticated, upload.array('photos', 5), [
     const listingId = req.params.id;
 
     if (!errors.isEmpty()) {
-        // Collect error messages
         const errorMessages = errors.array().map(err => err.msg).join(' ');
         req.flash('error', errorMessages);
         return res.status(400).redirect(`/listing/edit/${listingId}`);
@@ -253,7 +249,7 @@ router.put('/edit/:id', ensureAuthenticated, upload.array('photos', 5), [
         }
 
         // Check if the logged-in user is the owner of the listing
-        if (listing.userId.toString() !== req.session.userId.toString()) {
+        if (listing.userId.toString() !== req.session.user.id.toString()) {
             req.flash('error', 'You are not authorized to edit this listing.');
             return res.redirect('/user/profile1');
         }
@@ -320,7 +316,7 @@ router.delete('/delete/:id', ensureAuthenticated, async (req, res) => {
         }
 
         // Check if the logged-in user is the owner of the listing
-        if (listing.userId.toString() !== req.session.userId.toString()) {
+        if (listing.userId.toString() !== req.session.user.id.toString()) {
             req.flash('error', 'You are not authorized to delete this listing.');
             return res.redirect('/user/profile1');
         }
@@ -339,6 +335,9 @@ router.delete('/delete/:id', ensureAuthenticated, async (req, res) => {
                 });
             });
         }
+
+        // Set a success flash message
+        req.flash('success', 'Listing deleted successfully.');
 
         // Redirect to the user's profile page
         res.redirect('/user/profile1');
