@@ -174,7 +174,7 @@ router.get('/:id/offers', ensureAuthenticated, async (req, res) => {
             return res.redirect("/user/profile1");
         }
 
-        // Fetch offers related to this listing (assuming you have an Offer model)
+        // Fetch offers related to this listing (Offer model)
         const offers = await Offer.find({ listingId: listingId }).populate('userId', 'name email').lean();
 
         // Set a success flash message if needed
