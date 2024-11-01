@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character set and responsive design -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications & Messages</title>
+
+    <!-- Stylesheets for message, header, and footer -->
+    <link rel="stylesheet" href="/css/message.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+    <!-- Include the header partial for navigation -->
+    <%- include('partials/header') %>
+
+    <div class="messages-container">
+        <!-- Breadcrumbs for navigation -->
+        <div class="breadcrumbs">
+            <p>Eventify / Notifications & Messages</p>
+        </div>
+        
+        <!-- Main title of the page -->
+        <h2>Notifications & Messages</h2>
+
+        <!-- Tabs for switching between Buyer and Seller messages -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchView('buyer')">Buyer Messages</button>
+            <button class="tab-button" onclick="switchView('seller')">Seller Messages</button>
+        </div>
+
+        <!-- Container for messages and user interactions -->
+        <div class="messages-content">
+            <!-- Sidebar for user contacts -->
+            <div class="sidebar" id="contactList">
+                <ul class="contact-list">
+                    <li class="contact" onclick="selectUser('Username Is Something')">Username Is Something</li>
+                    <li class="contact" onclick="selectUser('Someone')">Someone</li>
+                    <li class="contact" onclick="selectUser('Random Person')">Random Person</li>
+                </ul>
+            </div>
+
+            <!-- Main area for message threads -->
+            <div class="message-thread">
+                <!-- Chat header displaying the currently selected user -->
+                <div class="chat-header">
+                    <p id="chatWith">Now chatting with <strong>Select a user</strong></p>
+                </div>
+                <!-- Area for displaying messages -->
+                <div class="message-thread-content" id="messageThreadContent"></div>
+                <!-- Input area for typing messages -->
+                <div class="message-input">
+                    <input type="text" placeholder="Type your message here." />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include the footer partial for additional information -->
+    <%- include('partials/footer') %>
+
+    <!-- Static JavaScript section for handling message logic -->
+    <script>
+        let currentView = 'buyer'; // Default view for messages
+        let currentUser = ''; // Currently selected user
+
+        // Sample message data structure for users
+        const messages = {
+            "Username Is Something": {
+                buyer: [
+                    { type: 'notification', text: 'Profile Name 1 liked your listing.' },
+                    { type: 'user', text: 'I WANT A DISCOUNT.' },
+                    { type: 'response', text: 'Ok, I will take $5 off. I just made the changes to the listing.' },
+                ],
+                seller: [
+                    { type: 'notification', text: 'Profile Name 2 has just lowered the listing by 10%.' },
+                    { type: 'notification', text: 'Profile Name 1 has purchased the item.' }
+                ]
+            },
+            "Someone": {
+                buyer: [
+                    { type: 'user', text: 'Hello! Is this item still available?' },
+                    { type: 'response', text: 'Yes, it is!' }
+                ],
+                seller: [
+                    { type: 'notification', text: 'Someone has sent you a message.' }
+                ]
+            },
+        };
+
+        // Function to switch between Buyer and Seller message views
+        function switchView(view) {
+            currentView = view; // Update the current view
+            // Remove 'active' class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+            // Add 'active' class to the selected tab button
+            document.querySelector(`[onclick="switchView('${view}')"]`).classList.add('active');
+            updateMessages(); // Update messages displayed
+        }
+
+        // Function to select a user and display their messages
+        function selectUser(user) {
+            currentUser = user; // Update the current user
+            // Remove 'active' class from all contacts
+            document.querySelectorAll('.contact').forEach(contact => contact.classList.remove('active'));
+            // Add 'active' class to the selected contact
+            document.querySelector(`[onclick="selectUser('${user}')"]`).classList.add('active');
+            // Update chat header to show the current user
+            document.getElementById('chatWith').innerHTML = `Now chatting with <strong>${user}</strong>`;
+            updateMessages(); // Update messages displayed
+        }
+
+        // Function to update the messages in the chat window
+        function updateMessages() {
+            const messageThread = document.getElementById('messageThreadContent');
+            messageThread.innerHTML = ''; // Clear previous messages
+            
+            // Check if there are messages for the selected user and current view
+            if (currentUser && messages[currentUser] && messages[currentUser][currentView]) {
+                messages[currentUser][currentView].forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `message ${msg.type}`; // Assign class based on message type
+                    messageElement.textContent = msg.text; // Set message text
+                    messageThread.appendChild(messageElement); // Append message to the thread
+                });
+            } else {
+                // If no messages, display a prompt to select a user
+                const noMessages = document.createElement('p');
+                noMessages.className = 'no-messages';
+                noMessages.textContent = 'Select a user to view messages.';
+                messageThread.appendChild(noMessages);
+            }
+        }
+    </script>
+</body>
+</html>
