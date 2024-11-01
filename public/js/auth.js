@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signup-form');
     const loginForm = document.getElementById('login-form');
-    const logoutForm = document.getElementById('logout-form'); // If you have a logout form
+    const logoutForm = document.getElementById('logout-form'); 
 
     // Handle Signup Form Submission
     if (signupForm) {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get ID token
                 const idToken = await user.getIdToken();
 
-                // Send user data to your server to create a local user record and establish a session
+                // Send user data to server to create a local user record and establish a session
                 const response = await fetch('/auth/signup', {
                     method: 'POST',
                     headers: {
