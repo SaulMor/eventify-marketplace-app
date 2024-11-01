@@ -94,9 +94,9 @@ app.use(
     })
 );
 
-// CORS Middleware (Optional: Adjust based on your needs)
+// CORS Middleware
 app.use(cors({
-    origin: 'http://localhost:3000', // Replace with your client's origin
+    origin: 'http://localhost:3000', 
     credentials: true
 }));
 
@@ -113,7 +113,7 @@ app.use(cookieParser());
 
 // Initialize express-session with MongoDB as the session store
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a strong secret in production
+    secret: process.env.SESSION_SECRET || 'your-secret-key', 
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
