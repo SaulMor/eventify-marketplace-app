@@ -1,3 +1,5 @@
+<!-- views/index.ejs-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +13,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/home.css"> <!-- New CSS for Home Page -->
+    <link rel="stylesheet" href="/css/home.css"> <!-- Home Page CSS -->
 </head>
 <body>
     <!-- Conditional Header -->
@@ -45,6 +47,15 @@
                     <button onclick="location.href='/auth/signup';" class="btn-signup">Sign Up</button>
                 </div>
             <% } %>
+        </section>
+
+        <!-- Seasonal Deals Section -->
+        <section class="seasonal-deals">
+            <div class="seasonal-overlay">
+                <h2>Holiday Deals!</h2>
+                <p>Up to 40% off everything you need to celebrate the season.</p>
+                <button onclick="location.href='/shop';" class="btn-shop-now">Shop Now</button>
+            </div>
         </section>
 
         <!-- Featured Listings Section -->
