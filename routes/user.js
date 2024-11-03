@@ -5,9 +5,11 @@ const router = express.Router();
 const User = require('../models/User');
 const Listing = require('../models/Listing'); // Ensure Listing model exists
 const ensureAuthenticated = require('../middleware/auth'); // Import the middleware
+const csrf = require('csurf');
+const csrfProtection = csrf();
 
 // Profile Route (Protected)
-router.get('/profile1', ensureAuthenticated, async (req, res) => {
+router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
         const userId = req.session.user.id; // Retrieve user ID from session
 
@@ -21,7 +23,11 @@ router.get('/profile1', ensureAuthenticated, async (req, res) => {
         // Get listings posted by the user
         const listings = await Listing.find({ userId: user._id }).lean();
 
-        res.render('profile1', { user, listings, csrfToken: res.locals.csrfToken });
+        res.render('profile1', { 
+            user, 
+            listings, 
+            csrfToken: req.csrfToken() 
+        });
     } catch (error) {
         console.error('Error retrieving profile:', error);
         req.flash('error', 'An error occurred while retrieving your profile.');
@@ -30,7 +36,7 @@ router.get('/profile1', ensureAuthenticated, async (req, res) => {
 });
 
 // Optionally, you can remove or update the /profile route if not needed
-router.get('/profile', ensureAuthenticated, async (req, res) => {
+router.get('/profile', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
         const userId = req.session.user.id; // Retrieve user ID from session
 
@@ -44,7 +50,11 @@ router.get('/profile', ensureAuthenticated, async (req, res) => {
         // Get listings posted by the user
         const listings = await Listing.find({ userId: user._id }).lean();
 
-        res.render('profile', { user, listings, csrfToken: res.locals.csrfToken });
+        res.render('profile', { 
+            user, 
+            listings, 
+            csrfToken: req.csrfToken() 
+        });
     } catch (error) {
         console.error('Error retrieving profile:', error);
         req.flash('error', 'An error occurred while retrieving your profile.');

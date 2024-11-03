@@ -1,3 +1,5 @@
+// public/js/header.js
+
 // Function to toggle the profile dropdown visibility
 function toggleProfileDropdown(event) {
     event.stopPropagation(); // Prevent the click event from bubbling up to the window

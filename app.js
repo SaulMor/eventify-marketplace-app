@@ -3,20 +3,19 @@
 const express = require('express');
 const path = require('path'); 
 const mongoose = require('mongoose'); 
-const methodOverride = require('method-override');
 const morgan = require('morgan'); // For logging
 const helmet = require('helmet'); // For securing HTTP headers
 const rateLimit = require('express-rate-limit'); // For rate limiting
 const admin = require('firebase-admin');
 const cors = require('cors'); // For handling CORS, if needed
-const csrf = require('csurf'); // CSRF protection
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // Import cookie-parser
 const session = require('express-session'); // Import express-session
 const MongoStore = require('connect-mongo'); // Import connect-mongo
 const flash = require('connect-flash');
+const csrf = require('csurf');
+const dotenv = require('dotenv'); // For environment variables
 
-require('dotenv').config(); // Load environment variables
+dotenv.config(); // Load environment variables
 
 const app = express();
 
@@ -32,31 +31,28 @@ mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
     .catch((error) => console.error('MongoDB connection error:', error));
 
 // -----------------------------
-// Middleware
+// Firebase Admin Initialization
 // -----------------------------
 
-// Initialize Firebase Admin SDK using the service account JSON file
-const serviceAccount = require('./serviceAccountKey.json');
+const serviceAccount = require('./serviceAccountKey.json'); // Ensure correct path
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     // databaseURL: "https://your_project_id.firebaseio.com", // Uncomment if using Realtime Database
 });
 
-// HTTP request logger
-app.use(morgan('dev'));
-
-// Body Parsing Middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
-
-// Method Override Middleware
-app.use(methodOverride('_method')); // Looks for a query parameter like ?_method=PUT
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public'))); 
 
-// Helmet for security
+// -----------------------------
+// Middleware
+// -----------------------------
+
+// HTTP request logger
+app.use(morgan('dev'));
+
+// Security Headers
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
@@ -96,22 +92,18 @@ app.use(
 
 // CORS Middleware
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost:3000', // Adjust as needed
     credentials: true
 }));
 
-// Rate Limiting (Optional but Recommended)
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
-    message: 'Too many attempts from this IP, please try again after 15 minutes'
-});
-app.use('/auth', authLimiter);
+// Body Parsing Middleware using Express's built-in parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Use cookie-parser before express-session and csurf
+// Cookie Parsing Middleware
 app.use(cookieParser());
 
-// Initialize express-session with MongoDB as the session store
+// Session Management
 app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key', 
     resave: false,
@@ -120,34 +112,19 @@ app.use(session({
     cookie: { 
         secure: process.env.NODE_ENV === 'production', // true in production
         httpOnly: true,
+        sameSite: 'lax', // Helps protect against CSRF
         maxAge: 1000 * 60 * 60 * 24 // 1 day
     }
 }));
 
-// Initialize connect-flash
+// Flash Messages
 app.use(flash());
 
-// Make flash messages available in all views
+// Make flash messages and user info available in all views
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
-    next();
-});
-
-// Initialize CSRF protection with cookies
-const csrfProtection = csrf({ cookie: true });
-
-// Apply CSRF protection to auth routes and set csrfToken
-app.use('/auth', csrfProtection, (req, res, next) => {
-    res.locals.csrfToken = req.csrfToken(); // Set CSRF token for EJS templates
-    next();
-}, require('./routes/auth'));
-
-// Make CSRF token available in all views if it exists (for other routes)
-app.use((req, res, next) => {
-    if (req.csrfToken) {
-        res.locals.csrfToken = req.csrfToken();
-    }
+    res.locals.user = req.session.user || null;
     next();
 });
 
@@ -162,13 +139,23 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 // -----------------------------
+// Rate Limiting
+// -----------------------------
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: "Too many requests from this IP, please try again after 15 minutes."
+});
+app.use(limiter);
+
+// -----------------------------
 // Routes
 // -----------------------------
 
-// Home Route
-app.get('/', (req, res) => {
-    res.render('index'); // Render index.ejs
-});
+// Mount index routes
+const indexRouter = require('./routes/index');
+app.use('/', indexRouter);
 
 // Contact Route
 app.get('/contact', (req, res) => {
@@ -185,19 +172,21 @@ app.get('/orderActivity', (req, res) => {
     res.render('orderActivity'); // Make sure this matches the EJS file in 'views' folder
 });
 
-// -----------------------------
 // Listing Routes (Mounted Here)
-// -----------------------------
-
 const listingRoutes = require('./routes/listing'); // Import the listing routes
 app.use('/listing', listingRoutes); // Mount them under /listing
 
-// -----------------------------
-// User Routes (Protected API)
-// -----------------------------
+// Product Routes (Mounted Here)
+const productRoutes = require('./routes/product'); // Import the product routes
+app.use('/products', productRoutes); // Mount them under /products
 
+// User Routes (Protected API)
 const userRoutes = require('./routes/user'); // Import the user routes
 app.use('/user', userRoutes); // Mount them under /user
+
+// Auth Routes (Login, Signup, Logout)
+const authRoutes = require('./routes/auth'); // Import the auth routes
+app.use('/auth', authRoutes); // Mount them under /auth
 
 // -----------------------------
 // Error Handling Middleware
@@ -211,6 +200,12 @@ app.use((req, res, next) => {
 // 500 Route (Error handling middleware)
 app.use((err, req, res, next) => {
     console.error(err.stack);
+    if (err.code === 'EBADCSRFTOKEN') {
+        // handle CSRF token errors here
+        req.flash('error', 'Invalid CSRF token. Please refresh the page and try again.');
+        return res.status(403).json({ error: 'Invalid CSRF token.' });
+    }
+
     if (req.originalUrl.startsWith('/auth') || req.originalUrl.startsWith('/user')) {
         // If the request is for an API route, respond with JSON
         res.status(500).json({ error: 'Internal Server Error' });

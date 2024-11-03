@@ -36,7 +36,8 @@
 
         <!-- Form Starts Here -->
         <form action="/listing/create" method="POST" enctype="multipart/form-data"> <!-- Important for file uploads -->
-            
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
             <!-- Photo Upload Section -->
             <section class="photo-upload-section">
                 <h2>Photo Upload</h2>

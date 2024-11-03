@@ -1,4 +1,4 @@
-// public/js/auth.js
+// public/js/auth.js 
 
 document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signup-form');
@@ -13,11 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword') ? document.getElementById('confirmPassword').value : '';
             const csrfToken = document.querySelector('input[name="_csrf"]').value; // Get CSRF token
 
             // Basic Frontend Validation
-            if (password !== confirmPassword) {
+            if (confirmPassword && password !== confirmPassword) {
                 alert('Passwords do not match.');
                 return;
             }
@@ -38,18 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get ID token
                 const idToken = await user.getIdToken();
 
-                // Send user data to server to create a local user record and establish a session
+                // Send idToken and name to server to create a local user record and establish a session
                 const response = await fetch('/auth/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken // Include CSRF token in headers
+                        'CSRF-Token': csrfToken // Include CSRF token in headers
                     },
                     body: JSON.stringify({
+                        idToken: idToken,
                         name: name,
-                        email: email,
-                        firebaseUid: user.uid,
-                        idToken: idToken // Send ID token for verification and session creation
                     })
                 });
 
@@ -85,21 +83,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get ID token
                 const idToken = await user.getIdToken();
 
-                // Send the ID token to the server to establish a session
+                // Send the idToken to the server to establish a session
                 const response = await fetch('/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken // Include CSRF token in headers
+                        'CSRF-Token': csrfToken // Include CSRF token in headers
                     },
-                    body: JSON.stringify({ idToken: idToken })
+                    body: JSON.stringify({ 
+                        idToken: idToken
+                    })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
                     alert(data.success);
-                    window.location.href = '/user/profile1';
+                    window.location.href = '/'; // Redirect to home page after login
                 } else {
                     alert(data.error || 'Login failed.');
                 }
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-Token': csrfToken
+                        'CSRF-Token': csrfToken
                     }
                 });
 

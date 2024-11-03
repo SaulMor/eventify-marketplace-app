@@ -22,4 +22,4 @@ const listingSchema = new mongoose.Schema({
 // Apply the mongoose-paginate-v2 plugin if using pagination
 listingSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('Listing', listingSchema); 
+module.exports = mongoose.model('Listing', listingSchema);

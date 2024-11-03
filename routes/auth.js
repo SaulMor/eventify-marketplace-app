@@ -4,110 +4,106 @@ const express = require("express");
 const router = express.Router();
 const admin = require("firebase-admin");
 const User = require("../models/User");
-
-// Display Login Page
-router.get("/login", (req, res) => {
-  res.render("login", {
-    title: "Login",
-    formData: {},
-    csrfToken: res.locals.csrfToken, // Pass csrfToken to EJS
-    error: req.session.error || null,
-    success: req.session.success || null,
-  });
-  // Clear the error and success after displaying
-  req.session.error = null;
-  req.session.success = null;
-});
+const axios = require("axios"); // Ensure axios is installed: npm install axios
+const csrf = require('csurf');
+const csrfProtection = csrf();
 
 // Display Signup Page
-router.get("/signup", (req, res) => {
+router.get("/signup", csrfProtection, (req, res) => {
   res.render("signup", {
     title: "Sign Up",
     formData: {},
-    csrfToken: res.locals.csrfToken, // Pass csrfToken to EJS
-    error: req.session.error || null,
-    success: req.session.success || null,
+    csrfToken: req.csrfToken(), // Pass csrfToken to EJS
+    error: req.flash('error'),
+    success: req.flash('success'),
   });
-  // Clear the error and success after displaying
-  req.session.error = null;
-  req.session.success = null;
+});
+
+// Display Login Page
+router.get("/login", csrfProtection, (req, res) => {
+  res.render("login", {
+    title: "Login",
+    formData: {},
+    csrfToken: req.csrfToken(), // Pass csrfToken to EJS
+    error: req.flash('error'),
+    success: req.flash('success'),
+  });
 });
 
 // Handle Signup Form Submission
-router.post("/signup", async (req, res) => {
+router.post("/signup", csrfProtection, async (req, res) => {
   try {
-    const { name, email, firebaseUid, idToken } = req.body;
+    const { idToken, name } = req.body;
 
-    console.log("Received signup request:", {
-      name,
-      email,
-      firebaseUid,
-      idToken,
-    });
-
-    // Validate input
-    if (!name || !email || !firebaseUid || !idToken) {
-      console.error("Signup validation failed: Missing fields");
-      return res.status(400).json({ error: "All fields are required." });
+    if (!idToken || !name) {
+      console.error("Signup failed: Missing idToken or name");
+      return res.status(400).json({ error: "Invalid signup request." });
     }
 
-    // Verify the ID token with Firebase
+    // Verify the ID token with Firebase Admin SDK
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const { uid } = decodedToken;
+    const { uid, email } = decodedToken;
 
-    if (uid !== firebaseUid) {
-      console.error("Signup validation failed: UID mismatch");
-      return res.status(400).json({ error: "Invalid authentication token." });
+    if (!email) {
+      console.error("Signup failed: Email not found in token");
+      return res.status(400).json({ error: "Email not found. Please try again." });
     }
 
-    // Check if user already exists in local DB
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      console.error("Signup validation failed: Email already exists");
-      return res.status(400).json({ error: "Email already exists." });
+    // Check if user already exists in MongoDB
+    let user = await User.findOne({ firebaseUid: uid });
+
+    if (user) {
+      console.error("Signup failed: User already exists in MongoDB");
+      return res.status(400).json({ error: "User already exists." });
     }
 
     // Create local user record
-    const newUser = await User.create({
+    user = await User.create({
       name,
-      email,
-      firebaseUid: firebaseUid,
+      email: email.toLowerCase(),
+      firebaseUid: uid,
     });
 
-    console.log("User created in MongoDB:", newUser);
+    console.log("User created in MongoDB:", user);
 
-    return res
-      .status(201)
-      .json({ success: "Registration successful. Please log in." });
+    return res.status(201).json({ success: "Registration successful. Please log in." });
   } catch (err) {
     console.error("Error during signup:", err);
-    return res.status(500).json({ error: "Registration failed." });
+    return res.status(500).json({ error: "Registration failed. Please try again." });
   }
 });
 
 // Handle Login Form Submission
-router.post("/login", async (req, res) => {
+router.post("/login", csrfProtection, async (req, res) => {
   try {
-    const { idToken } = req.body; // Expecting idToken from client
+    const { idToken } = req.body;
 
     if (!idToken) {
-      console.error("Login failed: No ID token provided");
-      return res.status(400).json({ error: "ID token is required." });
+      console.error("Login failed: Missing idToken");
+      return res.status(400).json({ error: "Invalid login request." });
     }
 
-    // Verify the ID token using Firebase Admin SDK
+    // Verify the ID token with Firebase Admin SDK
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { uid, email, name } = decodedToken;
 
+    if (!uid || !email) {
+      console.error("Login failed: Invalid token data");
+      return res.status(400).json({ error: "Invalid login credentials." });
+    }
+
     // Find the user in MongoDB
     let user = await User.findOne({ firebaseUid: uid });
+
     if (!user) {
-      // Optionally, create a new user in MongoDB if not found
+      // If user doesn't exist, create a new local user record
       user = await User.create({
         name: name || "Unnamed",
-        email: email,
+        email: email.toLowerCase(),
         firebaseUid: uid,
       });
+
+      console.log("User created in MongoDB during login:", user);
     }
 
     // Set user info in session
@@ -118,17 +114,17 @@ router.post("/login", async (req, res) => {
       firebaseUid: user.firebaseUid,
     };
 
-    console.log("User logged in:", req.session.user);
+    console.log("User logged in and session set:", req.session.user);
 
-    return res.status(200).json({ success: "Login successful." });
+    return res.status(200).json({ success: "Logged in successfully!" });
   } catch (err) {
     console.error("Error during login:", err);
-    return res.status(500).json({ error: "Login failed." });
+    return res.status(500).json({ error: "Login failed. Please try again." });
   }
 });
 
 // Handle Logout
-router.post("/logout", (req, res) => {
+router.post("/logout", csrfProtection, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
