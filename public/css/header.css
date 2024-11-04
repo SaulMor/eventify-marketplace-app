@@ -1,17 +1,43 @@
-/* Global Styles */
-:root {
-    --header-height: 110px; /* Total height of the header */
+/* public/css/header.css */
+
+/* Global Box-Sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
+/* CSS Variables for Header Height */
+:root {
+    --header-height: 160px; 
+}
+
+@media (max-width: 1024px) {
+    :root {
+        --header-height: 170px; /* Adjust as needed */
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-height: 190px; /* Adjust as needed */
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --header-height: 210px; /* Adjust as needed */
+    }
+}
+
+/* Body Styles */
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    height: 100%;
     margin: 0;
-    padding-top: var(--header-height); /* Add padding equal to the header height */
+    padding-top: var(--header-height);
 }
 
+/* Header Styles */
 .eventify-header {
     position: fixed;
     z-index: 1000;
@@ -25,9 +51,9 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%; /* Ensure it takes full height as per header-height */
 }
 
-/* 1-0 Header Top */
 .header-top {
     display: flex;
     flex-direction: row;
@@ -36,9 +62,10 @@ body {
     align-items: center;
     justify-content: space-between; /* Space out elements */
     flex-wrap: wrap; /* Allow wrapping */
+    box-sizing: border-box;
+    flex: 1; /* Distribute space evenly */
 }
 
-/* 1-1 Brand Logo */
 .brand-logo-container {
     display: flex;
     width: auto;
@@ -57,7 +84,6 @@ body {
     display: block;
 }
 
-/* 1-2 Search Bar */
 .header-search-container {
     display: flex;
     align-items: center;
@@ -77,7 +103,7 @@ body {
     padding: 10px;
     border: 1px solid rgb(204, 204, 204);
     border-radius: 5px;
-    font-size: var(--16px);
+    font-size: 16px; 
 }
 
 .header-search-button {
@@ -88,13 +114,13 @@ body {
     background: none;
     border: none;
     color: rgb(102, 102, 102);
-    font-size: var(--25px);
+    font-size: 20px; 
     cursor: pointer;
 }
 
-/* 1-3 User Icons */
+/* User Icons */
 .user-icon-wrapper {
-    position: relative; /* Added to position dropdown relative to icon */
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -124,7 +150,7 @@ body {
     margin-left: 10px;
 }
 
-/* 2-0 Header Bottom */
+/* Header Bottom */
 .header-bottom {
     display: flex;
     flex-direction: row;
@@ -134,13 +160,7 @@ body {
     background-color: white;
     box-sizing: border-box;
     flex-wrap: wrap; /* Allow wrapping */
-}
-
-/* 2-1 Header Categories */
-.header-all-container {
-    display: flex;
-    align-items: center; /* Center align items */
-    margin-right: 10px; /* Space out from other categories */
+    flex: 1; /* Distribute space evenly */
 }
 
 .header-categories-container {
@@ -154,34 +174,30 @@ body {
     overflow: hidden; /* Prevent overflow */
 }
 
-/* Default category styles */
 .header-categories-container a {
     color: black;
     text-decoration: none;
     font-family: 'LaoMuangKhong-Regular', sans-serif;
     font-size: 20px;
-    transition: opacity 0.3s ease; /* Smooth transition for opacity */
-    padding: 10px 15px; /* Consistent padding */
-    border-radius: 5px; /* Rounded corners for consistency */
+    transition: opacity 0.3s ease; 
+    padding: 10px 15px; 
+    border-radius: 5px; 
 }
 
-/* Specific styles for the "All" button */
 .header-all-container .all-category {
-    background-color: rgba(233, 192, 113, 1); /* Match background color */
-    color: black; /* Ensure text color matches */
-    padding: 10px 15px; /* Padding for the button */
-    border-radius: 5px; /* Rounded corners */
-    font-weight: bold; /* Make the text bold */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+    background-color: rgba(233, 192, 113, 1);
+    color: black; 
+    padding: 10px 15px; 
+    border-radius: 5px; 
+    font-weight: bold; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
 }
 
-/* Hover effect for the "All" button */
 .header-all-container .all-category:hover {
-    background-color: rgba(233, 192, 113, 0.8); /* Slightly darker on hover */
-    color: white; /* Change text color on hover */
+    background-color: rgba(233, 192, 113, 0.8); 
+    color: white; 
 }
 
-/* 2-2 Header Sell */
 .header-sell-container {
     display: flex;
     align-items: center;
@@ -206,14 +222,13 @@ body {
     display: block;
 }
 
-/* Dropdown styles */
 .header-dropdown {
-    display: none; /* Initially hide the dropdown */
-    position: absolute; /* Position absolute for placement next to the sell button */
-    top: 50%; /* Center vertically */
-    left: 100%; /* Align next to sell button */
-    transform: translateY(-50%); /* Adjust for vertical centering */
-    z-index: 999; /* Ensure it appears above other elements */
+    display: none; 
+    position: absolute; 
+    top: 50%; 
+    left: 100%; 
+    transform: translateY(-50%);
+    z-index: 999; 
 }
 
 .category-dropdown {
@@ -223,72 +238,81 @@ body {
     font-size: 16px;
 }
 
-/* Profile Dropdown Styles */
+/* Profile Dropdown */
 .profile-dropdown {
-    display: none; /* Initially hide the dropdown */
-    position: absolute; /* Position absolute for placement */
-    right: 0; /* Align to the right of the profile icon */
-    top: calc(100% + 5px); /* Position below the icon with a small margin */
-    background-color: white; /* Background color for dropdown */
-    border: 1px solid rgba(204, 204, 204, 0.5); /* Light border */
-    border-radius: 5px; /* Rounded corners */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    z-index: 1000; /* Ensure it appears above other elements */
-    width: 220px; /* Slightly wider for content */
+    display: none; 
+    position: absolute; 
+    right: 0; 
+    top: calc(100% + 5px); 
+    background-color: white; 
+    border: 1px solid rgba(204, 204, 204, 0.5); 
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    z-index: 1000; 
+    width: 220px; 
 }
 
-/* Ensure dropdown is displayed on toggle */
 .profile-dropdown.show-dropdown {
-    display: block; /* Show dropdown when toggled */
+    display: block; 
 }
 
-/* Profile Section */
 .profile-dropdown .username {
-    padding: 15px; /* More padding for better spacing */
-    font-weight: bold; /* Bold text for username */
+    padding: 15px; 
+    font-weight: bold; 
     display: flex;
-    align-items: center; /* Align icon and text */
-    border-bottom: 1px solid rgba(204, 204, 204, 0.5); /* Separator */
-    margin-bottom: 5px; /* Space below the username */
+    align-items: center; 
+    border-bottom: 1px solid rgba(204, 204, 204, 0.5); 
+    margin-bottom: 5px;
 }
 
-/* Icon in Username */
 .profile-dropdown .username::before {
-    content: '👤'; /* Add an icon (you can use an image or FontAwesome icon) */
-    margin-right: 10px; /* Spacing between icon and text */
+    content: '👤'; 
+    margin-right: 10px; 
 }
 
-/* Dropdown Items */
 .dropdown-items {
     display: flex;
     flex-direction: column; /* Align items vertically */
 }
 
+.dropdown-items a,
 .dropdown-items button {
-    padding: 12px; /* Padding for dropdown items */
-    text-align: left; /* Align text to the left */
-    background: none; /* No background */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor for buttons */
-    width: 100%; /* Full width for consistency */
-    border-bottom: 1px solid rgba(204, 204, 204, 0.5); /* Separator between items */
+    padding: 12px; 
+    text-align: left; 
+    background: none; 
+    cursor: pointer; 
+    width: 100%; 
+    border-bottom: 1px solid rgba(204, 204, 204, 0.5); 
+    font-size: 16px; 
 }
 
-.dropdown-items button:last-child {
-    border-bottom: none; /* Remove border for the last item */
-}
-
+.dropdown-items a:hover,
 .dropdown-items button:hover {
     background-color: rgba(233, 192, 113, 0.2); /* Softer hover color */
 }
 
-/* Specific Buttons for Account Settings and Logout */
-.dropdown-items .account-settings,
-.dropdown-items .logout {
-    color: #333; /* Darker text for these items */
+.dropdown-items button:last-child,
+.dropdown-items a:last-child {
+    border-bottom: none; /* Remove border for the last item */
 }
 
+.logout-form {
+    margin: 0;
+}
 
+.logout-form button {
+    width: 100%;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.logout-form button:hover {
+    background-color: rgba(233, 192, 113, 0.2);
+}
 
 /* Styles for the login and sign-up buttons */
 .header-login-button,
@@ -308,6 +332,10 @@ body {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 1024px) {
+    :root {
+        --header-height: 170px; /* Adjusted height for medium screens */
+    }
+
     .header-categories-container a {
         opacity: 1; /* Fully visible */
     }
@@ -332,14 +360,26 @@ body {
     .header-categories-container a:nth-child(n) {
         opacity: 0; /* Fully faded out after a certain point */
     }
+
+    /* Adjust font sizes and element sizes for better fit */
+    .header-search-box {
+        font-size: 18px;
+    }
+
+    .header-categories-container a {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 768px) {
+    :root {
+        --header-height: 190px; /* Adjusted height for small screens */
+    }
+
     .header-categories-container {
         display: none; /* Hide categories on smaller screens */
     }
 
-    /* Show dropdown when categories are hidden */
     .header-dropdown {
         display: block; /* Show the dropdown */
     }
@@ -361,37 +401,63 @@ body {
         width: 100%; /* Full width for icons */
         justify-content: space-between; /* Space out icons */
         margin-top: 10px; /* Add some space above */
+        gap: 10px; /* Reduce gap on smaller screens */
     }
 
     .header-search-box {
         padding: 12px; /* Slightly increase padding */
-        font-size: var(--18px); /* Increase font size */
+        font-size: 18px; /* Increase font size */
     }
 
     .header-search-button {
-        font-size: var(--22px); /* Decrease search button font size */
+        font-size: 22px; /* Decrease search button font size */
     }
 
-    /* Adjust user icon spacing for mobile */
-    .user-icon-wrapper {
-        gap: 10px; /* Reduce gap on smaller screens */
+    .header-sell-button img {
+        width: 150px; /* Reduce size for better fit */
     }
 }
 
 @media (max-width: 480px) {
+    :root {
+        --header-height: 210px; /* Adjusted height for extra small screens */
+    }
+
     .header-top {
         flex-direction: column; /* Stack items */
         align-items: flex-start; /* Align items to the start */
         padding: 10px 15px; /* Reduce padding */
     }
 
-    .header-login-button,
-    .header-signup-button {
-        font-size: 20px; /* Reduce font size */
-        padding: 8px 15px; /* Reduce padding */
+    .header-search-container {
+        width: 100%;
+        margin: 10px 0;
+    }
+
+    .user-icon-wrapper {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
     }
 
     .header-categories-container a {
         font-size: 16px; /* Adjust font size */
+    }
+
+    .header-sell-button img {
+        width: 120px;
+    }
+
+    /* Further adjustments for better fit */
+    .header-search-box {
+        font-size: 16px;
+    }
+
+    .header-search-button {
+        font-size: 20px;
+    }
+
+    .profile-dropdown {
+        width: 200px; /* Slightly narrower on small screens */
     }
 }

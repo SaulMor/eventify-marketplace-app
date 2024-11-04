@@ -157,6 +157,10 @@ app.use(limiter);
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
 
+// Category Routes
+const categoryRoutes = require('./routes/category');
+app.use('/category', categoryRoutes);
+
 // Contact Route
 app.get('/contact', (req, res) => {
     res.render('contact'); // Ensure this matches the filename in your views directory
@@ -194,7 +198,7 @@ app.use('/auth', authRoutes); // Mount them under /auth
 
 // 404 Route (Should be the last route)
 app.use((req, res, next) => {
-    res.status(404).render('404', { message: 'Page Not Found' }); // Ensure you have a 404.ejs template
+    res.status(404).render('404', { message: 'Page Not Found' }); // Ensure 404.ejs template is available
 });
 
 // 500 Route (Error handling middleware)
