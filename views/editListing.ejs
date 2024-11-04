@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Existing Listing - Eventify</title>
+    <title>Edit Listing - Eventify</title>
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/editListing.css">
@@ -23,12 +23,21 @@
     <div class="listing-page">
         <!-- Page Header -->
         <div class="page-header">
-            <h1>Edit Existing Listing</h1>
+            <h1>Edit Listing</h1>
         </div>
         <div class="header-divider"></div>
 
-        <form action="/listing/edit/<%= listing._id %>?_method=PUT" method="POST" enctype="multipart/form-data"> 
-            
+        <!-- Display Flash Messages -->
+        <% if (error && error.length > 0) { %>
+            <div class="error-message"><%= error %></div>
+        <% } %>
+        <% if (success && success.length > 0) { %>
+            <div class="success-message"><%= success %></div>
+        <% } %>
+
+        <form action="/listing/edit/<%= listing._id %>" method="POST" enctype="multipart/form-data">
+            <!-- CSRF Token -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <!-- Photo Upload Section -->
             <section class="photo-upload-section">
                 <h2>Photo Upload</h2>
@@ -49,6 +58,11 @@
                     <!-- Thumbnails Preview Section -->
                     <div class="photo-thumbnails">
                         <!-- Dynamically Inserted Thumbnails via JavaScript -->
+                        <% if (listing.photos && listing.photos.length > 0) { %>
+                            <% listing.photos.forEach(function(photo) { %>
+                                <img src="<%= photo %>" alt="<%= listing.title %>" class="current-photo">
+                            <% }); %>
+                        <% } %>
                     </div>
                 </div>
 
@@ -68,7 +82,7 @@
                     <div class="form-column">
                         <!-- Title Field -->
                         <div class="form-group horizontal-group">
-                            <label for="title">Add Title of Listing</label>
+                            <label for="title">Title:</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="title-helper">
                                     Give your listing a clear, descriptive name (e.g., Rustic Wedding Lantern).
@@ -77,24 +91,22 @@
                                     type="text"
                                     id="title"
                                     name="title"
-                                    placeholder="*Add title of listing"
+                                    value="<%= listing.title %>"
                                     required
                                     aria-describedby="title-helper"
-                                    value="<%= listing.title || '' %>"
                                 />
                             </div>
                         </div>
 
                         <!-- Description Field -->
                         <div class="form-group">
-                            <label for="description">Description</label>
+                            <label for="description">Description:</label>
                             <textarea
                                 id="description"
                                 name="description"
-                                placeholder="*Provide a detailed description"
                                 required
                                 aria-describedby="description-helper"
-                            ><%= listing.description || '' %></textarea>
+                            ><%= listing.description %></textarea>
                             <p class="helper-text" id="description-helper">
                                 Provide detailed information about the item, including dimensions, material, and special features.
                             </p>
@@ -102,7 +114,7 @@
 
                         <!-- Category Field -->
                         <div class="form-group horizontal-group">
-                            <label for="category">Category</label>
+                            <label for="category">Category:</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="category-helper">
                                     Choose the event type or category that best fits your item (e.g., Wedding, Birthday, Halloween).
@@ -110,6 +122,7 @@
                                 <select
                                     id="category"
                                     name="category"
+                                    required
                                     aria-describedby="category-helper"
                                 >
                                     <option value="">Select Category</option>
@@ -132,7 +145,7 @@
                     <div class="form-column">
                         <!-- Location Field -->
                         <div class="form-group horizontal-group">
-                            <label for="location">Location</label>
+                            <label for="location">Location:</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="location-helper">
                                     Enter the location where the item is available for pickup or delivery.
@@ -141,16 +154,15 @@
                                     type="text"
                                     id="location"
                                     name="location"
-                                    placeholder="Enter Location"
+                                    value="<%= listing.location %>"
                                     aria-describedby="location-helper"
-                                    value="<%= listing.location || '' %>"
                                 />
                             </div>
                         </div>
 
                         <!-- Condition Field -->
                         <div class="form-group horizontal-group">
-                            <label for="condition">Condition</label>
+                            <label for="condition">Condition:</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="condition-helper">
                                     Select the current condition of your item.
@@ -158,6 +170,7 @@
                                 <select
                                     id="condition"
                                     name="condition"
+                                    required
                                     aria-describedby="condition-helper"
                                 >
                                     <option value="">Select Condition</option>
@@ -169,7 +182,7 @@
 
                         <!-- Price Field -->
                         <div class="form-group horizontal-group">
-                            <label for="price">Price</label>
+                            <label for="price">Price ($):</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="price-helper">
                                     Enter the price in dollars (e.g., 25 for $25).
@@ -178,18 +191,18 @@
                                     type="number"
                                     id="price"
                                     name="price"
-                                    placeholder="*Set Price"
+                                    value="<%= listing.price %>"
+                                    step="0.01"
                                     required
-                                    aria-describedby="price-helper"
-                                    value="<%= listing.price || '' %>"
                                     min="0"
+                                    aria-describedby="price-helper"
                                 />
                             </div>
                         </div>
 
                         <!-- Handmade Field -->
                         <div class="form-group horizontal-group">
-                            <label for="handmade">Handmade</label>
+                            <label for="handmade">Handmade:</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="handmade-helper">
                                     Indicate whether your listing is handmade.
@@ -206,92 +219,91 @@
                             </div>
                         </div>
                     </div>
+                </section>
+
+                <!-- Additional Details Section -->
+                <section class="additional-details-section">
+                    <h2>Additional Details</h2>
+                    <div class="section-divider"></div>
+
+                    <div class="form-row">
+                        <!-- Quantity Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="quantity">Quantity:</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="quantity-helper">
+                                    Specify the number of items available.
+                                </p>
+                                <input
+                                    type="number"
+                                    id="quantity"
+                                    name="quantity"
+                                    value="<%= listing.quantity %>"
+                                    min="1"
+                                    aria-describedby="quantity-helper"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Delivery Options Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="delivery">Delivery Options:</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="delivery-helper">
+                                    Choose your preferred delivery method.
+                                </p>
+                                <select
+                                    id="delivery"
+                                    name="delivery"
+                                    aria-describedby="delivery-helper"
+                                >
+                                    <option value="">Select Option</option>
+                                    <option value="pickup" <%= listing.delivery === 'pickup' ? 'selected' : '' %>>Pickup</option>
+                                    <option value="delivery" <%= listing.delivery === 'delivery' ? 'selected' : '' %>>Delivery</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Color Field -->
+                        <div class="form-group horizontal-group">
+                            <label for="color">Color:</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="color-helper">
+                                    Specify the color options available for your listing.
+                                </p>
+                                <input
+                                    type="text"
+                                    id="color"
+                                    name="color"
+                                    value="<%= listing.color %>"
+                                    aria-describedby="color-helper"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Buttons -->
+                <div class="form-buttons">
+                    <button type="submit" class="submit-btn">Update Listing</button>
+                    <button
+                        type="button"
+                        class="draft-btn"
+                        onclick="alert('Save as Draft feature is coming soon!')"
+                    >
+                        Save as Draft (Coming Soon)
+                    </button>
                 </div>
-            </section>
+            </form>
+        </div>
+    </main>
 
-            <!-- Additional Details Section -->
-            <section class="additional-details-section">
-                <h2>Additional Details</h2>
-                <div class="section-divider"></div>
+    <%- include('partials/footer') %> 
 
-                <div class="form-row">
-                    <!-- Quantity Field -->
-                    <div class="form-group horizontal-group">
-                        <label for="quantity">Quantity</label>
-                        <div class="input-helper-wrapper">
-                            <p class="helper-text" id="quantity-helper">
-                                Specify the number of items available.
-                            </p>
-                            <input
-                                type="number"
-                                id="quantity"
-                                name="quantity"
-                                placeholder="Enter quantity"
-                                aria-describedby="quantity-helper"
-                                min="1"
-                                value="<%= listing.quantity || 1 %>"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- Delivery Options Field -->
-                    <div class="form-group horizontal-group">
-                        <label for="delivery">Delivery Options</label>
-                        <div class="input-helper-wrapper">
-                            <p class="helper-text" id="delivery-helper">
-                                Choose your preferred delivery method.
-                            </p>
-                            <select
-                                id="delivery"
-                                name="delivery"
-                                aria-describedby="delivery-helper"
-                            >
-                                <option value="">Select Option</option>
-                                <option value="pickup" <%= listing.delivery === 'pickup' ? 'selected' : '' %>>Pickup</option>
-                                <option value="delivery" <%= listing.delivery === 'delivery' ? 'selected' : '' %>>Delivery</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Color Field -->
-                    <div class="form-group horizontal-group">
-                        <label for="color">Color</label>
-                        <div class="input-helper-wrapper">
-                            <p class="helper-text" id="color-helper">
-                                Specify the color options available for your listing.
-                            </p>
-                            <input
-                                type="text"
-                                id="color"
-                                name="color"
-                                placeholder="Select Color"
-                                aria-describedby="color-helper"
-                                value="<%= listing.color || '' %>"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Buttons -->
-            <div class="form-buttons">
-                <button type="submit" class="submit-btn">Submit Changes</button>
-                <button
-                    type="button"
-                    class="draft-btn"
-                    onclick="alert('Save as Draft feature is coming soon!')"
-                >
-                    Save as Draft (Coming Soon)
-                </button>
-            </div>
-        </form>
-    </div>
-</main>
-
-<%- include('partials/footer') %> 
-
-<!-- External JavaScript for handling uploads and interactivity -->
-<script src="/js/uploadHandler.js"></script>
+    <!-- External JavaScript for handling uploads and interactivity -->
+    <script src="/js/header.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/uploadHandler.js"></script>
 
 </body>
 </html>

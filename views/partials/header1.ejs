@@ -1,31 +1,36 @@
+<!-- views/partials/header1.ejs -->
+
 <header class="eventify-header">
     <div class="header-wrapper">
-        <!-- Header top section -->
+        <!-- Header Top Section -->
         <div class="header-top">
             <div class="brand-logo-container">
-                <button class="brand-logo-button" onclick="location.href='/';">
+                <button class="brand-logo-button" onclick="location.href='/'" aria-label="Home">
                     <img src="/media/images/brandlogo.png" alt="Eventify brand logo">
                 </button>
             </div>
-            <!-- Search bar -->
+
+            <!-- Search Bar -->
             <div class="header-search-container">
-                <form action="#" method="GET" class="header-search-form">
+                <form action="/search" method="GET" class="header-search-form">
                     <input type="text" name="query" class="header-search-box" placeholder="Search for anything">
-                    <button type="submit" class="header-search-button"><i class="fa fa-search"></i></button>
+                    <button type="submit" class="header-search-button" aria-label="Search">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </form>
             </div>
-            <!-- Login and Signup buttons -->
+
+            <!-- Login and Signup Buttons -->
             <div class="user-icon-wrapper">
-                <button onclick="location.href='/login';" class="header-login-button">Login</button>
-                <button onclick="location.href='/signup';" class="header-signup-button">Sign Up</button>
+                <button onclick="location.href='/auth/login';" class="header-login-button">Login</button>
+                <button onclick="location.href='/auth/signup';" class="header-signup-button">Sign Up</button>
             </div>
         </div>
-        <!-- Header bottom section -->
+
+        <!-- Header Bottom Section -->
         <div class="header-bottom">
-            <div class="header-all-container">
-                <a href="#">All</a>
-            </div>
             <div class="header-categories-container">
+                <a href="#" class="all-category">All</a>
                 <a href="#">Academic</a>
                 <a href="#">Birthday</a>
                 <a href="#">Corporate</a>
@@ -36,11 +41,28 @@
                 <a href="#">Seasonal</a>
                 <a href="#">Wedding</a>
             </div>
+
             <div class="header-sell-container">
-                <button class="header-sell-button">
+                <button class="header-sell-button" onclick="location.href='/auth/login';" aria-label="Sell">
                     <img src="/media/images/sell.png" alt="Sell">
                 </button>
             </div>
+        </div>
+
+        <!-- Dropdown for Smaller Screens -->
+        <div class="header-dropdown">
+            <select class="category-dropdown" onchange="location.href=this.value;">
+                <option value="#">All</option>
+                <option value="/category/Academic">Academic</option>
+                <option value="/category/Birthday">Birthday</option>
+                <option value="/category/Corporate">Corporate</option>
+                <option value="/category/Cultural">Cultural</option>
+                <option value="/category/Entertainment">Entertainment</option>
+                <option value="/category/Holiday">Holiday</option>
+                <option value="/category/Luxury">Luxury</option>
+                <option value="/category/Seasonal">Seasonal</option>
+                <option value="/category/Wedding">Wedding</option>
+            </select>
         </div>
     </div>
 </header>

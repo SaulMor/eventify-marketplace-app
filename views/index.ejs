@@ -1,23 +1,96 @@
+<!-- views/index.ejs-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Eventify Header</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventify Home</title>
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/header.css"> <!-- Link to the Header CSS file -->
-    <link rel="stylesheet" href="/css/footer.css"> <!-- Link to the Footer CSS file -->
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/home.css"> <!-- Home Page CSS -->
 </head>
 <body>
-    <%- include('partials/header') %>
+    <!-- Conditional Header -->
+    <% if (user) { %>
+        <%- include('partials/header') %>
+    <% } else { %>
+        <%- include('partials/header1') %>
+    <% } %>
+
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
     <main>
-        <h1>Welcome to Eventify!</h1>
-        <!-- Add your main content here -->
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Welcome to Eventify!</h1>
+            <p>Your one-stop platform for all event-related needs.</p>
+            <% if (!user) { %>
+                <div class="auth-buttons">
+                    <button onclick="location.href='/auth/login';" class="btn-login">Login</button>
+                    <button onclick="location.href='/auth/signup';" class="btn-signup">Sign Up</button>
+                </div>
+            <% } %>
+        </section>
+
+        <!-- Seasonal Deals Section -->
+        <section class="seasonal-deals">
+            <div class="seasonal-overlay">
+                <h2>Holiday Deals!</h2>
+                <p>Up to 40% off everything you need to celebrate the season.</p>
+                <button onclick="location.href='/shop';" class="btn-shop-now">Shop Now</button>
+            </div>
+        </section>
+
+        <!-- Featured Listings Section -->
+        <section class="featured-listings">
+            <h2>Featured Listings</h2>
+            <div class="listing-grid">
+                <% if (listings && listings.length > 0) { %>
+                    <% listings.forEach(function(listing) { %>
+                        <div class="listing-card">
+                            <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                            <div class="listing-info">
+                                <h3><%= listing.title %></h3>
+                                <p><%= listing.description.substring(0, 100) %>...</p>
+                                <div class="listing-price">
+                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                                    <% if (listing.originalPrice) { %>
+                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                                    <% } %>
+                                </div>
+                                <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No listings available at the moment. Please check back later!</p>
+                <% } %>
+            </div>
+        </section>
     </main>
-    <%- include('partials/footer') %> <!-- Include the footer partial -->
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- JavaScript Files -->
+    <script src="/js/header.js"></script>
+    <script src="/js/auth.js"></script>
 </body>
 </html>
-

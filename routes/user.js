@@ -1,49 +1,65 @@
+// routes/user.js
+
 const express = require('express'); 
 const router = express.Router();
 const User = require('../models/User');
-const bcrypt = require('bcrypt'); 
-const Listing = require('../models/Listing');
+const Listing = require('../models/Listing'); // Ensure Listing model exists
+const ensureAuthenticated = require('../middleware/auth'); // Import the middleware
+const csrf = require('csurf');
+const csrfProtection = csrf();
 
-// adding a profile route
-router.get('/profile', async (req, res) => {
+// Profile Route (Protected)
+router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
-        if (!req.session.userId) {
-            return res.redirect('/auth/signup');
-        }
+        const userId = req.session.user.id; // Retrieve user ID from session
 
-        // Find the user by id to display their profile
-        const user = await User.findById(req.session.userId);
+        // Find the user in the local database
+        const user = await User.findById(userId).lean();
         if (!user) {
-            return res.status(404).send("User not found");
+            req.flash('error', 'User not found.');
+            return res.status(404).redirect('/auth/login');
         }
 
         // Get listings posted by the user
-        const listings = await Listing.find({ userId: req.session.userId });
-        res.render('profile', { user, listings });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Profile Retrieving Error');
-    }
-}); 
-router.get('/profile1', async (req, res) => {
-    try {
-        if (!req.session.userId) {
-            return res.redirect('/auth/signup');
-        }
+        const listings = await Listing.find({ userId: user._id }).lean();
 
-        // Find the user by id to display their profile
-        const user = await User.findById(req.session.userId);
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-
-        // Get listings posted by the user
-        const listings = await Listing.find({ userId: req.session.userId });
-        res.render('profile1', { user, listings });
+        res.render('profile1', { 
+            user, 
+            listings, 
+            csrfToken: req.csrfToken() 
+        });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Profile Retrieving Error');
+        console.error('Error retrieving profile:', error);
+        req.flash('error', 'An error occurred while retrieving your profile.');
+        res.redirect('/auth/login');
     }
 });
+
+// Optionally, you can remove or update the /profile route if not needed
+router.get('/profile', ensureAuthenticated, csrfProtection, async (req, res) => {
+    try {
+        const userId = req.session.user.id; // Retrieve user ID from session
+
+        // Find the user in the local database
+        const user = await User.findById(userId).lean();
+        if (!user) {
+            req.flash('error', 'User not found.');
+            return res.status(404).redirect('/auth/login');
+        }
+
+        // Get listings posted by the user
+        const listings = await Listing.find({ userId: user._id }).lean();
+
+        res.render('profile', { 
+            user, 
+            listings, 
+            csrfToken: req.csrfToken() 
+        });
+    } catch (error) {
+        console.error('Error retrieving profile:', error);
+        req.flash('error', 'An error occurred while retrieving your profile.');
+        res.redirect('/auth/login');
+    }
+}); 
 
 module.exports = router; 

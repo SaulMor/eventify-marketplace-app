@@ -1,12 +1,15 @@
 <!-- views/signup.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup - Eventify</title>
+    <title>Sign Up - Eventify</title>
     <link rel="stylesheet" href="/css/signup.css">
+    <!-- Include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="/js/firebase-init.js"></script>
 </head>
 <body>
     <header>
@@ -15,22 +18,30 @@
     
     <main>
         <div class="signup-container">
-            <h1 class="signup-title">Create an Account</h1>
-            
-            <!-- Flash Messages -->
-            
+            <h1 class="signup-title">Sign Up</h1>
 
-            <form action="/auth/signup" method="POST" class="signup-form">
-                <input type="text" id="name" name="name" required placeholder="Full Name" value="<%= formData.name || '' %>">
-                <input type="email" id="email" name="email" required placeholder="Email" value="<%= formData.email || '' %>">
+            <% if (error && error.length > 0) { %>
+                <div class="error-message"><%= error[0] %></div>
+            <% } %>
+            <% if (success && success.length > 0) { %>
+                <div class="success-message"><%= success[0] %></div>
+            <% } %>
+
+            <form action="/auth/signup" method="POST" id="signup-form" class="signup-form">
+                <!-- Include CSRF Token -->
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="text" id="name" name="name" required placeholder="Name">
+                <input type="email" id="email" name="email" required placeholder="Email">
                 <input type="password" id="password" name="password" required placeholder="Password">
                 <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password">
                 <div class="form-options">
                     <button type="submit" class="signup-btn">Sign Up</button>
                 </div>
             </form>
-            <p>Already have an account? <a href="/auth/login" class="login-link">Login here</a>.</p>
+            <p>Already have an account? <a href="/auth/login" class="login-link">Login here</a></p>
         </div>
     </main>
+
+    <script src="/js/auth.js"></script>
 </body>
 </html>
