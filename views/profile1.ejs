@@ -152,7 +152,7 @@
                         <% if (listings.length > 0) { %>
                             <% listings.forEach(listing => { %>
                                 <div class="product-card">
-                                    <a href="/listing/<%= listing._id %>" class="product-link">
+                                    <a href="/listing/<%= listing._id %>/detail" class="product-link"> <!-- Updated Link -->
                                         <div class="product-image-container">
                                             <% if (listing.photos && listing.photos.length > 0) { %>
                                                 <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image" loading="lazy">

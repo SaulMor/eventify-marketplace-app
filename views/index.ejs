@@ -1,4 +1,4 @@
-<!-- views/index.ejs-->
+<!-- views/index.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
-    <!-- CSS Files -->
+    <!-- CSS Files (Order Matters) -->
+    <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/home.css"> <!-- Home Page CSS -->
@@ -50,40 +51,49 @@
         </section>
 
         <!-- Seasonal Deals Section -->
-        <section class="seasonal-deals">
+        <section class="seasonal-deals" style="background-image: url('<%= seasonalImage %>');">
             <div class="seasonal-overlay">
-                <h2>Holiday Deals!</h2>
-                <p>Up to 40% off everything you need to celebrate the season.</p>
-                <button onclick="location.href='/shop';" class="btn-shop-now">Shop Now</button>
+                <h2><%= seasonalText.split(' Deals')[0] %> Deals!</h2>
+                <% 
+                    // Split the seasonalText to separate main message and additional info
+                    const parts = seasonalText.split(' Deals! ');
+                    const mainText = parts[0] + ' Deals!';
+                    const additionalText = parts[1] || 'Don\'t miss out on our exclusive offers.';
+                %>
+                <p><%= additionalText %></p>
+                <button onclick="location.href='/shop';" class="btn-shop-now"><%= seasonalButtonText %></button>
             </div>
         </section>
 
         <!-- Featured Listings Section -->
-        <section class="featured-listings">
-            <h2>Featured Listings</h2>
-            <div class="listing-grid">
-                <% if (listings && listings.length > 0) { %>
-                    <% listings.forEach(function(listing) { %>
-                        <div class="listing-card">
-                            <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
-                            <div class="listing-info">
-                                <h3><%= listing.title %></h3>
-                                <p><%= listing.description.substring(0, 100) %>...</p>
-                                <div class="listing-price">
-                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
-                                    <% if (listing.originalPrice) { %>
-                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
-                                    <% } %>
-                                </div>
-                                <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
-                            </div>
+<section class="featured-listings">
+    <h2>Featured Listings</h2>
+    <div class="listing-grid">
+        <% if (listings && listings.length > 0) { %>
+            <% listings.forEach(function(listing) { %>
+                <div class="listing-card">
+                    <a href="/listing/<%= listing._id %>"> <!-- Dynamic Link -->
+                        <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                    </a>
+                    <div class="listing-info">
+                        <h3><%= listing.title %></h3>
+                        <p><%= listing.description.substring(0, 100) %>...</p>
+                        <div class="listing-price">
+                            <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                            <% if (listing.originalPrice) { %>
+                                <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                            <% } %>
                         </div>
-                    <% }); %>
-                <% } else { %>
-                    <p>No listings available at the moment. Please check back later!</p>
-                <% } %>
-            </div>
-        </section>
+                        <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No listings available at the moment. Please check back later!</p>
+        <% } %>
+    </div>
+</section>
+
     </main>
 
     <!-- Footer -->

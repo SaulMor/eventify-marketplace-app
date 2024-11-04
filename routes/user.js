@@ -3,7 +3,7 @@
 const express = require('express'); 
 const router = express.Router();
 const User = require('../models/User');
-const Listing = require('../models/Listing'); // Ensure Listing model exists
+const Listing = require('../models/Listing'); 
 const ensureAuthenticated = require('../middleware/auth'); // Import the middleware
 const csrf = require('csurf');
 const csrfProtection = csrf();
@@ -35,7 +35,7 @@ router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) =>
     }
 });
 
-// Optionally, you can remove or update the /profile route if not needed
+// Optionally, remove or update the /profile route if not needed
 router.get('/profile', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
         const userId = req.session.user.id; // Retrieve user ID from session

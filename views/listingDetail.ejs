@@ -47,8 +47,8 @@
            <!-- Seller Info Section -->
 <div class="seller-info">
     <div class="profile-info">
-        <img src="/media/images/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic">
-        <span class="seller-name"><%= listing.userId.name %></span>
+        <img src="<%= listing.userId.profilePic || '/media/images/blank-profile-picture.webp' %>" alt="Profile Picture" class="profile-pic">
+        <span class="seller-name"><%= listing.userId.username %></span>
     </div>
     <div class="product-rating">
         <% if (listing.rating && listing.rating > 0) { %>
@@ -73,7 +73,7 @@
             <p class="product-brand">Category: <%= listing.category %></p>
 
             <!-- Listing Actions: Edit and See Offers Buttons -->
-            <% if (user && user._id.toString() === listing.userId._id.toString()) { %>
+            <% if (user && user.id.toString() === listing.userId._id.toString()) { %>
                 <div class="listing-actions">
                     <a href="/listing/edit/<%= listing._id %>" class="edit-listing-btn">Edit Listing</a>
                     <a href="/listing/<%= listing._id %>/offers" class="see-offers-btn">See Offers</a>

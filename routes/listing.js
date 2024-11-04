@@ -74,7 +74,7 @@ router.use((err, req, res, next) => {
 // ---------------------------------------
 
 // GET Route: Render the Create Listing Form
-router.get("/create", ensureAuthenticated, csrfProtection, (req, res) => {
+router.get("/create", ensureAuthenticated, csrfProtection, async (req, res) => {
   res.render("createListing", {
     error: null,
     listing: {},
@@ -177,12 +177,10 @@ router.get(
   ensureAuthenticated,
   authorizeListing,
   csrfProtection,
-  (req, res) => {
+  async (req, res) => {
     try {
       const listing = req.listing; // From authorizeListing middleware
       console.log("--- GET /listing/edit/:id ---");
-      console.log("Session ID:", req.sessionID);
-      console.log("CSRF Token:", req.csrfToken()); // Log CSRF token
       res.render("editListing", {
         listing,
         user: req.session.user || null,
@@ -219,8 +217,6 @@ router.post(
     const listingId = req.params.id;
 
     console.log('--- POST /listing/edit/:id ---');
-    console.log("Session ID:", req.sessionID);
-    console.log("Received CSRF Token:", req.body._csrf); // Log received CSRF token
     console.log("Form Data:", req.body);
     console.log("Uploaded Files:", req.files);
 
@@ -374,19 +370,40 @@ router.delete(
 // READ Listing Routes
 // ---------------------------------------
 
-// GET Route: Display Listing Details
-router.get("/:id", ensureAuthenticated, authorizeListing, async (req, res) => {
+// GET Route: Display Owner-Specific Listing Details
+router.get("/:id/detail", ensureAuthenticated, authorizeListing, async (req, res) => {
   try {
     const listing = req.listing; // From authorizeListing middleware
+    res.render("listingDetail", { listing, user: req.session.user });
+  } catch (error) {
+    console.error("Error fetching listing detail:", error);
+    req.flash("error", "An error occurred while fetching the listing.");
+    res.redirect("/user/profile1");
+  }
+});
 
-    // Fetch the current user's details
-    const currentUser = await User.findById(req.session.user.id).lean();
+// GET Route: Display Public Listing Details
+router.get("/:id", async (req, res) => {
+  try {
+    const listingId = req.params.id;
+    const listing = await Listing.findById(listingId)
+      .populate('userId') // Populate the userId field
+      .lean();
 
-    res.render("listingDetail", { listing, user: currentUser });
+    if (!listing) {
+      req.flash("error", "Listing not found.");
+      return res.redirect("/");
+    }
+
+    const user = req.session.user
+      ? await User.findById(req.session.user.id).lean()
+      : null;
+
+    res.render("productDetail", { product: listing, user });
   } catch (error) {
     console.error("Error fetching listing details:", error);
     req.flash("error", "An error occurred while fetching the listing.");
-    res.redirect("/user/profile1");
+    res.redirect("/");
   }
 });
 
@@ -397,7 +414,7 @@ router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res
 
     // Fetch offers related to this listing (Offer model)
     const offers = await Offer.find({ listingId: listing._id })
-      .populate("userId", "name email")
+      .populate("userId", "username email")
       .lean();
 
     // Set a success flash message if needed

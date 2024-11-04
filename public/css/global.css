@@ -1,0 +1,39 @@
+/* public/css/global.css */
+
+/* Apply box-sizing globally */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Flash Messages */
+.flash-message {
+    padding: 15px;
+    margin: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+}

@@ -1,15 +1,16 @@
-<!-- view/partials/header.ejs -->
+<!-- views/partials/header.ejs -->
+
 <header class="eventify-header">
     <div class="header-wrapper">
-        <!-- Header top section -->
+        <!-- Header Top Section -->
         <div class="header-top">
             <div class="brand-logo-container">
-                <button class="brand-logo-button" onclick="location.href='/'" aria-label="Home">
+                <a href="/" class="brand-logo-button" aria-label="Home">
                     <img src="/media/images/brandlogo.png" alt="Eventify brand logo">
-                </button>
+                </a>
             </div>
 
-            <!-- Search bar -->
+            <!-- Search Bar -->
             <div class="header-search-container">
                 <form action="/search" method="GET" class="header-search-form">
                     <input type="text" name="query" class="header-search-box" placeholder="Search for anything" required>
@@ -19,76 +20,87 @@
                 </form>
             </div>
 
-            <!-- User icons -->
+            <!-- User Icons -->
             <div class="user-icon-wrapper">
-                <button onclick="location.href='/orderActivity'" aria-label="Order Activity">
+                <a href="/orderActivity" aria-label="Order Activity" class="header-icon-link">
                     <img src="/media/images/circledollar.png" alt="Order Activity" class="header-icon">
-                </button>
-                <button onclick="location.href='/favorites'" aria-label="Favorites">
+                </a>
+                <a href="/favorites" aria-label="Favorites" class="header-icon-link">
                     <img src="/media/images/heart.png" alt="Favorites" class="header-icon">
-                </button>
-                <button onclick="location.href='/notifications'" aria-label="Notifications">
+                </a>
+                <a href="/notifications" aria-label="Notifications" class="header-icon-link">
                     <img src="/media/images/notifications.png" alt="Notifications" class="header-icon">
-                </button>
+                </a>
 
                 <!-- Profile Icon with Dropdown Trigger -->
-                <button id="profile-icon" class="header-icon-button" onclick="toggleProfileDropdown(event)" aria-label="User Profile">
-                    <img src="/media/images/user.png" alt="User Profile" class="header-icon">
-                </button>
+                <div class="profile-container">
+                    <a href="/user/profile1" aria-label="User Profile" class="header-icon-link">
+                        <img src="/media/images/user.png" alt="User Profile" class="header-icon">
+                    </a>
 
-                <!-- Profile Dropdown -->
-                <div id="profileDropdown" class="profile-dropdown">
-                    <p class="username">Username</p>
-                    <div class="dropdown-items">
-                        <button onclick="location.href='/user/profile1'" aria-label="View Profile">View Profile</button>
-                        <button aria-label="TBD">TBD</button>
-                        <button onclick="location.href='/help'" aria-label="Help Center">Help Center</button>
-                        <button onclick="location.href='/settings'" aria-label="Account Settings">Account Settings</button>
-                        <button onclick="logout()" aria-label="Log out">Log out</button>
+                    <!-- Profile Dropdown -->
+                    <div id="profileDropdown" class="profile-dropdown">
+                        <p class="username"><%= user.name %></p>
+                        <div class="dropdown-items">
+                            <a href="/user/profile1" aria-label="View Profile">View Profile</a>
+                            <a href="/notifications" aria-label="Notifications">Notifications</a>
+                            <a href="/help" aria-label="Help Center">Help Center</a>
+                            <a href="/settings" aria-label="Account Settings">Account Settings</a>
+                            
+                            <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+                                <form action="/auth/logout" method="POST" class="logout-form">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <button type="submit" aria-label="Log out">Log out</button>
+                                </form>
+                            <% } else { %>
+                                <!-- Optional: Hide the logout button or provide a notice -->
+                                <a href="/auth/logout" class="header-logout-button" aria-label="Log out">Log out</a>
+                            <% } %>
+                        </div>
                     </div>
                 </div>
 
-                <button onclick="location.href='/cart'" aria-label="User Cart">
+                <a href="/cart" aria-label="User Cart" class="header-icon-link">
                     <img src="/media/images/cart.png" alt="User Cart" class="header-user-cart">
-                </button>
+                </a>
             </div>
         </div>
 
-        <!-- Header bottom section -->
+        <!-- Header Bottom Section -->
         <div class="header-bottom">
             <div class="header-categories-container">
-                <a href="#" class="all-category">All</a>
-                <a href="#">Academic</a>
-                <a href="#">Birthday</a>
-                <a href="#">Corporate</a>
-                <a href="#">Cultural</a>
-                <a href="#">Entertainment</a>
-                <a href="#">Holiday</a>
-                <a href="#">Luxury</a>
-                <a href="#">Seasonal</a>
-                <a href="#">Wedding</a>
+                <a href="/category/all" class="all-category">All</a>
+                <a href="/category/academic">Academic</a>
+                <a href="/category/birthday">Birthday</a>
+                <a href="/category/corporate">Corporate</a>
+                <a href="/category/cultural">Cultural</a>
+                <a href="/category/entertainment">Entertainment</a>
+                <a href="/category/holiday">Holiday</a>
+                <a href="/category/luxury">Luxury</a>
+                <a href="/category/seasonal">Seasonal</a>
+                <a href="/category/wedding">Wedding</a>
             </div>
 
             <div class="header-sell-container">
-                <button class="header-sell-button" onclick="location.href='/createListing'" aria-label="Sell">
-                    <img src="/media/images/sell.png" alt="Sell">
-                </button>
+                <a href="/listing/create" class="header-sell-button" aria-label="Sell on Eventify">
+                    <img src="/media/images/sell.png" alt="Sell on Eventify">
+                </a>
             </div>
         </div>
 
-        <!-- Dropdown for smaller screens -->
+        <!-- Dropdown for Smaller Screens -->
         <div class="header-dropdown">
-            <select class="category-dropdown">
-                <option value="#">All</option>
-                <option value="#">Academic</option>
-                <option value="#">Birthday</option>
-                <option value="#">Corporate</option>
-                <option value="#">Cultural</option>
-                <option value="#">Entertainment</option>
-                <option value="#">Holiday</option>
-                <option value="#">Luxury</option>
-                <option value="#">Seasonal</option>
-                <option value="#">Wedding</option>
+            <select class="category-dropdown" onchange="location.href=this.value;">
+                <option value="/category/all">All</option>
+                <option value="/category/academic">Academic</option>
+                <option value="/category/birthday">Birthday</option>
+                <option value="/category/corporate">Corporate</option>
+                <option value="/category/cultural">Cultural</option>
+                <option value="/category/entertainment">Entertainment</option>
+                <option value="/category/holiday">Holiday</option>
+                <option value="/category/luxury">Luxury</option>
+                <option value="/category/seasonal">Seasonal</option>
+                <option value="/category/wedding">Wedding</option>
             </select>
         </div>
     </div>
