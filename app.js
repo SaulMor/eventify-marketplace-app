@@ -180,6 +180,9 @@ app.get('/orderActivity', (req, res) => {
 const listingRoutes = require('./routes/listing'); // Import the listing routes
 app.use('/listing', listingRoutes); // Mount them under /listing
 
+const eventsRoutes = require('./routes/events'); // Import the events router
+app.use('/events', eventsRoutes) // Mount them under /events
+
 // Product Routes (Mounted Here)
 const productRoutes = require('./routes/product'); // Import the product routes
 app.use('/products', productRoutes); // Mount them under /products

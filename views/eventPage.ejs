@@ -1,19 +1,19 @@
-<!-- views/index.ejs -->
+<!-- views/eventPage.ejs -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Eventify Home</title>
+    <title><%= event.name %> - Eventify</title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
-    <!-- CSS Files (Order Matters) -->
+    <!-- CSS Files -->
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/home.css"> <!-- Home Page CSS -->
+    <link rel="stylesheet" href="/css/event.css"> <!-- Event Page CSS -->
 </head>
 <body>
     <!-- Conditional Header -->
@@ -37,41 +37,23 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>Welcome to Eventify!</h1>
-            <p>Your one-stop platform for all event-related needs.</p>
-            <% if (!user) { %>
-                <div class="auth-buttons">
-                    <button onclick="location.href='/auth/login';" class="btn-login">Login</button>
-                    <button onclick="location.href='/auth/signup';" class="btn-signup">Sign Up</button>
-                </div>
-            <% } %>
-        </section>
-
-        <!-- Seasonal Deals Section -->
-        <section class="seasonal-deals <%= seasonalClass %>">
-            <div class="seasonal-overlay">
-                <h2><%= seasonalText.split(' Deals')[0] %> Deals!</h2>
-                <% 
-                    // Split the seasonalText to separate main message and additional info
-                    const parts = seasonalText.split(' Deals! ');
-                    const mainText = parts[0] + ' Deals!';
-                    const additionalText = parts[1] || 'Don\'t miss out on our exclusive offers.';
-                %>
-                <p><%= additionalText %></p>
-                <a href="<%= seasonalTargetUrl %>" class="btn-shop-now"><%= seasonalButtonText %></a>
+        <!-- Event Banner -->
+        <section class="event-banner" style="background-image: url('<%= event.image %>');">
+            <div class="event-overlay">
+                <h1><%= event.name %> Specials!</h1>
+                <p><%= event.text %></p>
+                <a href="/shop" class="btn-shop-now">Shop Now</a>
             </div>
         </section>
 
-        <!-- Featured Listings Section -->
-        <section class="featured-listings">
-            <h2>Featured Listings</h2>
+        <!-- Featured Listings for the Event -->
+        <section class="event-listings">
+            <h2><%= event.name %> Featured Products</h2>
             <div class="listing-grid">
                 <% if (listings && listings.length > 0) { %>
                     <% listings.forEach(function(listing) { %>
                         <div class="listing-card">
-                            <a href="/listing/<%= listing._id %>"> <!-- Dynamic Link -->
+                            <a href="/listing/<%= listing._id %>">
                                 <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
                             </a>
                             <div class="listing-info">
@@ -88,7 +70,7 @@
                         </div>
                     <% }); %>
                 <% } else { %>
-                    <p>No listings available at the moment. Please check back later!</p>
+                    <p>No listings available for this event at the moment.</p>
                 <% } %>
             </div>
         </section>

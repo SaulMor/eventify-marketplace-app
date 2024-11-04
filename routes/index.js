@@ -46,6 +46,7 @@ const events = [
         image: "/media/images/thanksgiving-banner.jpg",
         text: "Thanksgiving Deals! Give thanks with our exclusive offers.",
         buttonText: "Shop Now",
+        targetUrl: "/events/thanksgiving"
     },
     {
         name: "Black Friday",
@@ -79,100 +80,111 @@ function getNthWeekdayOfMonth(year, month, n, weekday) {
     return new Date(year, month - 1, day);
 }
 
+// Helper Function to Convert Event Name to Kebab-Case (for CSS Class Naming)
+const toKebabCase = (str) => str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+
 // Home route
 router.get("/", async (req, res) => {
-    try {
-        const listings = await Listing.find().limit(24).lean();
-        const user = req.session.user
-            ? await User.findById(req.session.user.id).lean()
-            : null;
+  try {
+      const listings = await Listing.find().limit(24).lean();
+      const user = req.session.user
+          ? await User.findById(req.session.user.id).lean()
+          : null;
 
-        // Determine current season or event
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth() + 1; // Months are 0-indexed
-        const currentDay = currentDate.getDate();
-        const currentYear = currentDate.getFullYear();
+      // Determine current season or event
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth() + 1; // Months are 0-indexed
+      const currentDay = currentDate.getDate();
+      const currentYear = currentDate.getFullYear();
 
-        let seasonalImage = "/media/images/default-seasonal.jpg";
-        let seasonalText = "Check out our exclusive deals!";
-        let seasonalButtonText = "Shop Now";
+      let seasonalClass = "default";
+      let seasonalText = "Check out our exclusive deals!";
+      let seasonalDescription = "Explore our wide range of products and enjoy great discounts.";
+      let seasonalButtonText = "Shop Now";
+      let seasonalTargetUrl = "/shop"; // Default target URL
 
-        // Find all events for the current month
-        const currentMonthEvents = events.filter((event) =>
-            event.months.includes(currentMonth)
-        );
+      // Find all events for the current month
+      const currentMonthEvents = events.filter((event) =>
+          event.months.includes(currentMonth)
+      );
 
-        let selectedEvent = null;
+      let selectedEvent = null;
 
-        currentMonthEvents.forEach((event) => {
-            if (event.name === "Thanksgiving") {
-                // Calculate Thanksgiving (4th Thursday of November)
-                const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
-                if (
-                    currentDate.toDateString() === thanksgiving.toDateString()
-                ) {
-                    selectedEvent = event;
-                }
-            } else if (event.name === "Black Friday") {
-                // Black Friday is the day after Thanksgiving
-                const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
-                const blackFriday = new Date(thanksgiving);
-                blackFriday.setDate(blackFriday.getDate() + 1);
-                if (
-                    currentDate.toDateString() === blackFriday.toDateString()
-                ) {
-                    selectedEvent = event;
-                }
-            } else if (event.name === "Cyber Monday") {
-                // Cyber Monday is the Monday after Black Friday
-                const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
-                const blackFriday = new Date(thanksgiving);
-                blackFriday.setDate(blackFriday.getDate() + 1);
-                const cyberMonday = new Date(blackFriday);
-                cyberMonday.setDate(cyberMonday.getDate() + 3);
-                if (
-                    currentDate.toDateString() === cyberMonday.toDateString()
-                ) {
-                    selectedEvent = event;
-                }
-            } else {
-                // For other events, simply check the month
-                selectedEvent = event;
-            }
-        });
+      currentMonthEvents.forEach((event) => {
+          if (event.name === "Thanksgiving") {
+              // Calculate Thanksgiving (4th Thursday of November)
+              const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
+              if (
+                  currentDate.toDateString() === thanksgiving.toDateString()
+              ) {
+                  selectedEvent = event;
+              }
+          } else if (event.name === "Black Friday") {
+              // Black Friday is the day after Thanksgiving
+              const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
+              const blackFriday = new Date(thanksgiving);
+              blackFriday.setDate(blackFriday.getDate() + 1);
+              if (
+                  currentDate.toDateString() === blackFriday.toDateString()
+              ) {
+                  selectedEvent = event;
+              }
+          } else if (event.name === "Cyber Monday") {
+              // Cyber Monday is the Monday after Black Friday
+              const thanksgiving = getNthWeekdayOfMonth(currentYear, 11, 4, 4); // 4th Thursday
+              const blackFriday = new Date(thanksgiving);
+              blackFriday.setDate(blackFriday.getDate() + 1);
+              const cyberMonday = new Date(blackFriday);
+              cyberMonday.setDate(cyberMonday.getDate() + 3);
+              if (
+                  currentDate.toDateString() === cyberMonday.toDateString()
+              ) {
+                  selectedEvent = event;
+              }
+          } else {
+              // For other events, simply check the month
+              selectedEvent = event;
+          }
+      });
 
-        // If no specific event is active, select the first event for the month if available
-        if (!selectedEvent && currentMonthEvents.length > 0) {
-            selectedEvent = currentMonthEvents[0];
-        }
+      // If no specific event is active, select the first event for the month if available
+      if (!selectedEvent && currentMonthEvents.length > 0) {
+          selectedEvent = currentMonthEvents[0];
+      }
 
-        if (selectedEvent) {
-            const imagePath = path.join(__dirname, '..', 'public', selectedEvent.image);
-            if (fs.existsSync(imagePath)) {
-                seasonalImage = selectedEvent.image;
-                seasonalText = selectedEvent.text;
-                seasonalButtonText = selectedEvent.buttonText;
-                console.log(`Selected Event: ${selectedEvent.name}`);
-                console.log(`Using Image: ${seasonalImage}`);
-            } else {
-                console.warn(`Image not found: ${selectedEvent.image}. Using default image.`);
-                // seasonalImage remains as default-seasonal.jpg
-            }
-        } else {
-            console.log('No specific event selected. Using default seasonal image.');
-        }
+      if (selectedEvent) {
+          const imagePath = path.join(__dirname, '..', 'public', selectedEvent.image);
+          if (fs.existsSync(imagePath)) {
+              seasonalClass = toKebabCase(selectedEvent.name);
+              seasonalText = selectedEvent.text;
+              seasonalDescription = selectedEvent.text; // Adjust if there's a separate description
+              seasonalButtonText = selectedEvent.buttonText;
+              seasonalTargetUrl = selectedEvent.targetUrl; // Assign targetUrl
+              console.log(`Selected Event: ${selectedEvent.name}`);
+              console.log(`Using Class: ${seasonalClass}`);
+          } else {
+              console.warn(`Image not found: ${selectedEvent.image}. Using default image.`);
+              // seasonalClass remains as 'default'
+              seasonalTargetUrl = "/shop"; // Fallback to default shop URL
+          }
+      } else {
+          console.log('No specific event selected. Using default seasonal image.');
+          seasonalTargetUrl = "/shop"; // Default target URL
+      }
 
-        res.render("index", {
-            listings,
-            user,
-            seasonalImage,
-            seasonalText,
-            seasonalButtonText,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error");
-    }
+      res.render("index", {
+          listings,
+          user,
+          seasonalClass,
+          seasonalText,
+          seasonalDescription,
+          seasonalButtonText,
+          seasonalTargetUrl, // Pass targetUrl to template
+      });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Server Error");
+  }
 });
 
 // Search Route

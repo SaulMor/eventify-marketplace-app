@@ -1,0 +1,174 @@
+/* public/css/event.css */
+
+/* Event Banner */
+.event-banner {
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.event-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent overlay */
+    color: white;
+    padding: 30px 50px;
+    text-align: center;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.event-overlay h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.event-overlay p {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.event-overlay .btn-shop-now {
+    padding: 15px 30px;
+    background-color: #E9C071;
+    color: #000000;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.event-overlay .btn-shop-now:hover {
+    background-color: #c5a24f;
+    color: #fff;
+}
+
+/* Event Listings Section */
+.event-listings {
+    padding: 40px 20px;
+}
+
+.event-listings h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.listing-card {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.listing-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.listing-info {
+    padding: 15px;
+}
+
+.listing-info h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.listing-info p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.listing-price {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.current-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+    margin-right: 10px;
+}
+
+.original-price {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.btn-view {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-view:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    .event-banner {
+        height: 250px;
+    }
+
+    .event-overlay h1 {
+        font-size: 32px;
+    }
+
+    .event-overlay p {
+        font-size: 18px;
+    }
+
+    .event-overlay .btn-shop-now {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .event-banner {
+        height: 200px;
+    }
+
+    .event-overlay h1 {
+        font-size: 24px;
+    }
+
+    .event-overlay p {
+        font-size: 14px;
+    }
+
+    .event-overlay .btn-shop-now {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+}

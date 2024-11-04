@@ -52,19 +52,24 @@ main {
 }
 /* Seasonal Deals Section */
 .seasonal-deals {
-    position: relative;
+    width: 100%;
+    height: 300px; 
     background-size: cover;
     background-position: center;
-    height: 300px;
-    margin: 40px 0;
+    background-repeat: no-repeat;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 40px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+
 .seasonal-deals .seasonal-overlay {
-    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    color: white;
     padding: 20px 40px;
     text-align: center;
     border-radius: 10px;
@@ -90,13 +95,58 @@ main {
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease, color 0.3s ease;
-        text-decoration: none;
+    text-decoration: none;
 }
 
 .seasonal-deals .seasonal-overlay .btn-shop-now:hover {
     background-color: #c5a24f;
         /* Darker shade on hover */
         color: #fff;
+}
+
+/* Default Seasonal Deals */
+.seasonal-deals.default {
+    background-image: url('/media/images/default-seasonal.jpg');
+}
+
+/* New Year */
+.seasonal-deals.new-year {
+    background-image: url('/media/images/newyear-banner.jpg');
+}
+
+/* Valentine's Day */
+.seasonal-deals.valentines-day {
+    background-image: url('/media/images/valentines-banner.jpg');
+}
+
+/* Easter */
+.seasonal-deals.easter {
+    background-image: url('/media/images/easter-banner.jpg');
+}
+
+/* Halloween */
+.seasonal-deals.halloween {
+    background-image: url('/media/images/halloween-banner.jpg');
+}
+
+/* Thanksgiving */
+.seasonal-deals.thanksgiving {
+    background-image: url('/media/images/thanksgiving-banner.jpg');
+}
+
+/* Black Friday */
+.seasonal-deals.black-friday {
+    background-image: url('/media/images/blackfriday-banner.jpg');
+}
+
+/* Cyber Monday */
+.seasonal-deals.cyber-monday {
+    background-image: url('/media/images/cybermonday-banner.jpg');
+}
+
+/* Christmas */
+.seasonal-deals.christmas {
+    background-image: url('/media/images/christmas-banner.jpg');
 }
 
 /* Featured Listings Section */
@@ -226,16 +276,16 @@ main {
         height: 180px;
     }
 
-                .seasonal-deals .seasonal-overlay h2 {
-                    font-size: 24px;
-                }
+    .seasonal-deals .seasonal-overlay h2 {
+        font-size: 24px;
+    }
 
-                .seasonal-deals .seasonal-overlay p {
-                    font-size: 14px;
-                }
-        
-                .seasonal-deals .seasonal-overlay .btn-shop-now {
-                    font-size: 14px;
-                    padding: 8px 16px;
-                }
+    .seasonal-deals .seasonal-overlay p {
+        font-size: 14px;
+    }
+
+    .seasonal-deals .seasonal-overlay .btn-shop-now {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 }
