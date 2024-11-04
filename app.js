@@ -23,10 +23,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)  // Use environment variable only
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 
