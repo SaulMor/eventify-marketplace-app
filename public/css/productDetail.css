@@ -15,11 +15,6 @@ body {
     background-color: #ffffff;
 }
 
-main {
-    padding-top: 135px; 
-    width: 100%; 
-}
-
 /* Breadcrumb styling */
 .breadcrumb {
     font-size: 1.2rem;

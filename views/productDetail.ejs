@@ -1,8 +1,10 @@
+<!-- views/productDetail.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><%= product.name %> - Eventify</title>
+    <title><%= product.title %> - Eventify</title>
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/productDetail.css">
@@ -21,27 +23,27 @@
 
 <main>
     <div class="breadcrumb">
-        <a href="/">Eventify</a> / <a href="#">Home</a> / <a href="#">Weddings</a> / <%= product.name %>
+        <a href="/">Eventify</a> / <a href="#">Home</a> / <a href="#">Weddings</a> / <%= product.title %>
     </div>
     <div class="product-detail-container">
         <!-- Left Section: Thumbnails -->
         <div class="product-thumbnails">
-            <% product.images.forEach(function(image) { %>
-                <img src="<%= image %>" alt="Thumbnail" class="thumbnail">
+            <% product.photos.forEach(function(photo) { %>
+                <img src="<%= photo %>" alt="Thumbnail" class="thumbnail">
             <% }); %>
         </div>
 
         <!-- Middle Section: Main Product Image -->
         <div class="product-main-image">
-            <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="product-image">
+            <img src="<%= product.photos[0] %>" alt="<%= product.title %>" class="product-image">
         </div>
 
         <!-- Right Section: Product Info -->
         <div class="product-info">
             <div class="seller-info">
                 <div class="profile-info">
-                    <img src="/media/images/blank-profile-picture.webp" alt="Profile Picture" class="profile-pic">
-                    <span class="seller-name">Username</span>
+                    <img src="<%= product.userId.profilePic || '/media/images/blank-profile-picture.webp' %>" alt="Profile Picture" class="profile-pic">
+                    <span class="seller-name"><%= product.userId.username %></span>
                     <div class="product-rating">
                         <% for(let i = 0; i < 5; i++) { %>
                             <i class="fas fa-star stars"></i>
@@ -50,9 +52,11 @@
                 </div>
             </div>
 
-            <h1><%= product.name %></h1>
-            <p class="product-price"><%= product.price %> <span class="original-price"><%= product.originalPrice %></span></p>
-            <p class="product-brand">Brand: <%= product.brand %></p>
+            <h1><%= product.title %></h1>
+            <p class="product-price">$<%= product.price.toFixed(2) %> <span class="original-price"><%= product.originalPrice ? '$' + product.originalPrice.toFixed(2) : '' %></span></p>
+            <% if(product.brand) { %>
+                <p class="product-brand">Brand: <%= product.brand %></p>
+            <% } %>
 
             <!-- Buttons -->
             <div class="product-buttons">
@@ -80,18 +84,20 @@
                 </div>
                 
                 <!-- Colors Section -->
-                <div class="colors">
-                    <div class="option-subheading">Colors:</div>
-                    <div class="color-options">
-                        <% product.colors.forEach(function(color) { %>
-                            <label class="color-box">
-                                <input type="radio" name="color" value="<%= color %>" aria-label="<%= color %>">
-                                <span class="color-circle <%= color.toLowerCase() %>"></span>
-                                <span class="color-name"><%= color %></span>
-                            </label>
-                        <% }); %>
+                <% if(product.colors && product.colors.length > 0) { %>
+                    <div class="colors">
+                        <div class="option-subheading">Colors:</div>
+                        <div class="color-options">
+                            <% product.colors.forEach(function(color) { %>
+                                <label class="color-box">
+                                    <input type="radio" name="color" value="<%= color %>" aria-label="<%= color %>">
+                                    <span class="color-circle <%= color.toLowerCase() %>"></span>
+                                    <span class="color-name"><%= color %></span>
+                                </label>
+                            <% }); %>
+                        </div>
                     </div>
-                </div>
+                <% } %>
             </div>
         </div>
     </div>
