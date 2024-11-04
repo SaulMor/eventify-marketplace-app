@@ -21,10 +21,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)  // Use environment variable only
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 
@@ -43,14 +40,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method')); // Looks for a query parameter like ?_method=PUT
 
 // Serve static files from the public directory
-app.use(express.static(path.join(__dirname, 'public'))); 
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Helmet for security
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
             styleSrc: ["'self'", 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
             fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
             imgSrc: ["'self'", 'data:', 'https://yourdomain.com'],
@@ -78,7 +75,7 @@ app.use(session({
         collectionName: 'sessions'
     }),
     cookie: { 
-        secure: process.env.NODE_ENV === 'production', // Set to true in production
+        secure: false,
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 // 1 day
     }

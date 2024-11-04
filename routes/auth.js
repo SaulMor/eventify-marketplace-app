@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
             email, 
             password: encyptedPassword
         });
-        res.redirect('/login'); 
+        res.redirect('/auth/login'); 
     } catch(err) { 
         console.error(err); 
         res.status(500).send("Sign up Erorr");
