@@ -130,9 +130,10 @@ router.post(
       let photos = [];
       if (req.files && req.files.length > 0) {
         photos = req.files.map((file) => `/uploads/${file.filename}`);
-      } else {
-        req.flash("error", "No files were uploaded.");
-        return res.redirect("/listing/create");
+      } else { 
+        photos = ['/media/images/default.jpg'];
+        // req.flash("error", "No files were uploaded.");
+        // return res.redirect("/listing/create");
       }
 
       // Create a new listing document
