@@ -18,7 +18,6 @@ body {
     position: relative;
     width: 100%;
     height: 250px;
-    background-image: url('/media/images/banner-beach.jpg'); /* Replace with your banner image path */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -52,6 +51,17 @@ body {
     object-fit: cover;
     border-radius: 50%;
 }
+
+/* Dynamic Banner Backgrounds */
+.event-banner.new-year {
+    background-image: url('/media/images/newyear-banner.jpg');
+}
+
+.event-banner.thanksgiving {
+    background-image: url('/media/images/thanksgiving-banner.jpg');
+}
+
+/* Add more event-specific classes as needed */
 
 /* Adjust Profile Info Section */
 .profile-info {
@@ -206,12 +216,30 @@ body {
     margin-bottom: 20px;
 }
 
+/* Color Classes */
+.color-black { background-color: black; }
+.color-white { background-color: white; }
+.color-red { background-color: red; }
+.color-orange { background-color: orange; }
+.color-yellow { background-color: yellow; }
+.color-green { background-color: green; }
+.color-blue { background-color: blue; }
+.color-purple { background-color: purple; }
+.color-pink { background-color: pink; }
+.color-gray { background-color: gray; }
+.color-brown { background-color: brown; }
+.color-lightgray { background-color: lightgray; }
+
 .color-circle {
     width: 20px;
     height: 20px;
     border-radius: 50%;
     border: 1px solid #c9c8c8;
     cursor: pointer;
+}
+
+.color-circle.selected {
+    border: 2px solid #4A90E2;
 }
 
 .custom-price {
@@ -432,9 +460,4 @@ body {
     max-height: 0;
     opacity: 0;
     transition: max-height 0.3s ease, opacity 0.3s ease;
-}
-
-/* Styling for Color Circles on Selection */
-.color-circle.selected {
-    border: 2px solid #4A90E2;
 }

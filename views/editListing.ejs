@@ -60,7 +60,7 @@
                         <!-- Dynamically Inserted Thumbnails via JavaScript -->
                         <% if (listing.photos && listing.photos.length > 0) { %>
                             <% listing.photos.forEach(function(photo) { %>
-                                <img src="<%= photo %>" alt="<%= listing.title %>" class="current-photo">
+                                <img src="<%= photo %>" alt="<%= listing.title %>" class="thumbnail">
                             <% }); %>
                         <% } %>
                     </div>
