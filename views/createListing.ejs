@@ -298,7 +298,15 @@
 
     <%- include('partials/footer') %> <!-- Include footer partial -->
 
+    <!-- Modal Structure -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage" alt="Enlarged Image">
+        <div id="caption"></div>
+    </div>
+
     <!-- JavaScript for interactivity, thumbnail clicks and file uploads -->
     <script src="/js/uploadHandler.js"></script>
+    <script src="/js/modalHandler.js"></script>
 </body>
 </html>

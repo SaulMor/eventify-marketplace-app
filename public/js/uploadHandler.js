@@ -85,9 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     img.src = e.target.result;
                     img.alt = "Photo Preview";
                     img.classList.add("thumbnail");
-                    if (thumbnailsContainer) {
-                        thumbnailsContainer.appendChild(img);
-                    }
+                    thumbnailsContainer.appendChild(img);
                 };
                 reader.readAsDataURL(file);
             });
