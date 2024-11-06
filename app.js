@@ -1,5 +1,3 @@
-// app.js
-
 const express = require('express');
 const path = require('path'); 
 const mongoose = require('mongoose'); 
@@ -15,7 +13,8 @@ const flash = require('connect-flash');
 const csrf = require('csurf');
 const dotenv = require('dotenv'); // For environment variables
 
-dotenv.config(); // Load environment variables
+// Load environment variables
+dotenv.config();
 
 const app = express();
 
@@ -23,10 +22,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 
@@ -40,7 +36,6 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     // databaseURL: "https://your_project_id.firebaseio.com", // Uncomment if using Realtime Database
 });
-
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public'))); 
@@ -85,7 +80,6 @@ app.use(
                 'https://www.gstatic.com',
                 'https://identitytoolkit.googleapis.com' // Added Firebase Auth endpoint
             ],
-            // Add other directives as needed
         },
     })
 );
@@ -105,10 +99,10 @@ app.use(cookieParser());
 
 // Session Management
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', 
+    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use a secure secret
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }), // Store sessions in MongoDB
     cookie: { 
         secure: process.env.NODE_ENV === 'production', // true in production
         httpOnly: true,
@@ -169,6 +163,10 @@ app.get('/contact', (req, res) => {
 // Cart Route
 app.get('/cart', (req, res) => {
     res.render('cart'); // Make sure this matches the EJS file in 'views' folder
+});
+
+app.get('/listingDetail', (req, res) => {
+    res.render('listingDetail'); // Make sure this matches the EJS file in 'views' folder
 });
 
 // Order Activity Route
