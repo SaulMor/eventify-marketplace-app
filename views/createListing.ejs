@@ -34,9 +34,18 @@
         </div>
         <div class="header-divider"></div>
 
+        <!-- Display Flash Messages -->
+        <% if (error && error.length > 0) { %>
+            <div class="error-message"><%= error %></div>
+        <% } %>
+        <% if (success && success.length > 0) { %>
+            <div class="success-message"><%= success %></div>
+        <% } %>
+
         <!-- Form Starts Here -->
         <form action="/listing/create" method="POST" enctype="multipart/form-data"> <!-- Important for file uploads -->
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <!-- CSRF Token -->
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
             <!-- Photo Upload Section -->
             <section class="photo-upload-section">
@@ -56,7 +65,7 @@
                     />
 
                     <!-- Thumbnails Preview Section -->
-                    <div class="photo-thumbnails">
+                    <div class="photo-thumbnails" data-initial-count="0">
                         <!-- Dynamically Inserted Thumbnails via JavaScript -->
                     </div>
                 </div>
@@ -119,19 +128,20 @@
                                 <select
                                     id="category"
                                     name="category"
+                                    required
                                     aria-describedby="category-helper"
                                 >
-                                <option value="">Select Category</option>
-                                <option value="wedding" <%= listing.category === 'wedding' ? 'selected' : '' %>>Wedding</option>
-                                <option value="birthday" <%= listing.category === 'birthday' ? 'selected' : '' %>>Birthday</option>
-                                <option value="halloween" <%= listing.category === 'halloween' ? 'selected' : '' %>>Halloween</option>
-                                <option value="academic" <%= listing.category === 'academic' ? 'selected' : '' %>>Academic</option>
-                                <option value="corporate" <%= listing.category === 'corporate' ? 'selected' : '' %>>Corporate</option>
-                                <option value="cultural" <%= listing.category === 'cultural' ? 'selected' : '' %>>Cultural</option>
-                                <option value="entertainment" <%= listing.category === 'entertainment' ? 'selected' : '' %>>Entertainment</option>
-                                <option value="holiday" <%= listing.category === 'holiday' ? 'selected' : '' %>>Holiday</option>
-                                <option value="luxury" <%= listing.category === 'luxury' ? 'selected' : '' %>>Luxury</option>
-                                <option value="seasonal" <%= listing.category === 'seasonal' ? 'selected' : '' %>>Seasonal</option>
+                                    <option value="">Select Category</option>
+                                    <option value="wedding" <%= listing.category === 'wedding' ? 'selected' : '' %>>Wedding</option>
+                                    <option value="birthday" <%= listing.category === 'birthday' ? 'selected' : '' %>>Birthday</option>
+                                    <option value="halloween" <%= listing.category === 'halloween' ? 'selected' : '' %>>Halloween</option>
+                                    <option value="academic" <%= listing.category === 'academic' ? 'selected' : '' %>>Academic</option>
+                                    <option value="corporate" <%= listing.category === 'corporate' ? 'selected' : '' %>>Corporate</option>
+                                    <option value="cultural" <%= listing.category === 'cultural' ? 'selected' : '' %>>Cultural</option>
+                                    <option value="entertainment" <%= listing.category === 'entertainment' ? 'selected' : '' %>>Entertainment</option>
+                                    <option value="holiday" <%= listing.category === 'holiday' ? 'selected' : '' %>>Holiday</option>
+                                    <option value="luxury" <%= listing.category === 'luxury' ? 'selected' : '' %>>Luxury</option>
+                                    <option value="seasonal" <%= listing.category === 'seasonal' ? 'selected' : '' %>>Seasonal</option>
                                 </select>
                             </div>
                         </div>
@@ -167,6 +177,7 @@
                                 <select
                                     id="condition"
                                     name="condition"
+                                    required
                                     aria-describedby="condition-helper"
                                 >
                                     <option value="">Select Condition</option>
@@ -178,7 +189,7 @@
 
                         <!-- Price Field -->
                         <div class="form-group horizontal-group">
-                            <label for="price">Price</label>
+                            <label for="price">Price ($)</label>
                             <div class="input-helper-wrapper">
                                 <p class="helper-text" id="price-helper">
                                     Enter the price in dollars (e.g., 25 for $25).

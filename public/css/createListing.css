@@ -456,3 +456,37 @@ button {
         width: 100%;
     }
 }
+
+/* Feedback Messages */
+#upload-feedback {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.alert.error {
+    background-color: #f44336; /* Red */
+}
+
+.alert.success {
+    background-color: #4CAF50; /* Green */
+}
+
+.alert.info {
+    background-color: #2196F3; /* Blue */
+}
+
+/* Optional: Add transition for smooth appearance */
+.alert {
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}

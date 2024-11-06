@@ -50,7 +50,7 @@ const fileFilter = (req, file, cb) => {
 // Initialize multer with defined storage and file filter
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit per photo
   fileFilter: fileFilter,
 });
 
@@ -130,10 +130,8 @@ router.post(
       let photos = [];
       if (req.files && req.files.length > 0) {
         photos = req.files.map((file) => `/uploads/${file.filename}`);
-      } else { 
-        photos = ['/media/images/default.jpg'];
-        // req.flash("error", "No files were uploaded.");
-        // return res.redirect("/listing/create");
+      } else {
+        photos = ["/media/images/default.jpg"];
       }
 
       // Create a new listing document
@@ -217,7 +215,7 @@ router.post(
     const errors = validationResult(req);
     const listingId = req.params.id;
 
-    console.log('--- POST /listing/edit/:id ---');
+    console.log("--- POST /listing/edit/:id ---");
     console.log("Form Data:", req.body);
     console.log("Uploaded Files:", req.files);
 
@@ -282,23 +280,62 @@ router.post(
         description: listing.description,
       });
 
+      // Log existing photos before upload
+      console.log("Before Upload - Existing Photos:", listing.photos);
+
+      // Process removed photos
+      const removedPhotos = req.body.removedPhotos ? JSON.parse(req.body.removedPhotos) : [];
+      if (removedPhotos.length > 0) {
+        console.log("Photos to be removed:", removedPhotos);
+        listing.photos = listing.photos.filter(photo => !removedPhotos.includes(photo));
+
+        // Delete the removed photo files from the server
+        removedPhotos.forEach(photoPath => {
+          const fullPath = path.join(__dirname, "..", "public", photoPath);
+          fs.unlink(fullPath, (err) => {
+            if (err) {
+              console.error("Error deleting photo:", err);
+            } else {
+              console.log(`Deleted photo: ${photoPath}`);
+            }
+          });
+        });
+
+        console.log("Photos after removal:", listing.photos);
+      }
+
       // Handle uploaded photos
       if (req.files && req.files.length > 0) {
-        // Optionally, delete old photos from the server
-        if (listing.photos && listing.photos.length > 0) {
-          listing.photos.forEach((photoPath) => {
-            const fullPath = path.join(__dirname, "..", "public", photoPath);
-            fs.unlink(fullPath, (err) => {
-              if (err) {
-                console.error("Error deleting old photo:", err);
-              }
+        const existingPhotoCount = listing.photos.length;
+        const newPhotoCount = req.files.length;
+        const totalPhotos = existingPhotoCount + newPhotoCount;
+
+        console.log(`Existing Photos Count: ${existingPhotoCount}`);
+        console.log(`New Photos Count: ${newPhotoCount}`);
+        console.log(`Total Photos after Upload: ${totalPhotos}`);
+
+        if (totalPhotos > 5) {
+          // Delete the newly uploaded files to prevent storage clutter
+          req.files.forEach(file => {
+            fs.unlink(path.join(__dirname, "..", "public", "uploads", file.filename), (err) => {
+              if (err) console.error("Error deleting file:", err);
+              else console.log(`Deleted uploaded file due to exceeding limit: ${file.filename}`);
             });
           });
+
+          req.flash("error", `You can only have a maximum of 5 photos. You have already uploaded ${existingPhotoCount} photos.`);
+          return res.redirect(`/listing/edit/${listingId}`);
         }
 
-        // Assign new photos
-        listing.photos = req.files.map((file) => `/uploads/${file.filename}`);
+        // Append new photos to the existing array
+        const newPhotos = req.files.map((file) => `/uploads/${file.filename}`);
+        listing.photos = listing.photos.concat(newPhotos);
+
+        console.log("After Upload - Updated Photos Array:", listing.photos);
       }
+
+      // Log the final photos array before saving
+      console.log("Final Photos Array:", listing.photos);
 
       // Save the updated listing
       await listing.save();

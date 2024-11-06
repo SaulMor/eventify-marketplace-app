@@ -56,8 +56,8 @@
                     />
 
                     <!-- Thumbnails Preview Section -->
-                    <div class="photo-thumbnails">
-                        <!-- Dynamically Inserted Thumbnails via JavaScript -->
+                    <div class="photo-thumbnails" data-initial-count="<%= listing.photos.length %>">
+                        <!-- Existing Thumbnails -->
                         <% if (listing.photos && listing.photos.length > 0) { %>
                             <% listing.photos.forEach(function(photo) { %>
                                 <img src="<%= photo %>" alt="<%= listing.title %>" class="thumbnail">
