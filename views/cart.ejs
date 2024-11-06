@@ -2,118 +2,156 @@
 <html lang="en">
 <head>
     <!-- Meta Tags -->
-    <meta charset="UTF-8" /> <!-- Character encoding for the document -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsive design for mobile devices -->
-    <title>Your Cart - Eventify</title> <!-- Page title -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Cart - Eventify</title>
 
-    <!-- ========================= -->
-    <!--        Stylesheets        -->
-    <!-- ========================= -->
-    <link rel="stylesheet" href="/css/header.css" /> <!-- Styles for the header -->
-    <link rel="stylesheet" href="/css/footer.css" /> <!-- Styles for the footer -->
-    <link rel="stylesheet" href="/css/cart.css" /> <!-- Styles for the cart page -->
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/cart.css" />
+    <link rel="stylesheet" href="/css/cartpopup.css" /> <!-- Ensure this is included -->
 
-    <!-- ========================= -->
-    <!--   Font Awesome for Icons  -->
-    <!-- ========================= -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> <!-- FontAwesome CDN for icons -->
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-    <!-- ========================= -->
-    <!--        Google Fonts       -->
-    <!-- ========================= -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" /> <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> <!-- Cross-origin preconnect for fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap" rel="stylesheet" /> <!-- Import custom font -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-    <%- include('partials/header') %> <!-- Include the header partial -->
+    <%- include('partials/header') %>
 
     <main>
-        <div class="cart-container"> <!-- Main container for the cart -->
-            <h1>Your Cart <span class="cart-icon">🛒</span></h1> <!-- Cart title with icon -->
+        <div class="cart-container">
+            <h1>Your Cart <span class="cart-icon">🛒</span></h1>
             <div class="cart">
-                <!-- ========================= -->
-                <!-- Left Section (Item Details) -->
-                <!-- ========================= -->
                 <div class="item-section">
                     <div class="item-header">
-                        <img src="/media/images/blank-profile-picture.webp" alt="user image" class="profile-image" /> <!-- User profile image -->
-                        <span class="username">Username</span> <!-- Placeholder for username -->
+                        <img src="/media/images/blank-profile-picture.webp" alt="user image" class="profile-image" />
+                        <span class="username">Username</span>
                     </div>
                     <div class="item-content">
                         <div class="item-info">
                             <div class="item-image">
-                                <img src="/media/images/weddingdecor.jpg" alt="Item image" /> <!-- Image of the item -->
+                                <img src="/media/images/weddingdecor.jpg" alt="Item image" />
                             </div>
                             <div class="item-details">
-                                <span class="stock-info">ONLY 1 LEFT</span> <!-- Stock availability -->
-                                <h2 class="item-title">Title of the item</h2> <!-- Title of the item -->
-                                <div class="item-price">$14</div> <!-- Item price -->
+                                <span class="stock-info">ONLY 1 LEFT</span>
+                                <h2 class="item-title">Title of the item</h2>
+                                <div class="item-price">$14</div>
                             </div>
                         </div>
-                        <div class="item-actions"> <!-- Item action buttons -->
-                            <button class="save-for-later">Save for later</button> <!-- Button to save item for later -->
-                            <button class="remove-item">Remove</button> <!-- Button to remove item from cart -->
+                        <div class="item-actions">
+                            <button class="save-for-later">Save for later</button>
+                            <button class="remove-item">Remove</button>
                         </div>
-                        <div class="shipping-info"> <!-- Shipping information -->
+                        <div class="shipping-info">
                             <span>Shipping: <span class="free-shipping">FREE</span></span><br />
-                            <span>Estimated Delivery: 5-8 Business Days</span> <!-- Delivery estimate -->
+                            <span>Estimated Delivery: 5-8 Business Days</span>
                         </div>
                     </div>
                     <div class="item-footer">
-                        <a href="#" class="contact-seller">Contact Seller</a> <!-- Link to contact the seller -->
+                        <a href="#" class="contact-seller">Contact Seller</a>
                     </div>
                 </div>
 
-                <!-- ========================= -->
-                <!-- Right Section (Payment Details) -->
-                <!-- ========================= -->
                 <div class="payment-section">
-                    <h3>Payment</h3> <!-- Payment section title -->
-                    <div class="payment-methods"> <!-- Payment method options -->
+                    <h3>Payment</h3>
+                    <div class="payment-methods">
                         <label>
-                            <input type="radio" name="payment" value="visa" /> <!-- Visa payment option -->
-                            <img src="/media/images/visa-logo.png" alt="Visa" class="payment-logo" /> <!-- Visa logo -->
+                            <input type="radio" name="payment" value="visa" />
+                            <img src="/media/images/visa-logo.png" alt="Visa" class="payment-logo" />
                         </label>
                         <label>
-                            <input type="radio" name="payment" value="mastercard" /> <!-- MasterCard payment option -->
-                            <img src="/media/images/mastercard-logo.png" alt="MasterCard" class="payment-logo" /> <!-- MasterCard logo -->
+                            <input type="radio" name="payment" value="mastercard" />
+                            <img src="/media/images/mastercard-logo.png" alt="MasterCard" class="payment-logo" />
                         </label>
                         <label>
-                            <input type="radio" name="payment" value="paypal" /> <!-- PayPal payment option -->
-                            <img src="/media/images/paypal-logo.png" alt="PayPal" class="payment-logo" /> <!-- PayPal logo -->
+                            <input type="radio" name="payment" value="paypal" />
                         </label>
                     </div>
 
-                    <!-- ========================= -->
-                    <!--        Price Details      -->
-                    <!-- ========================= -->
                     <div class="price-details">
                         <div class="price-row">
                             <span>Item(s) total:</span>
-                            <span class="price">$14</span> <!-- Example price, adjust dynamically -->
+                            <span class="price">$14</span>
                         </div>
                         <div class="price-row">
                             <span>Shipping:</span>
-                            <span class="price">FREE</span> <!-- Shipping cost -->
+                            <span class="price">FREE</span>
                         </div>
                         <div class="price-row">
                             <span>Tax:</span>
-                            <span class="price">$0</span> <!-- Example tax, adjust dynamically -->
+                            <span class="price">$0</span>
                         </div>
                         <div class="price-row total">
                             <span>Total:</span>
-                            <span class="price total-price">$14</span> <!-- Example total, adjust dynamically -->
+                            <span class="price total-price">$14</span>
                         </div>
                     </div>
 
-                    <button class="buy-now">Buy Now</button> <!-- Buy Now button -->
+                    <button class="buy-now">Buy Now</button>
                 </div>
+                
             </div>
         </div>
     </main>
 
-    <%- include('partials/footer') %> <!-- Include the footer partial -->
+    <div id="paymentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Payment Confirmation</h2>
+            <p>Please enter your card information:</p>
+            <form id="paymentForm">
+                <label for="cardNumber">Card Number:</label>
+                <input type="text" id="cardNumber" required /><br />
+                <label for="expiry">Expiry Date:</label>
+                <input type="text" id="expiry" placeholder="MM/YY" required /><br />
+                <label for="cvv">CVV:</label>
+                <input type="text" id="cvv" required /><br />
+                <button type="submit">Confirm Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("paymentModal");
+
+        // Get the button that opens the modal
+        var btn = document.querySelector(".buy-now");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle form submission
+        document.getElementById("paymentForm").onsubmit = function(event) {
+            event.preventDefault();
+            alert("Payment confirmed!"); // Placeholder for actual payment processing
+            modal.style.display = "none"; // Close the modal
+        }
+    </script>
 </body>
 </html>

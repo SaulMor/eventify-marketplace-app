@@ -1,5 +1,4 @@
 <!-- views/partials/header.ejs -->
-
 <header class="eventify-header">
     <div class="header-wrapper">
         <!-- Header Top Section -->
@@ -40,7 +39,8 @@
 
                     <!-- Profile Dropdown -->
                     <div id="profileDropdown" class="profile-dropdown">
-                        <p class="username"><%= user.name %></p>
+                        <!-- Username is now uppercase -->
+                        <p class="username"><%= user.name.toUpperCase() %></p>
                         <div class="dropdown-items">
                             <a href="/user/profile1" aria-label="View Profile">View Profile</a>
                             <a href="/notifications" aria-label="Notifications">Notifications</a>
@@ -53,7 +53,6 @@
                                     <button type="submit" aria-label="Log out">Log out</button>
                                 </form>
                             <% } else { %>
-                                <!-- Optional: Hide the logout button or provide a notice -->
                                 <a href="/auth/logout" class="header-logout-button" aria-label="Log out">Log out</a>
                             <% } %>
                         </div>
@@ -106,4 +105,8 @@
     </div>
 </header>
 
+<!-- Add your profilePopup.css link here -->
+<link rel="stylesheet" href="/css/profilePopup.css">
+
 <script src="/js/header.js"></script>
+<script src="/js/profilePopup.js"></script>
