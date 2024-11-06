@@ -22,7 +22,10 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 
@@ -177,6 +180,9 @@ app.get('/orderActivity', (req, res) => {
 // Listing Routes (Mounted Here)
 const listingRoutes = require('./routes/listing'); // Import the listing routes
 app.use('/listing', listingRoutes); // Mount them under /listing
+
+const eventsRoutes = require('./routes/events'); // Import the events router
+app.use('/events', eventsRoutes) // Mount them under /events
 
 // Product Routes (Mounted Here)
 const productRoutes = require('./routes/product'); // Import the product routes

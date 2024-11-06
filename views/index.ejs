@@ -4,7 +4,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eventify Home</title>
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
@@ -52,7 +51,7 @@
         </section>
 
         <!-- Seasonal Deals Section -->
-        <section class="seasonal-deals" style="background-image: url('<%= seasonalImage %>');">
+        <section class="seasonal-deals <%= seasonalClass %>">
             <div class="seasonal-overlay">
                 <h2><%= seasonalText.split(' Deals')[0] %> Deals!</h2>
                 <% 
@@ -62,39 +61,38 @@
                     const additionalText = parts[1] || 'Don\'t miss out on our exclusive offers.';
                 %>
                 <p><%= additionalText %></p>
-                <button onclick="location.href='/shop';" class="btn-shop-now"><%= seasonalButtonText %></button>
+                <a href="<%= seasonalTargetUrl %>" class="btn-shop-now"><%= seasonalButtonText %></a>
             </div>
         </section>
 
         <!-- Featured Listings Section -->
-<section class="featured-listings">
-    <h2>Featured Listings</h2>
-    <div class="listing-grid">
-        <% if (listings && listings.length > 0) { %>
-            <% listings.forEach(function(listing) { %>
-                <div class="listing-card">
-                    <a href="/listing/<%= listing._id %>"> <!-- Dynamic Link -->
-                        <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
-                    </a>
-                    <div class="listing-info">
-                        <h3><%= listing.title %></h3>
-                        <p><%= listing.description.substring(0, 100) %>...</p>
-                        <div class="listing-price">
-                            <span class="current-price">$<%= listing.price.toFixed(2) %></span>
-                            <% if (listing.originalPrice) { %>
-                                <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
-                            <% } %>
+        <section class="featured-listings">
+            <h2>Featured Listings</h2>
+            <div class="listing-grid">
+                <% if (listings && listings.length > 0) { %>
+                    <% listings.forEach(function(listing) { %>
+                        <div class="listing-card">
+                            <a href="/listing/<%= listing._id %>"> <!-- Dynamic Link -->
+                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                            </a>
+                            <div class="listing-info">
+                                <h3><%= listing.title %></h3>
+                                <p><%= listing.description.substring(0, 100) %>...</p>
+                                <div class="listing-price">
+                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                                    <% if (listing.originalPrice) { %>
+                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                                    <% } %>
+                                </div>
+                                <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                            </div>
                         </div>
-                        <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
-                    </div>
-                </div>
-            <% }); %>
-        <% } else { %>
-            <p>No listings available at the moment. Please check back later!</p>
-        <% } %>
-    </div>
-</section>
-
+                    <% }); %>
+                <% } else { %>
+                    <p>No listings available at the moment. Please check back later!</p>
+                <% } %>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->

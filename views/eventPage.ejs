@@ -1,0 +1,86 @@
+<!-- views/eventPage.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= event.name %> - Eventify</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/event.css"> <!-- Event Page CSS -->
+</head>
+<body>
+    <!-- Conditional Header -->
+    <% if (user) { %>
+        <%- include('partials/header') %>
+    <% } else { %>
+        <%- include('partials/header1') %>
+    <% } %>
+
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Event Banner -->
+        <section class="event-banner" style="background-image: url('<%= event.image %>');">
+            <div class="event-overlay">
+                <h1><%= event.name %> Specials!</h1>
+                <p><%= event.text %></p>
+                <a href="/shop" class="btn-shop-now">Shop Now</a>
+            </div>
+        </section>
+
+        <!-- Featured Listings for the Event -->
+        <section class="event-listings">
+            <h2><%= event.name %> Featured Products</h2>
+            <div class="listing-grid">
+                <% if (listings && listings.length > 0) { %>
+                    <% listings.forEach(function(listing) { %>
+                        <div class="listing-card">
+                            <a href="/listing/<%= listing._id %>">
+                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                            </a>
+                            <div class="listing-info">
+                                <h3><%= listing.title %></h3>
+                                <p><%= listing.description.substring(0, 100) %>...</p>
+                                <div class="listing-price">
+                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                                    <% if (listing.originalPrice) { %>
+                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                                    <% } %>
+                                </div>
+                                <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p>No listings available for this event at the moment.</p>
+                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <!-- JavaScript Files -->
+    <script src="/js/header.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

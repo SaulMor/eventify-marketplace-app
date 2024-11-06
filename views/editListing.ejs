@@ -56,11 +56,11 @@
                     />
 
                     <!-- Thumbnails Preview Section -->
-                    <div class="photo-thumbnails">
-                        <!-- Dynamically Inserted Thumbnails via JavaScript -->
+                    <div class="photo-thumbnails" data-initial-count="<%= listing.photos.length %>">
+                        <!-- Existing Thumbnails -->
                         <% if (listing.photos && listing.photos.length > 0) { %>
                             <% listing.photos.forEach(function(photo) { %>
-                                <img src="<%= photo %>" alt="<%= listing.title %>" class="current-photo">
+                                <img src="<%= photo %>" alt="<%= listing.title %>" class="thumbnail">
                             <% }); %>
                         <% } %>
                     </div>
@@ -300,10 +300,18 @@
 
     <%- include('partials/footer') %> 
 
+    <!-- Modal Structure -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage" alt="Enlarged Image">
+        <div id="caption"></div>
+    </div>
+
     <!-- External JavaScript for handling uploads and interactivity -->
     <script src="/js/header.js"></script>
     <script src="/js/auth.js"></script>
     <script src="/js/uploadHandler.js"></script>
+    <script src="/js/modalHandler.js"></script>
 
 </body>
 </html>
