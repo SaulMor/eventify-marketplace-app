@@ -192,6 +192,11 @@ app.use('/user', userRoutes); // Mount them under /user
 const authRoutes = require('./routes/auth'); // Import the auth routes
 app.use('/auth', authRoutes); // Mount them under /auth
 
+// Favorites Routes
+const favoritesRouter = require('./routes/favorites'); // Import the favortites routes
+app.use('/favorites', favoritesRouter); // Mount them under /favorites
+
+
 // -----------------------------
 // Error Handling Middleware
 // -----------------------------
