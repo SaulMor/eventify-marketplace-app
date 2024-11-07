@@ -25,6 +25,12 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
   favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Listing" }],
+  cart: [
+    {
+      listing: { type: mongoose.Schema.Types.ObjectId, ref: "Listing" },
+      quantity: { type: Number, default: 1, min: 1 },
+    },
+  ],
 });
 
 module.exports = mongoose.model('User', userSchema);

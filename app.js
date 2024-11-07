@@ -164,9 +164,8 @@ app.get('/helpcenter', (req, res) => {
 });
 
 // Cart Route
-app.get('/cart', (req, res) => {
-    res.render('cart'); // Make sure this matches the EJS file in 'views' folder
-});
+const cartRoutes = require('./routes/cart'); // Import the cart routes
+app.use('/cart', cartRoutes); // Mount them under /cart
 
 app.get('/listingDetail', (req, res) => {
     res.render('listingDetail'); // Make sure this matches the EJS file in 'views' folder

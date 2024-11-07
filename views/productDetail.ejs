@@ -41,10 +41,11 @@
 
         <!-- Right Section: Product Info -->
         <div class="product-info">
+            <!-- Seller Information -->
             <div class="seller-info">
                 <div class="profile-info">
                     <img 
-                        src="<%= (product.userId && product.userId.profilePic) ? product.userId.profilePic : '/media/images/blank-profile-picture.webp' %>" 
+                        src="<%= (product.userId && product.userId.profileImage) ? product.userId.profileImage : '/media/images/blank-profile-picture.webp' %>" 
                         alt="Profile Picture" 
                         class="profile-pic">
                         <span class="seller-name">
@@ -68,7 +69,8 @@
 
             <!-- Buttons -->
             <div class="product-buttons">
-                <button class="add-to-cart-btn">Add to Cart</button>
+                <!-- Add a data-listing-id attribute for JavaScript -->
+                <button class="add-to-cart-btn" data-listing-id="<%= product._id %>">Add to Cart</button>
                 <button id="makeOfferBtn" class="make-offer-btn">Make an Offer</button>
             </div>
             <button class="buy-now-btn">Buy Now</button>

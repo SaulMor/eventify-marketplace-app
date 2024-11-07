@@ -1,3 +1,4 @@
+<!-- views/cart.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Cart - Eventify</title>
+
+    <!-- CSRF Token for JavaScript -->
+    <meta name="csrf-token" content="<%= csrfToken %>">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/css/header.css" />
@@ -24,76 +28,111 @@
 <body>
     <%- include('partials/header') %>
 
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
     <main>
         <div class="cart-container">
-            <h1>Your Cart <span class="cart-icon">🛒</span></h1>
-            <div class="cart">
-                <div class="item-section">
-                    <div class="item-header">
-                        <img src="/media/images/blank-profile-picture.webp" alt="user image" class="profile-image" />
-                        <span class="username">Username</span>
-                    </div>
-                    <div class="item-content">
-                        <div class="item-info">
-                            <div class="item-image">
-                                <img src="/media/images/weddingdecor.jpg" alt="Item image" />
+            <h1>Your Cart <span class="cart-icon"><i class="fas fa-shopping-cart"></i></span></h1>
+            <% if (cart && cart.length > 0) { %>
+                <div class="cart">
+                    <% cart.forEach(function(item) { %>
+                        <% if (item.listing) { %>
+                            <div class="item-section cart-item">
+                                <div class="item-header">
+                                    <img src="<%= user.profileImage || '/media/images/blank-profile-picture.webp' %>" alt="user image" class="profile-image" />
+                                    <span class="username"><%= user.name %></span>
+                                </div>
+                                <div class="item-content">
+                                    <div class="item-info">
+                                        <div class="item-image">
+                                            <img src="<%= (item.listing.photos && item.listing.photos.length > 0) ? item.listing.photos[0] : '/media/images/default.jpg' %>" alt="<%= item.listing.title || 'Default Title' %>" />
+                                        </div>
+                                        <div class="item-details">
+                                            <% if (item.listing.stock && item.listing.stock < 5) { %>
+                                                <span class="stock-info">ONLY <%= item.listing.stock %> LEFT</span>
+                                            <% } %>
+                                            <h2 class="item-title"><%= item.listing.title %></h2>
+                                            <div class="item-price">$<%= item.listing.price.toFixed(2) %></div>
+                                        </div>
+                                    </div>
+                                    <div class="item-actions">
+                                        <button class="save-for-later" data-listing-id="<%= item.listing._id %>">Save for later</button>
+                                        <button class="remove-item" data-listing-id="<%= item.listing._id %>">Remove</button>
+                                    </div>
+                                    <div class="shipping-info">
+                                        <span>Shipping: <span class="free-shipping">FREE</span></span><br />
+                                        <span>Estimated Delivery: 5-8 Business Days</span>
+                                    </div>
+                                </div>
+                                <div class="item-footer">
+                                    <a href="/seller/<%= item.listing.seller %>" class="contact-seller">Contact Seller</a>
+                                </div>
                             </div>
-                            <div class="item-details">
-                                <span class="stock-info">ONLY 1 LEFT</span>
-                                <h2 class="item-title">Title of the item</h2>
-                                <div class="item-price">$14</div>
+                        <% } else { %>
+                            <div class="item-section">
+                                <p>Listing no longer available. <a href="/">Browse listings</a> to continue shopping.</p>
+                            </div>
+                        <% } %>
+                    <% }); %>
+
+                    <div class="payment-section">
+                        <h3>Payment</h3>
+                        <div class="payment-methods">
+                            <label>
+                                <input type="radio" name="payment" value="visa" />
+                                <img src="/media/images/visa-logo.png" alt="Visa" class="payment-logo" />
+                            </label>
+                            <label>
+                                <input type="radio" name="payment" value="mastercard" />
+                                <img src="/media/images/mastercard-logo.png" alt="MasterCard" class="payment-logo" />
+                            </label>
+                        </div>
+
+                        <div class="price-details">
+                            <div class="price-row">
+                                <span>Item(s) total:</span>
+                                <span class="price">$<%= cart.reduce((acc, item) => {
+                                    if (item.listing && typeof item.listing.price === 'number') {
+                                        return acc + (item.listing.price * item.quantity);
+                                    }
+                                    return acc;
+                                }, 0).toFixed(2) %></span>
+                            </div>
+                            <div class="price-row">
+                                <span>Shipping:</span>
+                                <span class="price">FREE</span>
+                            </div>
+                            <div class="price-row">
+                                <span>Tax:</span>
+                                <span class="price">$0.00</span>
+                            </div>
+                            <div class="price-row total">
+                                <span>Total:</span>
+                                <span class="price total-price">$<%= cart.reduce((acc, item) => {
+                                    if (item.listing && typeof item.listing.price === 'number') {
+                                        return acc + (item.listing.price * item.quantity);
+                                    }
+                                    return acc;
+                                }, 0).toFixed(2) %></span>
                             </div>
                         </div>
-                        <div class="item-actions">
-                            <button class="save-for-later">Save for later</button>
-                            <button class="remove-item">Remove</button>
-                        </div>
-                        <div class="shipping-info">
-                            <span>Shipping: <span class="free-shipping">FREE</span></span><br />
-                            <span>Estimated Delivery: 5-8 Business Days</span>
-                        </div>
-                    </div>
-                    <div class="item-footer">
-                        <a href="#" class="contact-seller">Contact Seller</a>
+
+                        <button id="checkout-btn" class="buy-now">Buy Now</button>
                     </div>
                 </div>
-
-                <div class="payment-section">
-                    <h3>Payment</h3>
-                    <div class="payment-methods">
-                        <label>
-                            <input type="radio" name="payment" value="visa" />
-                            <img src="/media/images/visa-logo.png" alt="Visa" class="payment-logo" />
-                        </label>
-                        <label>
-                            <input type="radio" name="payment" value="mastercard" />
-                            <img src="/media/images/mastercard-logo.png" alt="MasterCard" class="payment-logo" />
-                        </label>
-                    </div>
-
-                    <div class="price-details">
-                        <div class="price-row">
-                            <span>Item(s) total:</span>
-                            <span class="price">$14</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Shipping:</span>
-                            <span class="price">FREE</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Tax:</span>
-                            <span class="price">$0</span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total:</span>
-                            <span class="price total-price">$14</span>
-                        </div>
-                    </div>
-
-                    <button class="buy-now">Buy Now</button>
-                </div>
-                
-            </div>
+            <% } else { %>
+                <p>Your cart is empty. <a href="/">Browse listings</a> to add items to your cart.</p>
+            <% } %>
         </div>
     </main>
 
@@ -106,85 +145,84 @@
             <form id="paymentForm">
                 <h3>Mailing Information</h3>
                 <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" required /><br />
+                <input type="text" id="fullName" name="fullName" required /><br />
 
                 <label for="address">Street Address:</label>
-                <input type="text" id="address" required /><br />
+                <input type="text" id="address" name="address" required /><br />
 
                 <label for="city">City:</label>
-                <input type="text" id="city" required /><br />
+                <input type="text" id="city" name="city" required /><br />
 
                 <label for="state">State:</label>
-                    <select id="state" required>
-                        <option value="" disabled selected>Select State</option>
-                        <option value="AL">Alabama</option>
-                        <option value="AK">Alaska</option>
-                        <option value="AZ">Arizona</option>
-                        <option value="AR">Arkansas</option>
-                        <option value="CA">California</option>
-                        <option value="CO">Colorado</option>
-                        <option value="CT">Connecticut</option>
-                        <option value="DE">Delaware</option>
-                        <option value="FL">Florida</option>
-                        <option value="GA">Georgia</option>
-                        <option value="HI">Hawaii</option>
-                        <option value="ID">Idaho</option>
-                        <option value="IL">Illinois</option>
-                        <option value="IN">Indiana</option>
-                        <option value="IA">Iowa</option>
-                        <option value="KS">Kansas</option>
-                        <option value="KY">Kentucky</option>
-                        <option value="LA">Louisiana</option>
-                        <option value="ME">Maine</option>
-                        <option value="MD">Maryland</option>
-                        <option value="MA">Massachusetts</option>
-                        <option value="MI">Michigan</option>
-                        <option value="MN">Minnesota</option>
-                        <option value="MS">Mississippi</option>
-                        <option value="MO">Missouri</option>
-                        <option value="MT">Montana</option>
-                        <option value="NE">Nebraska</option>
-                        <option value="NV">Nevada</option>
-                        <option value="NH">New Hampshire</option>
-                        <option value="NJ">New Jersey</option>
-                        <option value="NM">New Mexico</option>
-                        <option value="NY">New York</option>
-                        <option value="NC">North Carolina</option>
-                        <option value="ND">North Dakota</option>
-                        <option value="OH">Ohio</option>
-                        <option value="OK">Oklahoma</option>
-                        <option value="OR">Oregon</option>
-                        <option value="PA">Pennsylvania</option>
-                        <option value="RI">Rhode Island</option>
-                        <option value="SC">South Carolina</option>
-                        <option value="SD">South Dakota</option>
-                        <option value="TN">Tennessee</option>
-                        <option value="TX">Texas</option>
-                        <option value="UT">Utah</option>
-                        <option value="VT">Vermont</option>
-                        <option value="VA">Virginia</option>
-                        <option value="WA">Washington</option>
-                        <option value="WV">West Virginia</option>
-                        <option value="WI">Wisconsin</option>
-                        <option value="WY">Wyoming</option>
-                    </select><br />
-
+                <select id="state" name="state" required>
+                    <option value="" disabled selected>Select State</option>
+                    <!-- List of states -->
+                    <option value="AL">Alabama</option>
+                    <option value="AK">Alaska</option>
+                    <option value="AZ">Arizona</option>
+                    <option value="AR">Arkansas</option>
+                    <option value="CA">California</option>
+                    <option value="CO">Colorado</option>
+                    <option value="CT">Connecticut</option>
+                    <option value="DE">Delaware</option>
+                    <option value="FL">Florida</option>
+                    <option value="GA">Georgia</option>
+                    <option value="HI">Hawaii</option>
+                    <option value="ID">Idaho</option>
+                    <option value="IL">Illinois</option>
+                    <option value="IN">Indiana</option>
+                    <option value="IA">Iowa</option>
+                    <option value="KS">Kansas</option>
+                    <option value="KY">Kentucky</option>
+                    <option value="LA">Louisiana</option>
+                    <option value="ME">Maine</option>
+                    <option value="MD">Maryland</option>
+                    <option value="MA">Massachusetts</option>
+                    <option value="MI">Michigan</option>
+                    <option value="MN">Minnesota</option>
+                    <option value="MS">Mississippi</option>
+                    <option value="MO">Missouri</option>
+                    <option value="MT">Montana</option>
+                    <option value="NE">Nebraska</option>
+                    <option value="NV">Nevada</option>
+                    <option value="NH">New Hampshire</option>
+                    <option value="NJ">New Jersey</option>
+                    <option value="NM">New Mexico</option>
+                    <option value="NY">New York</option>
+                    <option value="NC">North Carolina</option>
+                    <option value="ND">North Dakota</option>
+                    <option value="OH">Ohio</option>
+                    <option value="OK">Oklahoma</option>
+                    <option value="OR">Oregon</option>
+                    <option value="PA">Pennsylvania</option>
+                    <option value="RI">Rhode Island</option>
+                    <option value="SC">South Carolina</option>
+                    <option value="SD">South Dakota</option>
+                    <option value="TN">Tennessee</option>
+                    <option value="TX">Texas</option>
+                    <option value="UT">Utah</option>
+                    <option value="VT">Vermont</option>
+                    <option value="VA">Virginia</option>
+                    <option value="WA">Washington</option>
+                    <option value="WV">West Virginia</option>
+                    <option value="WI">Wisconsin</option>
+                    <option value="WY">Wyoming</option>
+                </select><br />
 
                 <label for="postalCode">Postal Code:</label>
-                <input type="text" id="postalCode" required /><br />
+                <input type="text" id="postalCode" name="postalCode" required /><br />
 
                 <label for="country">We currently are only shipping in the USA</label>
-                
 
                 <h3>Payment Information</h3>
                 <label for="cardNumber">Card Number:</label>
-                <input type="text" id="cardNumber" required /><br />
+                <input type="text" id="cardNumber" name="cardNumber" required /><br />
                 
                 <label for="expiry">Expiry Date:</label>
-                <input type="text" id="expiry" placeholder="MM/YY" required /><br />
+                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" required /><br />
 
                 <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" required /><br />
+                <input type="text" id="cvv" name="cvv" required /><br />
             </form>
 
             <p>Are you sure you want to make this purchase?</p>
@@ -195,6 +233,7 @@
 
     <%- include('partials/footer') %>
 
-    <script src="/js/cartpopup.js"></script>
+    <script src="/js/cart.js"></script>
+    <script src="/js/cartpopup.js"></script> 
 </body>
 </html>
