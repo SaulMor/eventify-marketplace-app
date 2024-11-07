@@ -99,8 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let itemsTotal = 0;
 
         cartItems.forEach(item => {
-            const price = parseFloat(item.querySelector(".item-price").textContent.replace('$', ''));
-            const quantity = parseInt(item.querySelector("input[name='quantity']").value, 10);
+            const priceElement = item.querySelector(".item-price");
+            const price = priceElement ? parseFloat(priceElement.textContent.replace('$', '')) : 0;
+            const quantityElement = item.querySelector("input[name='quantity']");
+            const quantity = quantityElement ? parseInt(quantityElement.value, 10) : 1;
             itemsTotal += price * quantity;
         });
 
