@@ -7,14 +7,14 @@ var btn = document.querySelector(".buy-now");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal only if Visa is selected
+// When the user clicks the button, open the modal only if Visa or Mastercard is selected
 btn.onclick = function() {
-    // Check if Visa is selected
+    // Check if Visa or Mastercard is selected
     var selectedPayment = document.querySelector('input[name="payment"]:checked');
     
-    if (!selectedPayment || selectedPayment.value !== "visa") {
-        alert("Please select Visa as your payment method before proceeding.");
-        return; // Stops modal from opening if Visa is not selected
+    if (!selectedPayment || (selectedPayment.value !== "visa" && selectedPayment.value !== "mastercard")) {
+        alert("Please select a valid payment method (Visa or Mastercard) before proceeding.");
+        return; // Stops modal from opening if neither Visa nor Mastercard is selected
     }
     
     modal.style.display = "block";
@@ -115,7 +115,13 @@ document.getElementById("confirmPurchase").onclick = function() {
     var cardNumber = document.getElementById("cardNumber").value.replace(/\s+/g, ''); // Remove spaces for validation
     var expiry = document.getElementById("expiry").value.replace(/\//g, ''); // Remove slash for validation
     var cvv = document.getElementById("cvv").value;
-    
+
+    // Check if all the required fields are filled
+    if (!cardNumber || !expiry || !cvv) {
+        alert("Please fill out all fields before confirming.");
+        return; // Prevent confirmation if any field is empty
+    }
+
     // Validate Card Number (must be 16 digits)
     var cardRegex = /^\d{16}$/;
     if (!cardRegex.test(cardNumber)) {

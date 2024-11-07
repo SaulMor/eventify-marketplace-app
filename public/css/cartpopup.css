@@ -9,20 +9,27 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background */
-    padding-top: 50px;
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly darker background for better contrast */
+    padding-top: 60px;
     overflow: auto;
+    transition: background-color 0.3s ease; /* Smooth background color transition */
 }
 
+/* ============================= */
+/* Modal Content Styling         */
+/* ============================= */
 .modal-content {
     background-color: #fff;
     margin: 5% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 500px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    border-radius: 12px; /* Rounded corners for a more modern look */
+    width: 85%;
+    max-width: 700px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Slightly bigger shadow for depth */
     animation: fadeIn 0.3s ease;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    max-height: 80vh; /* Keeps modal height manageable */
 }
 
 /* ============================= */
@@ -32,87 +39,77 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #333;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .modal-header h2 {
-    margin: 0; /* Remove any default margins */
+    margin: 0;
 }
 
 .close {
-    color: #e67e00;
+    color: #e67e00; /* Orange close button */
     font-size: 2rem;
     cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: #d16000;
+    color: #d16000; /* Darker orange on hover */
+    transform: rotate(90deg); /* Adds a slight rotation effect on hover */
 }
 
 /* ============================= */
 /* Form Inputs & Labels Styles   */
 /* ============================= */
 .modal-content label {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 5px;
+    font-size: 1.2rem; /* Increased label font size */
+    color: #555;
+    margin-bottom: 8px; /* More space between label and input */
     display: block;
+    font-weight: 500;
 }
 
-.modal-content input[type="text"] {
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="email"],
+.modal-content select {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
+    padding: 16px; /* Increased padding for larger touch targets */
+    margin: 12px 0;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem; /* Slightly larger font size */
+    line-height: 1.5; /* Improved line height for better readability */
+    background-color: #f9f9f9; /* Light background color to improve contrast */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.modal-content input[type="text"]:focus {
-    border-color: #e67e00;
+.modal-content input[type="text"]:focus,
+.modal-content input[type="number"]:focus,
+.modal-content input[type="email"]:focus,
+.modal-content select:focus {
+    border-color: #e67e00; /* Highlight border color on focus */
     outline: none;
+    background-color: #fff; /* Lighter background color on focus for better contrast */
 }
 
 /* ============================= */
 /* Button Styles in Modal        */
 /* ============================= */
 button {
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 14px 20px;
+    font-size: 1.1rem; /* Slightly larger font size for buttons */
     cursor: pointer;
     border: none;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s, transform 0.3s;
     font-family: 'Lao Muang Khong', sans-serif;
-}
-
-/* Style for the 'Yes, Confirm' button */
-#confirmPurchase {
-    background-color: #28a745; /* Green color for confirmation */
-    color: white;
     font-weight: bold;
-}
-
-#confirmPurchase:hover {
-    background-color: #218838; /* Darker green when hovered */
-    transform: scale(1.05); /* Slightly enlarge on hover */
-}
-
-/* Style for the 'Cancel' button */
-#cancelPurchase {
-    background-color: #dc3545; /* Red color for cancel */
-    color: white;
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-#cancelPurchase:hover {
-    background-color: #c82333; /* Darker red when hovered */
-    transform: scale(1.05); /* Slightly enlarge on hover */
+    width: 100%; /* Make buttons full width for consistency */
 }
 
 /* ============================= */
@@ -135,4 +132,67 @@ button {
 @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
+}
+
+/* ============================= */
+/* General Modal Enhancements    */
+/* ============================= */
+.modal-content {
+    box-sizing: border-box;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.modal-content input,
+.modal-content select {
+    font-size: 1.1rem; /* Slightly larger font size for easier reading */
+    line-height: 1.6; /* Improved line height */
+}
+
+button:focus {
+    outline: none;
+}
+
+/* ============================= */
+/* Button Container for Yes/Cancel */
+/* ============================= */
+.modal-footer {
+    display: flex;
+    justify-content: space-between; /* Ensures buttons are spaced apart */
+    gap: 20px; /* Adds space between the buttons */
+    margin-top: 20px; /* Adds margin to the top */
+}
+
+/* Style for the 'Yes, Confirm' button */
+#confirmPurchase {
+    background-color: #28a745; /* Green color for confirmation */
+    color: white;
+    padding: 10px 16px; /* Smaller padding */
+    font-size: 1rem; /* Adjusted font size */
+    border-radius: 6px; /* Slightly rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: auto; /* Automatic width based on content */
+}
+
+#confirmPurchase:hover {
+    background-color: #218838; /* Darker green when hovered */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Style for the 'Cancel' button */
+#cancelPurchase {
+    background-color: #dc3545; /* Red color for cancel */
+    color: white;
+    padding: 10px 16px; /* Smaller padding */
+    font-size: 1rem; /* Adjusted font size */
+    border-radius: 6px; /* Slightly rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: auto; /* Automatic width based on content */
+}
+
+#cancelPurchase:hover {
+    background-color: #c82333; /* Darker red when hovered */
+    transform: scale(1.05); /* Slightly enlarge on hover */
 }
