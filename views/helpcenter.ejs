@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventify Home</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Files (Order Matters) -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/helpcenter.css"> <!-- Home Page CSS -->
+</head>
+<body>
+    <!-- Conditional Header -->
+    <% if (user) { %>
+        <%- include('partials/header') %> <!-- Header for logged-in users -->
+    <% } else { %>
+        <%- include('partials/header1') %> <!-- Header for non-logged-in users -->
+    <% } %>
+
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Help Center Wrapper -->
+        <div class="help-center-wrapper">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Welcome to Eventify's Help Center!</h1>
+                <p>Your one-stop guide for all things Eventify. Let us help you navigate the platform.</p>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq">
+                <h2>Frequently Asked Questions</h2>
+
+                <div class="faq-item">
+                    <h3>How do I create an event?</h3>
+                    <p>To create an event, simply log in to your Eventify account, click the "Create Event" button on your dashboard, and fill in the event details (name, date, time, etc.). Don’t forget to save your event after completing the form!</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do I invite people to my event?</h3>
+                    <p>Once your event is created, you can share the invitation link through email, social media, or direct messaging! Just go to your event page and click "Share" to get your unique link.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I update event details after creating it?</h3>
+                    <p>Of course! You can always go back and edit your event details at any time by clicking on your event in the dashboard and selecting "Edit Event."</p>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact">
+                <h2>Need More Help?</h2>
+                <p>If you still have questions or need further assistance, don't hesitate to contact us!</p>
+                <a href="mailto:celebrationscreations2024@gmail.com" class="contact-btn">Contact Support</a>
+            </section>
+        </div> <!-- End of help-center-wrapper -->
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %> <!-- Footer for all users -->
+
+</body>
+</html>

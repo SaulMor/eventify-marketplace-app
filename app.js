@@ -159,8 +159,8 @@ const categoryRoutes = require('./routes/category');
 app.use('/category', categoryRoutes);
 
 // Contact Route
-app.get('/contact', (req, res) => {
-    res.render('contact'); // Ensure this matches the filename in your views directory
+app.get('/helpcenter', (req, res) => {
+    res.render('helpcenter'); // Ensure this matches the filename in your views directory
 });
 
 // Cart Route
