@@ -171,6 +171,10 @@ app.get('/listingDetail', (req, res) => {
     res.render('listingDetail'); // Make sure this matches the EJS file in 'views' folder
 });
 
+app.get('/settings', (req, res) => {
+    res.render('settings'); // Make sure this matches the EJS file in 'views' folder
+});
+
 // Order Activity Route
 app.get('/orderActivity', (req, res) => {
     res.render('orderActivity'); // Make sure this matches the EJS file in 'views' folder
