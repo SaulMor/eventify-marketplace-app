@@ -43,19 +43,24 @@ router.get('/', ensureAuthenticated, csrfProtection, async (req, res) => {
       item.listing.price >= 0
     );
 
-    // Optional: Notify the user about removed items
-    if (validCart.length !== user.cart.length) {
+    // Determine if any items were removed
+    const removedItems = user.cart.length - validCart.length;
+
+    // Update the user's cart to only contain valid items
+    if (removedItems > 0) {
+      await User.findByIdAndUpdate(userId, { cart: validCart });
+      // Update session data
+      req.session.user.cart = validCart;
       req.flash('error', 'Some items in your cart are no longer available and have been removed.');
     }
-
-    // Log validCart for debugging purposes
-    console.log('Valid Cart Items:', validCart);
 
     // Render the cart view with cart data
     res.render('cart', {
       user,
       cart: validCart, // Pass only valid cart items
       csrfToken: req.csrfToken(),
+      success: req.flash("success"),
+      error: req.flash("error")
     });
   } catch (error) {
     console.error('Error fetching cart:', error);
@@ -98,6 +103,9 @@ router.post('/add', ensureAuthenticated, csrfProtection, async (req, res) => {
 
     await user.save();
 
+    // Update session data
+    req.session.user.cart = user.cart;
+
     res.status(200).json({ success: 'Item added to cart successfully.' });
   } catch (error) {
     console.error('Error adding to cart:', error);
@@ -122,6 +130,9 @@ router.post('/remove', ensureAuthenticated, csrfProtection, async (req, res) => 
     user.cart = user.cart.filter(item => item.listing.toString() !== listingId);
 
     await user.save();
+
+    // Update session data
+    req.session.user.cart = user.cart;
 
     res.status(200).json({ success: 'Item removed from cart successfully.' });
   } catch (error) {
@@ -152,6 +163,9 @@ router.post('/update', ensureAuthenticated, csrfProtection, async (req, res) => 
     cartItem.quantity = parseInt(quantity, 10);
 
     await user.save();
+
+    // Update session data
+    req.session.user.cart = user.cart;
 
     res.status(200).json({ success: 'Cart updated successfully.' });
   } catch (error) {
