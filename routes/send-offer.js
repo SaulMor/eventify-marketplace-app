@@ -6,14 +6,10 @@ const Messages = require('../models/Messages');
 router.post('/', async (req, res) => { 
     try {  
         const { productId, message } = req.body;
-
-        // Create a new message with the provided productId and message content
         const newMessage = new Messages({ productId, message });
 
-        // Save the message to the database
         await newMessage.save();
-
-        // Redirect to the user's profile page after successful submission
+       
         res.redirect('/user/profile1');
     } catch (err) { 
         console.error("Error sending message:", err); 

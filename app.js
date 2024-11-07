@@ -198,7 +198,12 @@ app.use('/auth', authRoutes); // Mount them under /auth
 
 // Favorites Routes
 const favoritesRouter = require('./routes/favorites'); // Import the favortites routes
-app.use('/favorites', favoritesRouter); // Mount them under /favorites
+app.use('/favorites', favoritesRouter); // Mount them under /favorites 
+// message/offfer route
+const sendOfferRoute = require('./routes/send-offer');
+app.use('/send-offer', sendOfferRoute); // Mount under send-offer route.
+
+
 
 
 // -----------------------------

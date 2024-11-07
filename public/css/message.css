@@ -1,6 +1,7 @@
 /* Main container */
 .messages-container {
-    width: 90%;
+    display: none;
+    width: 90%; 
     max-width: 1200px;
     margin: auto;
     padding: 20px;

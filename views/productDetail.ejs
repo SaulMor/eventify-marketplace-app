@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/productDetail.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/message.css">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,7 +69,7 @@
             <!-- Buttons -->
             <div class="product-buttons">
                 <button class="add-to-cart-btn">Add to Cart</button>
-                <button class="make-offer-btn">Make an Offer</button>
+                <button id="makeOfferBtn" class="make-offer-btn">Make an Offer</button>
             </div>
             <button class="buy-now-btn">Buy Now</button>
 
@@ -117,12 +118,32 @@
             </div>
         </div>
     </div>
-</main>
+</main> 
+
+<div id="offerModal" class="messages-container" style="display: none;">
+    <div class="messages-content">
+        <div class="message-thread">
+            <div class="chat-header">
+                Message Seller
+                <span class="close-btn" id="closeModal" style="float: right; cursor: pointer;">&times;</span>
+            </div>
+            <div class="message-thread-content">
+                <div class="message notification">Start Conversation!</div>
+            </div>
+            <div class="message-input">
+                <form id="offerForm" action="/send-offer" method="POST">
+                    <input type="hidden" name="productId" value="<%= product._id %>">
+                    <textarea name="message" placeholder="Enter your offer..." required style="flex-grow: 1;"></textarea>
+                    <button type="submit" class="button">Send Offer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <%- include('partials/footer') %> <!-- Include footer partial -->
 
-<script src="/js/productDetail.js"></script>
-
+<script src="/js/productDetail.js"></script> 
 </body>
 </html>

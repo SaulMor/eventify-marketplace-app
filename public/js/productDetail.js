@@ -60,4 +60,30 @@ document.addEventListener("DOMContentLoaded", () => {
       countElement.textContent = currentCount > 0 ? currentCount : "";
     }
   }
+}); 
+
+// message seller function 
+document.addEventListener("DOMContentLoaded", () => {
+ 
+  const makeOfferBtn = document.getElementById("makeOfferBtn");
+  const offerModal = document.getElementById("offerModal");
+  const closeModal = document.getElementById("closeModal");
+
+  if (makeOfferBtn && offerModal && closeModal) {
+    
+    makeOfferBtn.addEventListener("click", () => {
+      offerModal.style.display = "block";
+    });
+
+   
+    closeModal.addEventListener("click", () => {
+      offerModal.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target === offerModal) {
+        offerModal.style.display = "none";
+      }
+    });
+  }
 });
