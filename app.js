@@ -1,6 +1,6 @@
 const express = require('express');
-const path = require('path'); 
-const mongoose = require('mongoose'); 
+const path = require('path');
+const mongoose = require('mongoose');
 const morgan = require('morgan'); // For logging
 const helmet = require('helmet'); // For securing HTTP headers
 const rateLimit = require('express-rate-limit'); // For rate limiting
@@ -22,7 +22,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, { // Use environment variable only
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })

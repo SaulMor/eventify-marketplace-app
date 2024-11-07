@@ -65,13 +65,7 @@
                             <input type="radio" name="payment" value="visa" />
                             <img src="/media/images/visa-logo.png" alt="Visa" class="payment-logo" />
                         </label>
-                        <label>
-                            <input type="radio" name="payment" value="mastercard" />
-                            <img src="/media/images/mastercard-logo.png" alt="MasterCard" class="payment-logo" />
-                        </label>
-                        <label>
-                            <input type="radio" name="payment" value="paypal" />
-                        </label>
+                
                     </div>
 
                     <div class="price-details">
@@ -100,10 +94,11 @@
         </div>
     </main>
 
+    <!-- Modal for Payment Information -->
     <div id="paymentModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Payment Confirmation</h2>
+            <h2>Payment Information</h2>
             <p>Please enter your card information:</p>
             <form id="paymentForm">
                 <label for="cardNumber">Card Number:</label>
@@ -112,46 +107,17 @@
                 <input type="text" id="expiry" placeholder="MM/YY" required /><br />
                 <label for="cvv">CVV:</label>
                 <input type="text" id="cvv" required /><br />
-                <button type="submit">Confirm Payment</button>
             </form>
+            <p>Are you sure you want to make this purchase?</p>
+            <!-- Only this "Yes, Confirm" button is needed to confirm payment -->
+            <button id="confirmPurchase">Yes, Confirm</button>
+            <button id="cancelPurchase">Cancel</button>
         </div>
     </div>
 
+
+
     <%- include('partials/footer') %>
-
-    <script>
-        // Get the modal
-        var modal = document.getElementById("paymentModal");
-
-        // Get the button that opens the modal
-        var btn = document.querySelector(".buy-now");
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks the button, open the modal 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Handle form submission
-        document.getElementById("paymentForm").onsubmit = function(event) {
-            event.preventDefault();
-            alert("Payment confirmed!"); // Placeholder for actual payment processing
-            modal.style.display = "none"; // Close the modal
-        }
-    </script>
+    <script src="/js/cartpopup.js"></script>
 </body>
 </html>

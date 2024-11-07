@@ -1,36 +1,138 @@
+/* ============================= */
+/*         General Modal Reset   */
+/* ============================= */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background */
+    padding-top: 50px;
+    overflow: auto;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    background-color: #fff;
+    margin: 5% auto;
     padding: 20px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    max-width: 500px; /* Limit width */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease;
+}
+
+/* ============================= */
+/* Modal Header and Close Button */
+/* ============================= */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0; /* Remove any default margins */
 }
 
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+    color: #e67e00;
+    font-size: 2rem;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
+    color: #d16000;
+}
+
+/* ============================= */
+/* Form Inputs & Labels Styles   */
+/* ============================= */
+.modal-content label {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.modal-content input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.modal-content input[type="text"]:focus {
+    border-color: #e67e00;
+    outline: none;
+}
+
+/* ============================= */
+/* Button Styles in Modal        */
+/* ============================= */
+button {
+    padding: 12px 20px;
+    font-size: 16px;
     cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: 'Lao Muang Khong', sans-serif;
+}
+
+/* Style for the 'Yes, Confirm' button */
+#confirmPurchase {
+    background-color: #28a745; /* Green color for confirmation */
+    color: white;
+    font-weight: bold;
+}
+
+#confirmPurchase:hover {
+    background-color: #218838; /* Darker green when hovered */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Style for the 'Cancel' button */
+#cancelPurchase {
+    background-color: #dc3545; /* Red color for cancel */
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+#cancelPurchase:hover {
+    background-color: #c82333; /* Darker red when hovered */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* ============================= */
+/* Payment Confirmation Section  */
+/* ============================= */
+.payment-confirmation {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.payment-confirmation p {
+    margin: 10px 0;
+}
+
+/* ============================= */
+/* Modal Fade In Animation       */
+/* ============================= */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
 }
