@@ -131,7 +131,7 @@
                 <div class="message notification">Start Conversation!</div>
             </div>
             <div class="message-input">
-                <form id="offerForm" action="/send-offer" method="POST">
+                <form id="offerForm" action="/sendOffer" method="POST">
                     <input type="hidden" name="productId" value="<%= product._id %>">
                     <textarea name="message" placeholder="Enter your offer..." required style="flex-grow: 1;"></textarea>
                     <button type="submit" class="button">Send Offer</button>
