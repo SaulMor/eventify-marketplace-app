@@ -1,0 +1,141 @@
+<!-- views/favorites.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Likes/Favorites - Eventify</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/favorites.css">
+    <link rel="stylesheet" href="/css/filters.css">
+</head>
+<body>
+
+    <!-- Including header partial -->
+    <%- include('partials/header') %> 
+
+    <!-- Main Content -->
+    <main class="favorites-main">
+        <!-- Title -->
+        <h1>My Favorites</h1>
+
+        <!-- Search and Sort Bar -->
+        <div class="search-sort-bar">
+            <form id="favorites-search-sort-form" method="GET" action="/favorites">
+                <input type="text" name="search" class="search-input" placeholder="Search your favorites..." value="<%= search %>">
+
+                <div class="sort-dropdown">
+                    <label for="sort">Sort by:</label>
+                    <select id="sort" name="sort">
+                        <option value="">-- Select --</option>
+                        <option value="price-asc" <%= sort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                        <option value="price-desc" <%= sort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                        <option value="date-newest" <%= sort === 'date-newest' ? 'selected' : '' %>>Date: Newest First</option>
+                        <option value="date-oldest" <%= sort === 'date-oldest' ? 'selected' : '' %>>Date: Oldest First</option>
+                        <!-- Add more sort options as needed -->
+                    </select>
+                </div>
+
+                <button type="submit" class="apply-filters-btn">Apply</button>
+            </form>
+        </div>
+
+        <% if (success && success.length > 0) { %>
+            <div class="flash-message success">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <% if (error && error.length > 0) { %>
+            <div class="flash-message error">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Container for Filters and Listings -->
+        <div class="favorites-container">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <form id="favorites-filter-form" method="GET" action="/favorites">
+                    <!-- Include the Filters Partial -->
+                    <%- include('partials/filters', {
+                        selectedCategories: selectedCategories,
+                        selectedColors: selectedColors,
+                        selectedPrice: selectedPrice,
+                        customPrice: customPrice
+                    }) %>
+                    
+                    <!-- Submit Button (optional if using individual apply buttons) -->
+                </form>
+            </aside>
+
+            <!-- Listings Grid -->
+            <section class="product-list">
+                <% if (favorites.length > 0) { %>
+                    <% favorites.forEach(listing => { %>
+                        <div class="product-card">
+                            <a href="/listing/<%= listing._id %>" class="product-link">
+                                <div class="product-image-container">
+                                    <% if (listing.photos && listing.photos.length > 0) { %>
+                                        <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image" loading="lazy">
+                                    <% } else { %>
+                                        <img src="/media/images/default-listing.jpg" alt="Default Listing Photo" class="product-image" loading="lazy">
+                                    <% } %>
+                                </div>
+                                <div class="product-info">
+                                    <h3 class="product-title"><%= listing.title %></h3>
+                                    <p class="product-price">$<%= listing.price.toFixed(2) %></p>
+                                    <p class="product-category"><%= listing.category %></p>
+                                    <div class="product-user">
+                                        <% if (listing.userId && listing.userId.name) { %>
+                                            <span class="username"><%= listing.userId.name %></span>
+                                        <% } else { %>
+                                            <span class="username">Unknown Seller</span>
+                                        <% } %>
+                                        <div class="product-rating">
+                                            <% if (listing.rating) { %>
+                                                <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
+                                                    <i class="fa fa-star"></i>
+                                                <% } %>
+                                                <% if (listing.rating % 1 >= 0.5) { %>
+                                                    <i class="fa fa-star-half-alt"></i>
+                                                <% } %>
+                                                <% for (let i = Math.ceil(listing.rating); i < 5; i++) { %>
+                                                    <i class="fa fa-star-o"></i>
+                                                <% } %>
+                                            <% } else { %>
+                                                <span>No rating</span>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <!-- Remove from Favorites Button -->
+                            <form action="/favorites/remove/<%= listing._id %>" method="POST" class="remove-favorite-form">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" class="remove-favorite-button" aria-label="Remove from Favorites">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>You have no favorite listings yet.</p>
+                <% } %>
+            </section>
+        </div>
+    </main>
+
+    <!-- Including footer partial -->
+    <%- include('partials/footer') %>
+
+    <!-- Optional JavaScript -->
+    <script src="/js/favorites.js"></script>
+    <script src="/js/filter.js"></script> <!-- Script for toggle functionality -->
+</body>
+</html>

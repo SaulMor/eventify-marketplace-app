@@ -1,0 +1,150 @@
+/* public/css/filters.css */
+
+/* Filters Section Styling */
+.filters {
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    font-family: 'LaoMuangKhong-Regular', sans-serif;
+    border-radius: 8px;
+}
+
+.filters h3 {
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.filters h3:hover {
+    color: #4A90E2; 
+}
+
+.filters h4 {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.filters label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.category-group {
+    margin-bottom: 20px;
+}
+
+.color-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Color Classes */
+.color-black { background-color: black; }
+.color-white { background-color: white; }
+.color-red { background-color: red; }
+.color-orange { background-color: orange; }
+.color-yellow { background-color: yellow; }
+.color-green { background-color: green; }
+.color-blue { background-color: blue; }
+.color-purple { background-color: purple; }
+.color-pink { background-color: pink; }
+.color-gray { background-color: gray; }
+.color-brown { background-color: brown; }
+.color-lightgray { background-color: lightgray; }
+
+.color-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #c9c8c8;
+    cursor: pointer;
+    display: inline-block;
+    margin-right: 5px;
+    transition: border 0.3s ease;
+}
+
+.color-circle.selected {
+    border: 2px solid #4A90E2;
+}
+
+.custom-price {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.custom-price label {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.price-inputs {
+    display: flex;
+    align-items: center; 
+    gap: 10px;
+}
+
+.filter-apply {
+    align-self: center;
+    padding: 5px 10px;
+    color: black;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-family: 'LaoMuangKhong-Regular', sans-serif;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.filter-apply:hover {
+    background-color: #f0f0f0;
+}
+
+.hidden-filter {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.toggle-btn {
+    font-size: 1rem;
+    padding: 0 10px;
+    user-select: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.toggle-btn:hover {
+    color: rgb(4, 69, 139);
+}
+
+.custom-price input[type="number"] {
+    width: 80px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.custom-price span {
+    font-weight: bold;
+}
+
+/* Optional: Selected Color Circle Styling */
+.color-group label .color-circle {
+    margin-right: 5px;
+}
+
+.color-group label:hover .color-circle {
+    opacity: 0.7;
+}

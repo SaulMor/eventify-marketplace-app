@@ -7,12 +7,12 @@ const path = require("path");
 const fs = require("fs");
 const { body, validationResult } = require("express-validator");
 const csrf = require('csurf');
+const mongoose = require("mongoose");
+const Listing = require("../models/Listing");
+const User = require("../models/User");
+const Offer = require("../models/Offer");
 
-const Listing = require('../models/Listing');
-const User = require('../models/User');
-const Offer = require('../models/Offer');
-
-const ensureAuthenticated = require('../middleware/auth');
+const ensureAuthenticated = require("../middleware/auth");
 const authorizeListing = require("../middleware/authorizeListing");
 
 // Initialize CSRF Protection
@@ -166,6 +166,78 @@ router.post(
   }
 );
 
+// POST /listing/:id/favorite - Toggle Favorite Status
+router.post('/:id/favorite', ensureAuthenticated, csrfProtection, async (req, res) => {
+  try {
+      const userId = req.session.user.id;
+      const listingId = req.params.id;
+
+      // Validate the listing ID format
+      if (!mongoose.Types.ObjectId.isValid(listingId)) {
+          if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+              return res.status(400).json({ error: 'Invalid listing ID.' });
+          }
+          req.flash('error', 'Invalid listing ID.');
+          return res.redirect(req.get('Referrer') || '/');
+      }
+
+      // Check if the listing exists
+      const listing = await Listing.findById(listingId);
+      if (!listing) {
+          if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+              return res.status(404).json({ error: 'Listing not found.' });
+          }
+          req.flash('error', 'Listing not found.');
+          return res.redirect(req.get('Referrer') || '/');
+      }
+
+      // Find the user
+      const user = await User.findById(userId);
+
+      // Convert listingId to string for consistent comparison
+      const listingIdStr = listingId.toString();
+
+      // Check if the listing is already in favorites
+      const isFavorited = user.favorites.some(id => id.toString() === listingIdStr);
+
+      if (isFavorited) {
+          // Remove from favorites
+          user.favorites = user.favorites.filter(id => id.toString() !== listingIdStr);
+          await user.save();
+
+          if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+              // AJAX Request: Respond with JSON
+              return res.status(200).json({ message: 'Removed from favorites.' });
+          } else {
+              // Standard Request: Set flash message and redirect
+              req.flash('success', 'Listing removed from your favorites.');
+              return res.redirect(req.get('Referrer') || '/');
+          }
+      } else {
+          // Add to favorites
+          user.favorites.push(listingId);
+          await user.save();
+
+          if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+              // AJAX Request: Respond with JSON
+              return res.status(200).json({ message: 'Added to favorites.' });
+          } else {
+              // Standard Request: Set flash message and redirect
+              req.flash('success', 'Listing added to your favorites.');
+              return res.redirect(req.get('Referrer') || '/');
+          }
+      }
+
+  } catch (error) {
+      console.error('Error toggling favorite:', error);
+      if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+          return res.status(500).json({ error: 'An error occurred while updating your favorites.' });
+      }
+      req.flash('error', 'An error occurred while updating your favorites.');
+      res.redirect(req.get('Referrer') || '/');
+  }
+});
+
 // ---------------------------------------
 // EDIT and DELETE Listing Routes
 // ---------------------------------------
@@ -284,13 +356,17 @@ router.post(
       console.log("Before Upload - Existing Photos:", listing.photos);
 
       // Process removed photos
-      const removedPhotos = req.body.removedPhotos ? JSON.parse(req.body.removedPhotos) : [];
+      const removedPhotos = req.body.removedPhotos
+        ? JSON.parse(req.body.removedPhotos)
+        : [];
       if (removedPhotos.length > 0) {
         console.log("Photos to be removed:", removedPhotos);
-        listing.photos = listing.photos.filter(photo => !removedPhotos.includes(photo));
+        listing.photos = listing.photos.filter(
+          (photo) => !removedPhotos.includes(photo)
+        );
 
         // Delete the removed photo files from the server
-        removedPhotos.forEach(photoPath => {
+        removedPhotos.forEach((photoPath) => {
           const fullPath = path.join(__dirname, "..", "public", photoPath);
           fs.unlink(fullPath, (err) => {
             if (err) {
@@ -316,14 +392,23 @@ router.post(
 
         if (totalPhotos > 5) {
           // Delete the newly uploaded files to prevent storage clutter
-          req.files.forEach(file => {
-            fs.unlink(path.join(__dirname, "..", "public", "uploads", file.filename), (err) => {
-              if (err) console.error("Error deleting file:", err);
-              else console.log(`Deleted uploaded file due to exceeding limit: ${file.filename}`);
-            });
+          req.files.forEach((file) => {
+            fs.unlink(
+              path.join(__dirname, "..", "public", "uploads", file.filename),
+              (err) => {
+                if (err) console.error("Error deleting file:", err);
+                else
+                  console.log(
+                    `Deleted uploaded file due to exceeding limit: ${file.filename}`
+                  );
+              }
+            );
           });
 
-          req.flash("error", `You can only have a maximum of 5 photos. You have already uploaded ${existingPhotoCount} photos.`);
+          req.flash(
+            "error",
+            `You can only have a maximum of 5 photos. You have already uploaded ${existingPhotoCount} photos.`
+          );
           return res.redirect(`/listing/edit/${listingId}`);
         }
 
@@ -409,23 +494,36 @@ router.delete(
 // ---------------------------------------
 
 // GET Route: Display Owner-Specific Listing Details
-router.get("/:id/detail", ensureAuthenticated, authorizeListing, async (req, res) => {
-  try {
-    const listing = req.listing; // From authorizeListing middleware
-    res.render("listingDetail", { listing, user: req.session.user });
-  } catch (error) {
-    console.error("Error fetching listing detail:", error);
-    req.flash("error", "An error occurred while fetching the listing.");
-    res.redirect("/user/profile1");
+router.get(
+  "/:id/detail",
+  ensureAuthenticated,
+  authorizeListing,
+  async (req, res) => {
+    try {
+      const listing = req.listing; // From authorizeListing middleware
+      res.render("listingDetail", { listing, user: req.session.user });
+    } catch (error) {
+      console.error("Error fetching listing detail:", error);
+      req.flash("error", "An error occurred while fetching the listing.");
+      res.redirect("/user/profile1");
+    }
   }
-});
+);
 
 // GET Route: Display Public Listing Details
-router.get("/:id", async (req, res) => {
+router.get("/:id", csrfProtection, async (req, res) => {
+  // Added csrfProtection middleware
   try {
     const listingId = req.params.id;
+
+    // Validate the listing ID format
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      req.flash("error", "Invalid listing ID.");
+      return res.redirect("/");
+    }
+
     const listing = await Listing.findById(listingId)
-      .populate('userId') // Populate the userId field
+      .populate("userId") // Populate the userId field
       .lean();
 
     if (!listing) {
@@ -437,7 +535,11 @@ router.get("/:id", async (req, res) => {
       ? await User.findById(req.session.user.id).lean()
       : null;
 
-    res.render("productDetail", { product: listing, user });
+    res.render("productDetail", {
+      product: listing,
+      user,
+      csrfToken: req.csrfToken(), // Now works correctly
+    });
   } catch (error) {
     console.error("Error fetching listing details:", error);
     req.flash("error", "An error occurred while fetching the listing.");

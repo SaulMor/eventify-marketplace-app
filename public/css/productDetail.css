@@ -1,3 +1,5 @@
+/* public/css/productDetail.css */
+
 /* Global Box-Sizing */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -95,11 +97,21 @@ body {
     gap: 10px; 
 }
 
-/* Product Rating */
+/* Product rating*/
+.product-rating-container {
+    display: flex;
+    justify-content: flex-end; /* Align the rating to the right */
+    margin-top: 10px; /* Add some spacing above the rating */
+}
+
 .product-rating {
     display: flex;
-    align-items: center;
-    gap: 2px; 
+    gap: 2px; /* Space between stars */
+}
+
+.product-rating i {
+    color: rgb(0, 0, 0);
+    font-size: 20px;
 }
 
 .seller-name {
@@ -166,10 +178,61 @@ body {
 .like-save-container {
     margin-top: 15px;
     font-size: 1rem;
-    color: #FF4136;
+    color: #FF4136; 
     cursor: pointer;
 }
 
+/* Like Save Button */
+.like-save-button {
+    background: none; 
+    border: none; 
+    color: #555555; 
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect for the Button */
+.like-save-button:hover {
+    color: #FF4136; 
+}
+
+/* Hover Effect for the Heart Icon */
+.like-save-button:hover i {
+    transform: scale(1.2);
+}
+
+/* Favorited State */
+.like-save-button.favorited {
+    color: #FF4136; 
+}
+
+/* Heart Icon Transition */
+.like-save-button i {
+    transition: color 0.3s ease, transform 0.3s ease;
+    font-size: 1.2rem; 
+}
+
+/* Favorited Heart Animation */
+.like-save-button.favorited i {
+    transform: scale(1.2); 
+    color: #FF4136; 
+}
+
+/* Unfavorited Heart Color */
+.like-save-button:not(.favorited) i {
+    color: #555555; 
+}
+
+/* Text Styling */
+.like-save-button span {
+    font-weight: 500;
+}
+
+/* Remove margin-right from the container */
 .like-save-container i {
     margin-right: 5px;
 }
