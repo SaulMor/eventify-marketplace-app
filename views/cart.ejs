@@ -45,54 +45,50 @@
             <h1>Your Cart <span class="cart-icon"><i class="fas fa-shopping-cart"></i></span></h1>
             <% if (cart && cart.length > 0) { %>
                 <div class="cart">
-                    <% cart.forEach(function(item) { %>
-                        <% if (item.listing) { %>
-                            <div class="item-section cart-item">
-                                <div class="item-header">
-                                    <img src="<%= user.profileImage || '/media/images/blank-profile-picture.webp' %>" alt="user image" class="profile-image" />
-                                    <span class="username"><%= user.name %></span>
-                                </div>
-                                <div class="item-content">
-                                    <div class="item-info">
-                                        <div class="item-image">
-                                            <img src="<%= (item.listing.photos && item.listing.photos.length > 0) ? item.listing.photos[0] : '/media/images/default.jpg' %>" alt="<%= item.listing.title || 'Default Title' %>" />
-                                        </div>
-                                        <div class="item-details">
-                                            <% if (item.listing.stock && item.listing.stock < 5) { %>
-                                                <span class="stock-info">ONLY <%= item.listing.stock %> LEFT</span>
-                                            <% } %>
-                                            <h2 class="item-title"><%= item.listing.title %></h2>
-                                            <div class="item-price">$<%= item.listing.price.toFixed(2) %></div>
-                                            <!-- Quantity Input (Optional) -->
-                                            <!-- Uncomment the following if you decide to implement quantity changes -->
-                                            <!-- 
-                                            <div class="item-quantity">
-                                                <label for="quantity-<%= item.listing._id %>">Quantity:</label>
-                                                <input type="number" id="quantity-<%= item.listing._id %>" name="quantity" value="<%= item.quantity %>" min="1" data-listing-id="<%= item.listing._id %>">
+                    <!-- Item Section -->
+                    <div class="item-section">
+                        <% cart.forEach(function(item) { %>
+                            <% if (item.listing) { %>
+                                <div class="cart-item">
+                                    <div class="item-header">
+                                        <img src="<%= user.profileImage || '/media/images/blank-profile-picture.webp' %>" alt="user image" class="profile-image" />
+                                        <span class="username"><%= user.name %></span>
+                                    </div>
+                                    <div class="item-content">
+                                        <div class="item-info">
+                                            <div class="item-image">
+                                                <img src="<%= (item.listing.photos && item.listing.photos.length > 0) ? item.listing.photos[0] : '/media/images/default.jpg' %>" alt="<%= item.listing.title || 'Default Title' %>" />
                                             </div>
-                                            -->
+                                            <div class="item-details">
+                                                <% if (item.listing.stock && item.listing.stock < 5) { %>
+                                                    <span class="stock-info">ONLY <%= item.listing.stock %> LEFT</span>
+                                                <% } %>
+                                                <h2 class="item-title"><%= item.listing.title %></h2>
+                                                <div class="item-price">$<%= item.listing.price.toFixed(2) %></div>
+                                            </div>
+                                        </div>
+                                        <div class="item-actions">
+                                            <button class="save-for-later" data-listing-id="<%= item.listing._id %>">Save for later</button>
+                                            <button class="remove-item" data-listing-id="<%= item.listing._id %>">Remove</button>
+                                        </div>
+                                        <div class="shipping-info">
+                                            <span>Shipping: <span class="free-shipping">FREE</span></span><br />
+                                            <span>Estimated Delivery: 5-8 Business Days</span>
                                         </div>
                                     </div>
-                                    <div class="item-actions">
-                                        <button class="save-for-later" data-listing-id="<%= item.listing._id %>">Save for later</button>
-                                        <button class="remove-item" data-listing-id="<%= item.listing._id %>">Remove</button>
-                                    </div>
-                                    <div class="shipping-info">
-                                        <span>Shipping: <span class="free-shipping">FREE</span></span><br />
-                                        <span>Estimated Delivery: 5-8 Business Days</span>
+                                    <div class="item-footer">
+                                        <a href="/seller/<%= item.listing.seller %>" class="contact-seller">Contact Seller</a>
                                     </div>
                                 </div>
-                                <div class="item-footer">
-                                    <a href="/seller/<%= item.listing.seller %>" class="contact-seller">Contact Seller</a>
+                            <% } else { %>
+                                <div class="cart-item">
+                                    <p>Listing no longer available. <a href="/">Browse listings</a> to continue shopping.</p>
                                 </div>
-                            </div>
-                        <% } else { %>
-                            <div class="item-section">
-                                <p>Listing no longer available. <a href="/">Browse listings</a> to continue shopping.</p>
-                            </div>
-                        <% } %>
-                    <% }); %>
+                            <% } %>
+                        <% }); %>
+                    </div>
 
+                    <!-- Payment Section -->
                     <div class="payment-section">
                         <h3>Payment</h3>
                         <div class="payment-methods">
