@@ -62,33 +62,64 @@
             </div>
 
             <h1><%= product.title %></h1>
-            <p class="product-price">$<%= product.price.toFixed(2) %> <span class="original-price"><%= product.originalPrice ? '$' + product.originalPrice.toFixed(2) : '' %></span></p>
+            <p class="product-price">$<%= Number(product.price).toFixed(2) %> <span class="original-price"><%= product.originalPrice ? '$' + Number(product.originalPrice).toFixed(2) : '' %></span></p>
             <% if(product.brand) { %>
                 <p class="product-brand">Brand: <%= product.brand %></p>
             <% } %>
 
-            <!-- Buttons -->
+            <!-- Product Buttons: Add to Cart, Make Offer, Buy Now -->
             <div class="product-buttons">
-                <!-- Add a data-listing-id attribute for JavaScript -->
-                <button class="add-to-cart-btn" data-listing-id="<%= product._id %>">Add to Cart</button>
-                <button id="makeOfferBtn" class="make-offer-btn">Make an Offer</button>
+                <!-- Add to Cart and Make Offer Buttons Side by Side -->
+                <div class="add-make-buttons">
+                    <form action="/cart/add" method="POST" class="add-to-cart-form">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="listingId" value="<%= product._id %>">
+                        
+                        <button type="submit" class="add-to-cart-btn" aria-label="Add <%= product.title %> to Cart">Add to Cart</button>
+                    </form>
+                    <button id="makeOfferBtn" class="make-offer-btn" aria-label="Make an Offer on <%= product.title %>">Make an Offer</button>
+                </div>
+                
+                <!-- Buy Now Button -->
+                <button class="buy-now-btn" aria-label="Buy <%= product.title %> Now">Buy Now</button>
+                
+                <!-- Quantity Form Field -->
+                <form action="/cart/updateQuantity" method="POST" class="quantity-form">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <label for="quantity">Quantity:</label>
+                    <input 
+                        type="number" 
+                        id="quantity" 
+                        name="quantity" 
+                        value="1" 
+                        min="1" 
+                        max="<%= Number(product.quantity) %>" 
+                        required
+                        class="quantity-input"
+                        aria-label="Quantity for <%= product.title %>"
+                    >
+                </form>
+                
+                <!-- Like and Save it for Later Feature -->
+                <div class="like-save-container">
+                    <% 
+                        // Convert user.favorites ObjectIds to strings for accurate comparison
+                        const favoriteIds = user && user.favorites ? user.favorites.map(id => id.toString()) : [];
+                        const isFavorited = favoriteIds.includes(product._id.toString());
+                    %>
+                    <button 
+                        id="favorite-button" 
+                        class="like-save-button <%= isFavorited ? 'favorited' : '' %>" 
+                        aria-label="<%= isFavorited ? 'Remove from Favorites' : 'Like it and save it for later' %>" 
+                        data-listing-id="<%= product._id %>"
+                    >
+                        <i class="<%= isFavorited ? 'fas fa-heart' : 'far fa-heart' %>"></i> 
+                        <span><%= isFavorited ? 'Remove from Favorites' : 'Like it and save it for later' %></span>
+                    </button>
+                    <input type="hidden" id="csrf-token" value="<%= csrfToken %>">
+                </div>
             </div>
-            <button class="buy-now-btn">Buy Now</button>
-
-            <!-- Like and Save Button with AJAX -->
-            <div class="like-save-container">
-                <% 
-                    // Convert user.favorites ObjectIds to strings for accurate comparison
-                    const favoriteIds = user && user.favorites ? user.favorites.map(id => id.toString()) : [];
-                    const isFavorited = favoriteIds.includes(product._id.toString());
-                %>
-                <button id="favorite-button" class="like-save-button <%= isFavorited ? 'favorited' : '' %>" aria-label="<%= isFavorited ? 'Remove from Favorites' : 'Like it and save it for later' %>" data-listing-id="<%= product._id %>">
-                    <i class="<%= isFavorited ? 'fas fa-heart' : 'far fa-heart' %>"></i> 
-                    <span><%= isFavorited ? 'Remove from Favorites' : 'Like it and save it for later' %></span>
-                </button>
-                <input type="hidden" id="csrf-token" value="<%= csrfToken %>">
-            </div>
-
+            
             <!-- Product Description -->
             <p class="product-description">
                 <%= product.description %>
@@ -109,7 +140,13 @@
                         <div class="color-options">
                             <% product.colors.forEach(function(color) { %>
                                 <label class="color-box">
-                                    <input type="radio" name="color" value="<%= color %>" aria-label="<%= color %>">
+                                    <input 
+                                        type="radio" 
+                                        name="color" 
+                                        value="<%= color %>" 
+                                        aria-label="<%= color %>"
+                                        required
+                                    >
                                     <span class="color-circle <%= color.toLowerCase() %>"></span>
                                     <span class="color-name"><%= color %></span>
                                 </label>
@@ -122,6 +159,7 @@
     </div>
 </main> 
 
+<!-- Modal for Making an Offer -->
 <div id="offerModal" class="messages-container" style="display: none;">
     <div class="messages-content">
         <div class="message-thread">
@@ -134,14 +172,24 @@
             </div>
             <div class="message-input">
                 <form id="offerForm" action="/sendOffer" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <input type="hidden" name="productId" value="<%= product._id %>">
                     <textarea name="message" placeholder="Enter your offer..." required style="flex-grow: 1;"></textarea>
-                    <button type="submit" class="button">Send Offer</button>
+                    <button type="submit" class="button" aria-label="Send Offer">Send Offer</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Modal for Add to Cart Success -->
+<div id="addToCartModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeModal">&times;</span>
+      <p id="addToCartMessage">Your order has been added to the cart.</p>
+      <button id="continueButton" class="modal-button">Continue</button>
+    </div>
+  </div>
 
 
 <%- include('partials/footer') %> <!-- Include footer partial -->

@@ -50,7 +50,7 @@ const fileFilter = (req, file, cb) => {
 // Initialize multer with defined storage and file filter
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit per photo
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit per photo
   fileFilter: fileFilter,
 });
 
@@ -97,6 +97,9 @@ router.post(
     body("category").notEmpty().withMessage("Category is required"),
     body("condition").notEmpty().withMessage("Condition is required"),
     body("description").notEmpty().withMessage("Description is required"),
+    body("quantity")
+      .isInt({ gt: 0 })
+      .withMessage("Quantity must be a positive integer"),
     // Add more validations as needed
   ],
   async (req, res) => {
@@ -538,7 +541,7 @@ router.get("/:id", csrfProtection, async (req, res) => {
     res.render("productDetail", {
       product: listing,
       user,
-      csrfToken: req.csrfToken(), // Now works correctly
+      csrfToken: req.csrfToken(), 
     });
   } catch (error) {
     console.error("Error fetching listing details:", error);

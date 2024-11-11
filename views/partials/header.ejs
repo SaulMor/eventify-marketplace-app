@@ -19,49 +19,62 @@
                 </form>
             </div>
 
-            <!-- User Icons -->
+            <!-- User Icons or Login/Signup Buttons -->
             <div class="user-icon-wrapper">
-                <a href="/orderActivity" aria-label="Order Activity" class="header-icon-link">
-                    <img src="/media/images/circledollar.png" alt="Order Activity" class="header-icon">
-                </a>
-                <a href="/favorites" aria-label="Favorites" class="header-icon-link">
-                    <img src="/media/images/heart.png" alt="Favorites" class="header-icon">
-                </a>
-                <a href="/notifications" aria-label="Notifications" class="header-icon-link">
-                    <img src="/media/images/notifications.png" alt="Notifications" class="header-icon">
-                </a>
-
-                <!-- Profile Icon with Dropdown Trigger -->
-                <div class="profile-container">
-                    <a href="/user/profile1" aria-label="User Profile" class="header-icon-link">
-                        <img src="/media/images/user.png" alt="User Profile" class="header-icon">
+                <% if (user) { %>
+                    <!-- Authenticated User Icons -->
+                    <a href="/orderActivity" aria-label="Order Activity" class="header-icon-link">
+                        <img src="/media/images/circledollar.png" alt="Order Activity" class="header-icon">
+                    </a>
+                    <a href="/favorites" aria-label="Favorites" class="header-icon-link">
+                        <img src="/media/images/heart.png" alt="Favorites" class="header-icon">
+                    </a>
+                    <a href="/notifications" aria-label="Notifications" class="header-icon-link">
+                        <img src="/media/images/notifications.png" alt="Notifications" class="header-icon">
                     </a>
 
-                    <!-- Profile Dropdown -->
-                    <div id="profileDropdown" class="profile-dropdown">
-                        <!-- Username is now uppercase -->
-                        <p class="username"><%= user.name.toUpperCase() %></p>
-                        <div class="dropdown-items">
-                            <a href="/user/profile1" aria-label="View Profile">View Profile</a>
-                            <a href="/notifications" aria-label="Notifications">Notifications</a>
-                            <a href="/helpcenter" aria-label="Help Center">Help Center</a>
-                            <a href="/settings" aria-label="Account Settings">Account Settings</a>
-                            
-                            <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
-                                <form action="/auth/logout" method="POST" class="logout-form">
-                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <button type="submit" aria-label="Log out">Log out</button>
-                                </form>
-                            <% } else { %>
-                                <a href="/auth/logout" class="header-logout-button" aria-label="Log out">Log out</a>
-                            <% } %>
+                    <!-- Profile Icon with Dropdown Trigger -->
+                    <div class="profile-container">
+                        <a href="/user/profile1" aria-label="User Profile" class="header-icon-link">
+                            <img src="/media/images/user.png" alt="User Profile" class="header-icon">
+                        </a>
+
+                        <!-- Profile Dropdown -->
+                        <div id="profileDropdown" class="profile-dropdown">
+                            <!-- Username is now uppercase -->
+                            <p class="username"><%= user.name.toUpperCase() %></p>
+                            <div class="dropdown-items">
+                                <a href="/user/profile1" aria-label="View Profile">View Profile</a>
+                                <a href="/notifications" aria-label="Notifications">Notifications</a>
+                                <a href="/helpcenter" aria-label="Help Center">Help Center</a>
+                                <a href="/settings" aria-label="Account Settings">Account Settings</a>
+                                
+                                <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+                                    <form action="/auth/logout" method="POST" class="logout-form">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        <button type="submit" aria-label="Log out">Log out</button>
+                                    </form>
+                                <% } else { %>
+                                    <a href="/auth/logout" class="header-logout-button" aria-label="Log out">Log out</a>
+                                <% } %>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <a href="/cart" aria-label="User Cart" class="header-icon-link">
-                    <img src="/media/images/cart.png" alt="User Cart" class="header-user-cart">
-                </a>
+                    <a href="/cart" aria-label="User Cart" class="header-icon-link" style="position: relative;">
+                        <img src="/media/images/cart.png" alt="User Cart" class="header-user-cart">
+                        <% if (cartCount > 0) { %>
+                            <span id="cart-count" class="cart-count"><%= cartCount %></span>
+                        <% } else { %>
+                            <span id="cart-count" class="cart-count" style="display: none;"></span>
+                        <% } %>
+                    </a>
+                    
+                <% } else { %>
+                    <!-- Guest User Links Styled as Buttons -->
+                    <a href="/auth/login" class="header-login-button" aria-label="Login">Login</a>
+                    <a href="/auth/signup" class="header-signup-button" aria-label="Sign Up">Sign Up</a>
+                <% } %>
             </div>
         </div>
 
@@ -105,7 +118,6 @@
     </div>
 </header>
 
-<!-- Add your profilePopup.css link here -->
 <link rel="stylesheet" href="/css/profilePopup.css">
 
 <script src="/js/header.js"></script>

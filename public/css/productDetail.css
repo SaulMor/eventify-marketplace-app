@@ -140,38 +140,83 @@ body {
 /* Buttons */
 .product-buttons {
     display: flex;
-    gap: 15px;
-    margin-top: 15px;
+    flex-direction: column;
+    gap: 15px; 
+    margin-top: 15px; 
 }
 
+/* Container for Add to Cart and Make Offer Buttons */
+.add-make-buttons {
+    display: flex;
+    gap: 10px; /* Space between Add to Cart and Make Offer buttons */
+}
+
+/* Add to Cart and Make Offer Buttons Styling */
 .add-to-cart-btn,
-.make-offer-btn,
-.buy-now-btn {
+.make-offer-btn {
     background-color: #CBC9C9;
     color: rgb(0, 0, 0);
     padding: 10px 26px;
     border: none;
     cursor: pointer;
     font-size: 1rem;
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
+.add-to-cart-btn:hover,
+.make-offer-btn:hover {
+    background-color: #A9A9A9;
+    opacity: 0.9;
+}
+
+/* Buy Now Button Styling */
 .buy-now-btn {
     background-color: #E9C071;
+    color: rgb(0, 0, 0);
     padding: 10px 0px; 
     border: none;
     cursor: pointer;
     font-size: 1.2rem;
-    width: 49%; 
-    max-width: 300px; 
-    display: inline-block;
     text-align: center; 
-    margin-top: 10px;
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    max-width: 300px;
+    width: 100%;
 }
 
-.add-to-cart-btn:hover,
-.make-offer-btn:hover,
 .buy-now-btn:hover {
+    background-color: #D4B55A; 
     opacity: 0.9;
+}
+
+/* Quantity Form Styling */
+.quantity-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 300px; /* Align with Buy Now button */
+}
+
+.quantity-form label {
+    font-size: 1rem;
+    color: #000;
+}
+
+.quantity-input {
+    width: 60px;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.quantity-input:focus {
+    border-color: #007BFF;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Like and Save */
@@ -359,7 +404,7 @@ body {
 @media (max-width: 768px) {
     .product-detail-container {
         flex-direction: column;
-        gap: 15px; /* Further reduce gap on smaller screens */
+        gap: 15px; 
     }
 
     .product-thumbnails {
@@ -390,4 +435,75 @@ body {
         width: 100%; 
         gap: 10px; 
     }
+
+    /* Adjust Add to Cart and Make Offer Buttons to stack vertically */
+    .add-make-buttons {
+        flex-direction: column;
+    }
+
+    .add-make-buttons .add-to-cart-btn,
+    .add-make-buttons .make-offer-btn {
+        width: 100%;
+    }
 }
+
+/* The Modal (background) */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); 
+  }
+  
+  /* Modal Content Box */
+  .modal-content {
+    background-color: #ffffff;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+  }
+  
+  /* The Close Button (X) */
+  .modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .modal-content .close:hover,
+  .modal-content .close:focus {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  /* Modal Button */
+  .modal-button {
+    background-color: #E9C071;
+    color: rgb(0, 0, 0);
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .modal-button:hover {
+    background-color: #D4B55A;
+    opacity: 0.9;
+  }

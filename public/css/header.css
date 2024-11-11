@@ -461,3 +461,31 @@ body {
         width: 200px; /* Slightly narrower on small screens */
     }
 }
+
+/* Cart Count Badge */
+.cart-count {
+    position: absolute;
+    top: 5px;
+    right: 4px;
+    color: white;
+    padding: 2px 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+@media (max-width: 600px) {
+    .cart-count {
+        font-size: 0.65rem;
+        min-width: 16px;
+        height: 16px;
+    }
+}

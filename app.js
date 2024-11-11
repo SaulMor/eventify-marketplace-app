@@ -126,6 +126,16 @@ app.use((req, res, next) => {
 });
 
 // -----------------------------
+// Middleware to Pass Cart Count to All Views
+// -----------------------------
+app.use((req, res, next) => {
+    res.locals.cartCount = req.session.user && req.session.user.cart 
+      ? req.session.user.cart.reduce((acc, item) => acc + item.quantity, 0) 
+      : 0;
+    next();
+  });
+
+// -----------------------------
 // View Engine Setup
 // -----------------------------
 
