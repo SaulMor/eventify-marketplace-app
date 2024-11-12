@@ -53,8 +53,8 @@
                             <% if (item.listing) { %>
                                 <div class="cart-item" data-listing-id="<%= item.listing._id %>">
                                     <div class="item-header">
-                                        <img src="<%= user.profileImage || '/media/images/blank-profile-picture.webp' %>" alt="user image" class="profile-image" />
-                                        <span class="username"><%= user.name %></span>
+                                        <img src="<%= item.listing.userId.profilePic || '/media/images/blank-profile-picture.webp' %>" alt="seller image" class="profile-image" />
+                                        <span class="username"><%= item.listing.userId.name || 'Unknown Seller' %></span>
                                     </div>
                                     <div class="item-content">
                                         <div class="item-info">
@@ -111,7 +111,7 @@
                                         </div>
                                     </div>
                                     <div class="item-footer">
-                                        <a href="/seller/<%= item.listing.userId %>" class="contact-seller">Contact Seller</a>
+                                        <a href="/listing/<%= item.listing.userId._id %>" class="contact-seller">Contact Seller</a>
                                     </div>
                                 </div>
                                 <!-- Removal Message Placeholder -->

@@ -235,11 +235,16 @@ router.get('/', ensureAuthenticated, csrfProtection, async (req, res) => {
   try {
     const userId = req.session.user.id;
 
-    // Fetch user with populated cart listings
+    // Fetch user with populated cart listings and their respective sellers
     const user = await User.findById(userId)
       .populate({
         path: 'cart.listing',
         model: 'Listing',
+        populate: {
+          path: 'userId',
+          model: 'User',
+          select: 'name profilePic', // Select only necessary fields
+        },
       })
       .lean();
 
@@ -249,8 +254,8 @@ router.get('/', ensureAuthenticated, csrfProtection, async (req, res) => {
     }
 
     // Filter out cart items with invalid listings or prices
-    const validCart = user.cart.filter(item => 
-      item.listing && 
+    const validCart = user.cart.filter(item =>
+      item.listing &&
       typeof item.listing.price === 'number' &&
       item.listing.price >= 0
     );

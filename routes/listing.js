@@ -573,7 +573,7 @@ router.get("/", async (req, res) => {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: { created: -1 },
-      populate: { path: 'userId', select: 'username email profilePic' }, // Ensure profilePic is included
+      populate: { path: 'userId', select: 'name email profilePic' }, // Ensure profilePic is included
       lean: true,
     };
 
