@@ -221,7 +221,7 @@ exports.getListingOffers = async (req, res) => {
 
     // Fetch offers related to this listing (Offer model)
     const offers = await Offer.find({ listingId: listing._id })
-      .populate("userId", "username email")
+      .populate("userId", "name email")
       .lean();
 
     // Set a success flash message if needed

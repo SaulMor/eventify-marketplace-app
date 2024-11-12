@@ -72,8 +72,8 @@
                 <% if (listings && listings.length > 0) { %>
                     <% listings.forEach(function(listing) { %>
                         <div class="listing-card">
-                            <a href="/listing/<%= listing._id %>"> <!-- Dynamic Link -->
-                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                            <a href="/product/<%= listing._id %>"> <!-- Dynamic Link -->
+                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>" class="listing-image">
                             </a>
                             <div class="listing-info">
                                 <h3><%= listing.title %></h3>

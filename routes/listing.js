@@ -501,10 +501,11 @@ router.get(
   "/:id/detail",
   ensureAuthenticated,
   authorizeListing,
+  csrfProtection,
   async (req, res) => {
     try {
       const listing = req.listing; // From authorizeListing middleware
-      res.render("listingDetail", { listing, user: req.session.user });
+      res.render("listingDetail", { listing, user: req.session.user, csrfToken: req.csrfToken() });
     } catch (error) {
       console.error("Error fetching listing detail:", error);
       req.flash("error", "An error occurred while fetching the listing.");
@@ -515,7 +516,6 @@ router.get(
 
 // GET Route: Display Public Listing Details
 router.get("/:id", csrfProtection, async (req, res) => {
-  // Added csrfProtection middleware
   try {
     const listingId = req.params.id;
 
@@ -525,8 +525,9 @@ router.get("/:id", csrfProtection, async (req, res) => {
       return res.redirect("/");
     }
 
+    // Fetch the listing and populate seller information
     const listing = await Listing.findById(listingId)
-      .populate("userId") // Populate the userId field
+      .populate("userId", "name email profilePic")
       .lean();
 
     if (!listing) {
@@ -534,21 +535,63 @@ router.get("/:id", csrfProtection, async (req, res) => {
       return res.redirect("/");
     }
 
-    const user = req.session.user
-      ? await User.findById(req.session.user.id).lean()
-      : null;
+    const user = req.session.user || null;
+    const isSeller = user && user.id.toString() === listing.userId._id.toString();
 
-    res.render("productDetail", {
-      product: listing,
+    // Ownership Detection Logs
+    console.log("Current User ID:", user ? user.id : "No user logged in");
+    console.log("Listing Seller ID:", listing.userId._id.toString());
+    console.log("Is Seller:", isSeller);
+
+    if (isSeller) {
+      // Redirect to owner-specific detail page
+      return res.redirect(`/listing/${listingId}/detail`);
+    }
+
+    // Render standard product detail page for buyers
+    res.render("productDetail", { 
+      product: listing, 
       user,
-      csrfToken: req.csrfToken(), 
+      csrfToken: req.csrfToken()
     });
   } catch (error) {
     console.error("Error fetching listing details:", error);
-    req.flash("error", "An error occurred while fetching the listing.");
-    res.redirect("/");
+    res.status(500).render("error", { message: "Internal Server Error" });
   }
 });
+
+// routes/listing.js
+
+// Existing imports and middleware...
+
+// GET Route: List All Listings with Optional Pagination
+router.get("/", async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: { created: -1 },
+      populate: { path: 'userId', select: 'username email profilePic' }, // Ensure profilePic is included
+      lean: true,
+    };
+
+    const result = await Listing.paginate({}, options);
+    res.render("index", { 
+      listings: result.docs, 
+      pagination: result, 
+      user: req.session.user || null,
+      csrfToken: req.csrfToken()
+    }); // Pass listings, pagination info, user, and CSRF token to EJS
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    res.status(500).render("error", { message: "Internal Server Error" });
+  }
+});
+
+// EXPORT THE ROUTER
+module.exports = router;
 
 // GET Route: View Offers for a Listing
 router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res) => {
@@ -557,7 +600,7 @@ router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res
 
     // Fetch offers related to this listing (Offer model)
     const offers = await Offer.find({ listingId: listing._id })
-      .populate("userId", "username email")
+      .populate("userId", "name email")
       .lean();
 
     // Set a success flash message if needed

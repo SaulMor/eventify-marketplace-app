@@ -2,24 +2,62 @@
 
 const express = require("express");
 const router = express.Router();
-const Listing = require("../models/Listing"); // Import Listing model
+const mongoose = require("mongoose");
+const Listing = require("../models/Listing");
+const User = require("../models/User");
+const csrf = require('csurf');
 
-// Route to render product detail page
-router.get("/:id", async (req, res) => {
+// Middleware
+const ensureAuthenticated = require("../middleware/auth");
+
+// Initialize CSRF Protection
+const csrfProtection = csrf();
+
+// Route to render product detail page based on ownership
+router.get("/:id", ensureAuthenticated, async (req, res) => {
   try {
-    const productId = req.params.id;
-    const listing = await Listing.findById(productId).populate('userId', 'name email').lean();
+    const listingId = req.params.id;
 
-    if (listing) {
+    // Validate the listing ID format
+    if (!mongoose.Types.ObjectId.isValid(listingId)) {
+      req.flash("error", "Invalid listing ID.");
+      return res.redirect("/");
+    }
+
+    // Fetch the listing and populate seller information
+    const listing = await Listing.findById(listingId)
+      .populate('userId', 'name email profilePic')
+      .lean();
+
+    if (!listing) {
+      req.flash("error", "Listing not found.");
+      return res.redirect("/");
+    }
+
+    const user = req.session.user || null;
+    const isSeller = user && user.id.toString() === listing.userId._id.toString();
+
+    console.log("Current User ID:", user ? user.id : "No user logged in");
+    console.log("Listing Seller ID:", listing.userId._id.toString());
+    console.log("Is Seller:", isSeller);
+
+    if (isSeller) {
+      // Render seller-specific listing detail page
+      res.render("listingDetail", { 
+        listing, 
+        user,
+        csrfToken: req.csrfToken() 
+      });
+    } else {
+      // Render standard product detail page for buyers
       res.render("productDetail", { 
         product: listing, 
-        user: req.session.user || null 
-      }); // Pass product data and user to EJS template
-    } else {
-      res.status(404).render("404", { message: "Product not found." });
+        user,
+        csrfToken: req.csrfToken()
+      });
     }
   } catch (error) {
-    console.error("Error fetching product details:", error);
+    console.error("Error fetching listing details:", error);
     res.status(500).render("error", { message: "Internal Server Error" });
   }
 });
@@ -38,11 +76,12 @@ router.get("/", async (req, res) => {
     };
 
     const result = await Listing.paginate({}, options);
-    res.render("productList", { 
-      products: result.docs, 
+    res.render("index", { 
+      listings: result.docs, 
       pagination: result, 
-      user: req.session.user || null 
-    }); // Pass products, pagination info, and user to EJS template
+      user: req.session.user || null,
+      csrfToken: req.csrfToken()
+    }); // Pass listings, pagination info, and user to EJS template
   } catch (error) {
     console.error("Error fetching products:", error);
     res.status(500).render("error", { message: "Internal Server Error" });
