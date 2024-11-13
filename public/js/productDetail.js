@@ -2,7 +2,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
   const favoriteButton = document.getElementById("favorite-button");
-  const addToCartButton = document.querySelector(".add-to-cart-form .add-to-cart-btn"); // Select the 'Add to Cart' button within the form
+  const addToCartForm = document.querySelector(".add-to-cart-form"); // Select the form instead of the button
   const csrfTokenElement = document.getElementById("csrf-token");
   const csrfToken = csrfTokenElement ? csrfTokenElement.value : '';
 
@@ -65,16 +65,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Handle Add to Cart Button Click
-  if (addToCartButton) {
-    addToCartButton.addEventListener("click", async function (e) {
-      e.preventDefault(); // Prevent default button behavior
+  // Handle Add to Cart Form Submission
+  if (addToCartForm) {
+    addToCartForm.addEventListener("submit", async function (e) {
+      e.preventDefault(); // Prevent traditional form submission
 
-      const form = e.currentTarget.closest('.add-to-cart-form');
-      const listingId = form.querySelector("input[name='listingId']").value;
-      const quantityInput = document.getElementById("quantity"); // Correctly select the quantity input by ID
+      const listingId = addToCartForm.querySelector("input[name='listingId']").value;
+      const quantityInput = document.getElementById("quantity"); // Select the quantity input by ID
       const quantity = parseInt(quantityInput.value, 10);
-      const csrfToken = form.querySelector("input[name='_csrf']").value;
+      const csrfToken = addToCartForm.querySelector("input[name='_csrf']").value;
 
       // Validate the quantity on the client-side
       if (isNaN(quantity) || quantity < 1) {
@@ -99,41 +98,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
 
         if (response.ok) {
-          // Instead of displaying a message under the button, show a modal
+          // Show the Add to Cart Success Modal
           showAddToCartModal("Your order has been added to the cart.");
           // Update cart count in header based on server response
           if (data.cartCount !== undefined) {
             updateCartCount(data.cartCount);
           }
         } else {
-          displayError(form, data.error || 'Failed to add to cart.');
+          displayError(addToCartForm, data.error || 'Failed to add to cart.');
         }
       } catch (error) {
         console.error('Error adding to cart:', error);
-        displayError(form, 'An error occurred while adding to cart.');
+        displayError(addToCartForm, 'An error occurred while adding to cart.');
       }
     });
   }
 
-  // Utility Function to Show Add to Cart Modal
+  // Updated Utility Function to Show Add to Cart Modal
   function showAddToCartModal(message) {
+    console.log("showAddToCartModal called"); // Debugging log
     const modal = document.getElementById("addToCartModal");
     const modalMessage = document.getElementById("addToCartMessage");
     const continueButton = document.getElementById("continueButton");
 
     modalMessage.textContent = message;
-    modal.style.display = "block";
+    modal.classList.add("active"); // Show the modal by adding 'active' class
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
 
     // Close modal when clicking the 'Continue' button
-    continueButton.onclick = function() {
-      modal.style.display = "none";
-    };
-
-    // Close modal when clicking outside the modal content
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
+    continueButton.onclick = function () {
+      modal.classList.remove("active"); // Hide the modal by removing 'active' class
+      document.body.style.overflow = "auto"; // Re-enable background scrolling
     };
   }
 
@@ -165,24 +160,29 @@ document.addEventListener("DOMContentLoaded", () => {
     return null;
   }
 
-  // Message Seller Modal Handling (Existing Code)
+  /**
+   * Function to Display Error Messages
+   */
+  function displayError(form, message) {
+    let errorContainer = form.querySelector('.error-message');
+    if (!errorContainer) {
+      errorContainer = document.createElement('div');
+      errorContainer.className = 'error-message';
+      form.appendChild(errorContainer);
+    }
+    errorContainer.textContent = message;
+    errorContainer.style.color = 'red';
+    errorContainer.style.marginTop = '10px';
+  }
+
+  // Message Seller Modal Handling
   const makeOfferBtn = document.getElementById("makeOfferBtn");
   const offerModal = document.getElementById("offerModal");
-  const closeModal = document.getElementById("closeModal");
 
-  if (makeOfferBtn && offerModal && closeModal) {
+  if (makeOfferBtn && offerModal) {
     makeOfferBtn.addEventListener("click", () => {
-      offerModal.style.display = "block";
-    });
-
-    closeModal.addEventListener("click", () => {
-      offerModal.style.display = "none";
-    });
-
-    window.addEventListener("click", (event) => {
-      if (event.target === offerModal) {
-        offerModal.style.display = "none";
-      }
+      offerModal.classList.add("active"); // Show the modal by adding 'active' class
+      document.body.style.overflow = "hidden"; // Prevent background scrolling
     });
   }
 });

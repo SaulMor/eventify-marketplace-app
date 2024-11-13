@@ -1,59 +1,38 @@
 // public/js/modalHandler.js
 
 document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("imageModal");
-    const modalImg = document.getElementById("modalImage");
-    const captionText = document.getElementById("caption");
-    const closeBtn = document.getElementsByClassName("close")[0];
+  function initializeModal(modalId, closeBtnId) {
+    const modal = document.getElementById(modalId);
+    const closeBtn = document.getElementById(closeBtnId);
 
-    // Get the thumbnails container
-    const thumbnailsContainer = document.querySelector(".photo-thumbnails");
+    if (modal && closeBtn) {
+      // Close modal when the close button is clicked
+      closeBtn.addEventListener("click", () => {
+        modal.classList.remove("active");
+        document.body.style.overflow = "auto";
+      });
 
-    // Variable to keep track of the last focused thumbnail
-    let lastFocusedThumbnail = null;
-
-    // Add a single event listener to the thumbnails container using Event Delegation
-    thumbnailsContainer.addEventListener("click", (e) => {
-        // Check if the clicked element has the 'thumbnail' class
-        if (e.target && e.target.classList.contains("thumbnail")) {
-            modal.style.display = "block";
-            modalImg.src = e.target.src;
-            modalImg.alt = e.target.alt;
-            captionText.innerHTML = e.target.alt || "Enlarged Image";
-            document.body.style.overflow = "hidden"; 
-            closeBtn.focus(); 
-            lastFocusedThumbnail = e.target; 
+      // Close modal when clicking outside the modal content
+      window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          modal.classList.remove("active");
+          document.body.style.overflow = "auto";
         }
-    });
+      });
 
-    // When the user clicks on <span> (x), close the modal
-    closeBtn.onclick = function () {
-        modal.style.display = "none";
-        document.body.style.overflow = "auto"; 
-        if (lastFocusedThumbnail) {
-            lastFocusedThumbnail.focus(); 
+      // Close modal on Esc key press
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && modal.classList.contains("active")) {
+          modal.classList.remove("active");
+          document.body.style.overflow = "auto";
         }
-    };
+      });
+    }
+  }
 
-    // When the user clicks anywhere outside of the modal content, close it
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto"; 
-            if (lastFocusedThumbnail) {
-                lastFocusedThumbnail.focus(); 
-            }
-        }
-    };
+  // Initialize Offer Modal
+  initializeModal("offerModal", "closeOfferModal");
 
-    // Close modal on Esc key press
-    document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && modal.style.display === "block") {
-            modal.style.display = "none";
-            document.body.style.overflow = "auto"; 
-            if (lastFocusedThumbnail) {
-                lastFocusedThumbnail.focus(); 
-            }
-        }
-    });
+  // Initialize Add to Cart Modal
+  initializeModal("addToCartModal", "closeAddToCartModal");
 });

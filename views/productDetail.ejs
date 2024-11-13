@@ -29,14 +29,24 @@
     <div class="product-detail-container">
         <!-- Left Section: Thumbnails -->
         <div class="product-thumbnails">
-            <% product.photos.forEach(function(photo) { %>
-                <img src="<%= photo %>" alt="Thumbnail" class="thumbnail">
+            <% product.photos.forEach(function(photo, index) { %>
+                <img 
+                    src="<%= photo %>" 
+                    alt="Thumbnail <%= index + 1 %>" 
+                    class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+                    data-src="<%= photo %>"
+                >
             <% }); %>
         </div>
 
         <!-- Middle Section: Main Product Image -->
         <div class="product-main-image">
-            <img src="<%= product.photos[0] %>" alt="<%= product.title %>" class="product-image">
+            <img 
+                src="<%= product.photos[0] %>" 
+                alt="<%= product.title %>" 
+                class="product-image clickable-image" 
+                data-src="<%= product.photos[0] %>"
+            >
         </div>
 
         <!-- Right Section: Product Info -->
@@ -48,18 +58,18 @@
                         src="<%= (product.userId && product.userId.profileImage) ? product.userId.profileImage : '/media/images/blank-profile-picture.webp' %>" 
                         alt="Profile Picture" 
                         class="profile-pic">
-                        <span class="seller-name">
-                            <%= (product.userId && product.userId.name) ? product.userId.name : 'Unknown Seller' %>
-                        </span>
-                        <div class="product-rating-container">
-                            <div class="product-rating">
-                                <% for(let i = 0; i < 5; i++) { %>
-                                    <i class="fas fa-star stars"></i>
-                                <% } %>
-                            </div>
-                        </div>
+                    <span class="seller-name">
+                        <%= (product.userId && product.userId.name) ? product.userId.name : 'Unknown Seller' %>
+                    </span>
+                </div>
+                <div class="product-rating-container">
+                    <div class="product-rating">
+                        <% for(let i = 0; i < 5; i++) { %>
+                            <i class="fas fa-star stars"></i>
+                        <% } %>
+                    </div>
+                </div>
             </div>
-        </div>
 
             <h1><%= product.title %></h1>
             <p class="product-price">$<%= Number(product.price).toFixed(2) %> <span class="original-price"><%= product.originalPrice ? '$' + Number(product.originalPrice).toFixed(2) : '' %></span></p>
@@ -159,41 +169,54 @@
     </div>
 </main> 
 
-<!-- Modal for Making an Offer -->
-<div id="offerModal" class="messages-container" style="display: none;">
-    <div class="messages-content">
-        <div class="message-thread">
-            <div class="chat-header">
-                Message Seller
-                <span class="close-btn" id="closeModal" style="float: right; cursor: pointer;">&times;</span>
-            </div>
-            <div class="message-thread-content">
-                <div class="message notification">Start Conversation!</div>
-            </div>
-            <div class="message-input">
-                <form id="offerForm" action="/sendOffer" method="POST">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <input type="hidden" name="productId" value="<%= product._id %>">
-                    <textarea name="message" placeholder="Enter your offer..." required style="flex-grow: 1;"></textarea>
-                    <button type="submit" class="button" aria-label="Send Offer">Send Offer</button>
-                </form>
+    <!-- Modal for Making an Offer -->
+    <div id="offerModal" class="offer-modal-container" role="dialog" aria-modal="true" aria-labelledby="offerModalTitle">
+        <div class="offer-modal-content">
+            <div class="offer-message-thread">
+                <div class="offer-chat-header">
+                    <h2 id="offerModalTitle">Message Seller</h2>
+                    <span class="close-btn" id="closeOfferModal" aria-label="Close Offer Modal">&times;</span>
+                </div>
+                <div class="offer-message-thread-content">
+                    <div class="message notification">Start Conversation!</div>
+                </div>
+                <div class="offer-message-input">
+                    <form id="offerForm" action="/sendOffer" method="POST">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                        <div class="offer-input-group">
+                            <textarea name="message" placeholder="Enter your offer..." required></textarea>
+                            <button type="submit" class="button send-offer-button" aria-label="Send Offer">Send Message</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+    
 
-<!-- Modal for Add to Cart Success -->
-<div id="addToCartModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <p id="addToCartMessage">Your order has been added to the cart.</p>
-      <button id="continueButton" class="modal-button">Continue</button>
+    <!-- Modal for Add to Cart Success -->
+    <div id="addToCartModal" class="add-to-cart-modal" role="dialog" aria-modal="true" aria-labelledby="addToCartModalTitle" style="display: none;">
+        <div class="add-to-cart-modal-content">
+            <span class="close" id="closeAddToCartModal" aria-label="Close Add to Cart Modal">&times;</span>
+            <h2 id="addToCartModalTitle">Success</h2>
+            <p id="addToCartMessage">Your order has been added to the cart.</p>
+            <button id="continueButton" class="modal-button" aria-label="Continue Shopping">Continue</button>
+        </div>
     </div>
-  </div>
 
+    <!-- Modal Structure -->
+    <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle" style="display: none;">
+        <span class="close" id="closeImageModal" aria-label="Close Image Modal">&times;</span>
+        <img class="image-modal-content" id="modalImage" alt="Enlarged Product Image">
+        <div id="caption"></div>
+    </div>
 
 <%- include('partials/footer') %> <!-- Include footer partial -->
 
-<script src="/js/productDetail.js"></script> 
+<!-- Include JavaScript Files -->
+<script src="/js/modalHandler.js"></script> 
+<script src="/js/productDetail.js"></script>
+<script src="/js/imageModalHandler.js"></script> <!-- Include image modal handler -->
 </body>
 </html>
