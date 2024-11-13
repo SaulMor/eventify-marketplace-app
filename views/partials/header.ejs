@@ -35,7 +35,7 @@
 
                     <!-- Profile Icon with Dropdown Trigger -->
                     <div class="profile-container">
-                        <a href="/user/profile1" aria-label="User Profile" class="header-icon-link">
+                        <a href="/user/profile1" aria-label="User Profile" class="header-icon-link" id="profile-icon">
                             <img src="/media/images/user.png" alt="User Profile" class="header-icon">
                         </a>
 
@@ -49,13 +49,15 @@
                                 <a href="/helpcenter" aria-label="Help Center">Help Center</a>
                                 <a href="/settings" aria-label="Account Settings">Account Settings</a>
                                 
-                                <% if (typeof csrfToken !== 'undefined' && csrfToken) { %>
+                                <!-- Logout Form -->
+                                <% if (csrfToken) { %>
                                     <form action="/auth/logout" method="POST" class="logout-form">
                                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                         <button type="submit" aria-label="Log out">Log out</button>
                                     </form>
                                 <% } else { %>
-                                    <a href="/auth/logout" class="header-logout-button" aria-label="Log out">Log out</a>
+                                    <!-- Secure Fallback: Optionally, disable the logout button or show a message -->
+                                    <button type="button" class="disabled-logout-button" aria-label="Log out" disabled>Log out</button>
                                 <% } %>
                             </div>
                         </div>
@@ -119,6 +121,8 @@
 </header>
 
 <link rel="stylesheet" href="/css/profilePopup.css">
+
+<!-- Include CSRF Token as a Meta Tag for AJAX Requests (Optional) -->
 
 <script src="/js/header.js"></script>
 <script src="/js/profilePopup.js"></script>

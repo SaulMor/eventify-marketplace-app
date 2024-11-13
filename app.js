@@ -1,3 +1,4 @@
+// app.js
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
@@ -12,6 +13,7 @@ const MongoStore = require('connect-mongo'); // Import connect-mongo
 const flash = require('connect-flash');
 const csrf = require('csurf');
 const dotenv = require('dotenv'); // For environment variables
+const csrfProtection = csrf();
 
 // Load environment variables
 dotenv.config();
@@ -125,6 +127,20 @@ app.use((req, res, next) => {
     next();
 });
 
+// Middleware to inject csrfToken into res.locals if available
+app.use((req, res, next) => {
+    try {
+        if (typeof req.csrfToken === 'function') {
+            res.locals.csrfToken = req.csrfToken();
+        } else {
+            res.locals.csrfToken = null;
+        }
+    } catch (e) {
+        res.locals.csrfToken = null;
+    }
+    next();
+});
+
 // -----------------------------
 // Middleware to Pass Cart Count to All Views
 // -----------------------------
@@ -167,11 +183,6 @@ app.use('/', indexRouter);
 // Category Routes
 const categoryRoutes = require('./routes/category');
 app.use('/category', categoryRoutes);
-
-// Contact Route
-app.get('/helpcenter', (req, res) => {
-    res.render('helpcenter'); // Ensure this matches the filename in your views directory
-});
 
 // Cart Route
 const cartRoutes = require('./routes/cart'); // Import the cart routes
@@ -223,7 +234,13 @@ app.use('/sendOffer', sendOfferRoute); // Mount under send-offer route.
 
 // 404 Route (Should be the last route)
 app.use((req, res, next) => {
-    res.status(404).render('404', { message: 'Page Not Found' }); // Ensure 404.ejs template is available
+    let csrfToken;
+    try {
+        csrfToken = req.csrfToken();
+    } catch (e) {
+        csrfToken = null;
+    }
+    res.status(404).render('404', { message: 'Page Not Found', csrfToken });
 });
 
 // 500 Route (Error handling middleware)
@@ -232,7 +249,13 @@ app.use((err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
         // handle CSRF token errors here
         req.flash('error', 'Invalid CSRF token. Please refresh the page and try again.');
-        return res.status(403).json({ error: 'Invalid CSRF token.' });
+        let csrfToken;
+        try {
+            csrfToken = req.csrfToken();
+        } catch (e) {
+            csrfToken = null;
+        }
+        return res.status(403).render('error', { message: 'Invalid CSRF token.', csrfToken });
     }
 
     if (req.originalUrl.startsWith('/auth') || req.originalUrl.startsWith('/user')) {
@@ -240,7 +263,13 @@ app.use((err, req, res, next) => {
         res.status(500).json({ error: 'Internal Server Error' });
     } else {
         // For non-API routes, render the 500 error page
-        res.status(500).render('500', { message: 'Internal Server Error' });
+        let csrfToken;
+        try {
+            csrfToken = req.csrfToken();
+        } catch (e) {
+            csrfToken = null;
+        }
+        res.status(500).render('500', { message: 'Internal Server Error', csrfToken });
     }
 });
 

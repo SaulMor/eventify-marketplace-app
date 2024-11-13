@@ -4,6 +4,8 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/Listing"); // Import Listing model
 const User = require("../models/User"); // Import User model
+const csrf = require('csurf');
+const csrfProtection = csrf();
 
 // Define Seasons and Specials (Same as in index.js)
 const events = [
@@ -71,7 +73,7 @@ const events = [
 const toKebabCase = (str) => str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
 
 // Event-specific route
-router.get("/:eventName", async (req, res) => {
+router.get("/:eventName", csrfProtection, async (req, res) => {
     try {
         const eventName = req.params.eventName;
         const event = events.find(e => toKebabCase(e.name) === eventName);
@@ -80,9 +82,6 @@ router.get("/:eventName", async (req, res) => {
             return res.status(404).render("404", { message: "Event not found." });
         }
 
-        // Fetch listings related to the event
-        // This assumes you have a way to associate listings with events, e.g., a field in Listing model
-        // For demonstration, we'll filter listings based on a hypothetical 'event' field
         const listings = await Listing.find({ event: event.name }).lean();
 
         const user = req.session.user
@@ -93,6 +92,7 @@ router.get("/:eventName", async (req, res) => {
             event,
             listings,
             user,
+            csrfToken: req.csrfToken() // Pass CSRF token
         });
     } catch (error) {
         console.error(error);

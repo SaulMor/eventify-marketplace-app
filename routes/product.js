@@ -37,10 +37,6 @@ router.get("/:id", ensureAuthenticated, async (req, res) => {
     const user = req.session.user || null;
     const isSeller = user && user.id.toString() === listing.userId._id.toString();
 
-    console.log("Current User ID:", user ? user.id : "No user logged in");
-    console.log("Listing Seller ID:", listing.userId._id.toString());
-    console.log("Is Seller:", isSeller);
-
     if (isSeller) {
       // Render seller-specific listing detail page
       res.render("listingDetail", { 

@@ -4,9 +4,11 @@ const express = require('express');
 const router = express.Router();
 const Listing = require('../models/Listing');
 const User = require('../models/User');
+const csrf = require('csurf');
+const csrfProtection = csrf();
 
 // Category Page Route
-router.get('/:category', async (req, res) => {
+router.get('/:category', csrfProtection, async (req, res) => {
     const category = req.params.category.toLowerCase(); // Convert to lowercase
     try {
         let filter = {};
@@ -25,7 +27,8 @@ router.get('/:category', async (req, res) => {
         res.render('category', { 
             listings,
             user,
-            categoryName
+            categoryName,
+            csrfToken: req.csrfToken() // Pass CSRF token
         });
     } catch (error) {
         console.error(error);

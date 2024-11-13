@@ -11,27 +11,29 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
     <!-- CSS Files -->
+    <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/home.css"> <!-- Reuse home.css for consistency -->
 </head>
 <body>
-    <!-- Conditional Header -->
-    <% if (user) { %>
-        <%- include('partials/header') %>
-    <% } else { %>
-        <%- include('partials/header1') %>
-    <% } %>
+    
+    <!-- Single Header Partial -->
+    <%- include('partials/header') %>
 
     <!-- Flash Messages -->
     <% if (success && success.length > 0) { %>
         <div class="flash-message success">
-            <%= success %>
+            <% success.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
         </div>
     <% } %>
     <% if (error && error.length > 0) { %>
         <div class="flash-message error">
-            <%= error %>
+            <% error.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
         </div>
     <% } %>
 

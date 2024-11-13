@@ -16,12 +16,9 @@
     <link rel="stylesheet" href="/css/event.css"> <!-- Event Page CSS -->
 </head>
 <body>
-    <!-- Conditional Header -->
-    <% if (user) { %>
-        <%- include('partials/header') %>
-    <% } else { %>
-        <%- include('partials/header1') %>
-    <% } %>
+    
+    <!-- Single Header Partial -->
+    <%- include('partials/header') %>
 
     <!-- Flash Messages -->
     <% if (success && success.length > 0) { %>

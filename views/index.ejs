@@ -17,22 +17,22 @@
 
 </head>
 <body>
-    <!-- Conditional Header -->
-    <% if (user) { %>
-        <%- include('partials/header') %>
-    <% } else { %>
-        <%- include('partials/header1') %>
-    <% } %>
+    <!-- Include Header Partial -->
+    <%- include('partials/header') %>
 
     <!-- Flash Messages -->
     <% if (success && success.length > 0) { %>
         <div class="flash-message success">
-            <%= success %>
+            <% success.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
         </div>
     <% } %>
     <% if (error && error.length > 0) { %>
         <div class="flash-message error">
-            <%= error %>
+            <% error.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
         </div>
     <% } %>
 

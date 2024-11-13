@@ -14,13 +14,10 @@
     <link rel="stylesheet" href="/css/helpcenter.css"> <!-- Home Page CSS -->
 </head>
 <body>
-    <!-- Conditional Header -->
-    <% if (user) { %>
-        <%- include('partials/header') %> <!-- Header for logged-in users -->
-    <% } else { %>
-        <%- include('partials/header1') %> <!-- Header for non-logged-in users -->
-    <% } %>
-
+    
+     <!-- Including header partial -->
+     <%- include('partials/header') %> 
+   
     <!-- Flash Messages -->
     <% if (success && success.length > 0) { %>
         <div class="flash-message success">

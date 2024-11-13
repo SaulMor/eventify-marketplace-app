@@ -4,33 +4,32 @@ const express = require("express");
 const router = express.Router();
 const admin = require("firebase-admin");
 const User = require("../models/User");
-const axios = require("axios"); // Ensure axios is installed: npm install axios
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
-// Display Signup Page
+// Display Signup Page with CSRF Protection
 router.get("/signup", csrfProtection, (req, res) => {
   res.render("signup", {
     title: "Sign Up",
     formData: {},
-    csrfToken: req.csrfToken(), // Pass csrfToken to EJS
+    csrfToken: req.csrfToken(), // Pass CSRF token
     error: req.flash('error'),
     success: req.flash('success'),
   });
 });
 
-// Display Login Page
+// Display Login Page with CSRF Protection
 router.get("/login", csrfProtection, (req, res) => {
   res.render("login", {
     title: "Login",
     formData: {},
-    csrfToken: req.csrfToken(), // Pass csrfToken to EJS
+    csrfToken: req.csrfToken(), // Pass CSRF token
     error: req.flash('error'),
     success: req.flash('success'),
   });
 });
 
-// Handle Signup Form Submission
+// Handle Signup Form Submission with CSRF Protection
 router.post("/signup", csrfProtection, async (req, res) => {
   try {
     const { idToken, name } = req.body;
@@ -73,7 +72,7 @@ router.post("/signup", csrfProtection, async (req, res) => {
   }
 });
 
-// Handle Login Form Submission
+// Handle Login Form Submission with CSRF Protection
 router.post("/login", csrfProtection, async (req, res) => {
   try {
     const { idToken } = req.body;
@@ -123,15 +122,17 @@ router.post("/login", csrfProtection, async (req, res) => {
   }
 });
 
-// Handle Logout
+// Handle Logout with CSRF Protection
 router.post("/logout", csrfProtection, (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Error destroying session:", err);
-      return res.status(500).json({ error: "Logout failed." });
+      // Redirect with an error query parameter
+      return res.redirect("/?error=Logout failed. Please try again.");
     }
     res.clearCookie("connect.sid"); // Assuming default cookie name
-    return res.status(200).json({ success: "Logout successful." });
+    // Redirect with a success query parameter
+    return res.redirect("/?success=Logout successful.");
   });
 });
 
