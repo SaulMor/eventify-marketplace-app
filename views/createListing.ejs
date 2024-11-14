@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/header.css" />
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/createListing.css" />
+    <link rel="stylesheet" href="/css/imageModal.css" />
 
     <link
       rel="stylesheet"
@@ -309,15 +310,16 @@
 
     <%- include('partials/footer') %> <!-- Include footer partial -->
 
-    <!-- Modal Structure -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <img class="modal-content" id="modalImage" alt="Enlarged Image">
+    <!-- Image Modal Structure -->
+    <div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle" style="display: none;">
+        <span class="close" id="closeImageModal" aria-label="Close Image Modal">&times;</span>
+        <img class="image-modal-content" id="modalImage" alt="Enlarged Product Image">
         <div id="caption"></div>
     </div>
 
     <!-- JavaScript for interactivity, thumbnail clicks and file uploads -->
     <script src="/js/uploadHandler.js"></script>
     <script src="/js/modalHandler.js"></script>
+    <script src="/js/imageModalHandler.js"></script>
 </body>
 </html>

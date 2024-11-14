@@ -35,12 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const remainingSlots =
             maxPhotos - initialPhotosCount - accumulatedFiles.length;
 
-          console.log("=== File Selection ===");
-          console.log("Existing Photos:", initialPhotosCount);
-          console.log("Accumulated Files:", accumulatedFiles.length);
-          console.log("Remaining Slots:", remainingSlots);
-          console.log("Selected Files:", files.length);
-
           if (remainingSlots <= 0) {
             showFeedback(
               `You've already uploaded the maximum of ${maxPhotos} photos.`,
@@ -91,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             accumulatedFiles.push(file);
-            console.log(`Added file to accumulatedFiles: ${file.name}`);
 
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -104,7 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
               // Append the new thumbnail
               thumbnailsContainer.appendChild(img);
-              console.log(`Displayed thumbnail for: ${file.name}`);
 
               // Check if max photos reached to disable the upload button
               if (accumulatedFiles.length >= maxPhotos - initialPhotosCount) {
@@ -157,12 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const remainingSlots =
           maxPhotos - initialPhotosCount - accumulatedFiles.length;
 
-        console.log("=== Drag-and-Drop ===");
-        console.log("Existing Photos:", initialPhotosCount);
-        console.log("Accumulated Files:", accumulatedFiles.length);
-        console.log("Remaining Slots:", remainingSlots);
-        console.log("Dropped Files:", files.length);
-
         if (remainingSlots <= 0) {
           showFeedback(
             `You've already uploaded the maximum of ${maxPhotos} photos.`,
@@ -207,9 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           accumulatedFiles.push(file);
-          console.log(
-            `Added file to accumulatedFiles via Drag-and-Drop: ${file.name}`
-          );
 
           const reader = new FileReader();
           reader.onload = (e) => {
@@ -222,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Append the new thumbnail
             thumbnailsContainer.appendChild(img);
-            console.log(`Displayed thumbnail for: ${file.name}`);
 
             // Check if max photos reached to disable the upload button
             if (accumulatedFiles.length >= maxPhotos - initialPhotosCount) {
@@ -263,7 +245,6 @@ document.addEventListener("DOMContentLoaded", () => {
           // Add accumulated files to the DataTransfer object
           formsData[formId].accumulatedFiles.forEach((file) => {
             dt.items.add(file);
-            console.log(`Appending file to formData: ${file.name}`);
           });
 
           // Set the file input's files to the accumulated files

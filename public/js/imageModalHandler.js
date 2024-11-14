@@ -1,57 +1,75 @@
 // public/js/imageModalHandler.js
 
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById("imageModal");
-  const modalImg = document.getElementById("modalImage");
+  // Select the modal by ID
+  const imageModal = document.getElementById("imageModal");
+  
+  // Select the image inside the modal
+  const modalImage = document.getElementById("modalImage");
+  
+  // Select the caption element
   const captionText = document.getElementById("caption");
-  const closeBtn = document.getElementById("closeImageModal");
-  const thumbnails = document.querySelectorAll(".thumbnail, .clickable-image");
+  
+  // Select the close button within the modal
+  const closeImageModalBtn = document.getElementById("closeImageModal");
+  
+  // Select the container that holds all thumbnails
+  // Assuming all pages use the same container class, e.g., 'product-thumbnails' or 'photo-thumbnails'
+  const thumbnailsContainers = document.querySelectorAll(".product-thumbnails, .photo-thumbnails");
 
   let lastFocusedThumbnail = null;
 
-  thumbnails.forEach((thumbnail) => {
-    thumbnail.addEventListener("click", () => {
-      const dataSrc = thumbnail.getAttribute("data-src");
-      if (dataSrc) {
-        modalImg.src = dataSrc;
-        modalImg.alt = thumbnail.alt;
-        captionText.textContent = thumbnail.alt || "Enlarged Image";
-        modal.style.display = "flex";
-        document.body.style.overflow = "hidden";
-        closeBtn.focus();
-        lastFocusedThumbnail = thumbnail;
-      }
-    });
-  });
+  // Function to open the modal with the specified image and alt text
+  const openModal = (src, alt) => {
+      modalImage.src = src;
+      modalImage.alt = alt;
+      captionText.textContent = alt || "Enlarged Image";
+      imageModal.style.display = "flex";
+      document.body.style.overflow = "hidden"; // Prevent background scrolling
+      closeImageModalBtn.focus(); // Set focus to the close button for accessibility
+  };
 
-  // Close modal when the close button is clicked
-  closeBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-    if (lastFocusedThumbnail) {
-      lastFocusedThumbnail.focus();
-    }
-  });
-
-  // Close modal when clicking outside the modal content
-  modal.addEventListener("click", (event) => {
-    if (event.target === modal) {
-      modal.style.display = "none";
-      document.body.style.overflow = "auto";
+  // Function to close the modal
+  const closeModal = () => {
+      imageModal.style.display = "none";
+      document.body.style.overflow = "auto"; // Restore scrolling
       if (lastFocusedThumbnail) {
-        lastFocusedThumbnail.focus();
+          lastFocusedThumbnail.focus(); // Return focus to the last focused thumbnail
       }
-    }
+  };
+
+  // Attach a single event listener to each thumbnails container for event delegation
+  thumbnailsContainers.forEach((container) => {
+      container.addEventListener("click", (event) => {
+          // Determine if a thumbnail was clicked
+          const thumbnail = event.target.closest(".thumbnail");
+          if (thumbnail && container.contains(thumbnail)) {
+              const src = thumbnail.getAttribute("data-src") || thumbnail.src;
+              const alt = thumbnail.alt || "Enlarged Image";
+              lastFocusedThumbnail = thumbnail;
+              openModal(src, alt);
+          }
+      });
   });
+
+  // Attach click event to the close button to close the modal
+  if (closeImageModalBtn) {
+      closeImageModalBtn.addEventListener("click", closeModal);
+  }
+
+  // Close modal when clicking outside the image
+  if (imageModal) {
+      imageModal.addEventListener("click", (event) => {
+          if (event.target === imageModal) {
+              closeModal();
+          }
+      });
+  }
 
   // Close modal on Esc key press
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && modal.style.display === "flex") {
-      modal.style.display = "none";
-      document.body.style.overflow = "auto";
-      if (lastFocusedThumbnail) {
-        lastFocusedThumbnail.focus();
+      if (event.key === "Escape" && imageModal.style.display === "flex") {
+          closeModal();
       }
-    }
   });
 });

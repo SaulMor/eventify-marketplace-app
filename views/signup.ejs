@@ -16,6 +16,22 @@
         <img src="/media/images/brandlogo.png" alt="Eventify Brand Logo" class="brand-logo">
     </header>
     
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <% success.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <% error.forEach(function(msg){ %>
+                <p><%= msg %></p>
+            <% }) %>
+        </div>
+    <% } %> 
+
     <main>
         <div class="signup-container">
             <h1 class="signup-title">Sign Up</h1>

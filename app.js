@@ -13,6 +13,7 @@ const MongoStore = require('connect-mongo'); // Import connect-mongo
 const flash = require('connect-flash');
 const csrf = require('csurf');
 const dotenv = require('dotenv'); // For environment variables
+const methodOverride = require('method-override'); // Import method-override
 const csrfProtection = csrf();
 
 // Load environment variables
@@ -118,6 +119,9 @@ app.use(session({
 
 // Flash Messages
 app.use(flash());
+
+// Method Override Middleware
+app.use(methodOverride('_method')); // This will look for a query parameter like ?_method=DELETE
 
 // Make flash messages and user info available in all views
 app.use((req, res, next) => {

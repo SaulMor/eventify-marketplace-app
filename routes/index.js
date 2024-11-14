@@ -180,9 +180,7 @@ router.get("/", csrfProtection, async (req, res) => {
             seasonalDescription,
             seasonalButtonText,
             seasonalTargetUrl, // Pass targetUrl to template
-            csrfToken: req.csrfToken(), // **Important: Pass CSRF token**
-            success: req.flash('success'),
-            error: req.flash('error'),
+            csrfToken: req.csrfToken() // **Important: Pass CSRF token**
         });
     } catch (error) {
         console.error(error);
@@ -217,8 +215,7 @@ router.get("/search", csrfProtection, async (req, res) => {
             user,
             query,
             csrfToken: req.csrfToken(), // Pass CSRF token to the view
-            success: req.flash('success'),
-            error: req.flash('error'),
+            
         });
     } catch (error) {
         console.error(error);
@@ -252,9 +249,8 @@ router.get("/helpcenter", csrfProtection, async (req, res) => {
 
         res.render("helpcenter", {
             user,
-            csrfToken: req.csrfToken(), // Now available
-            success: req.flash('success'),
-            error: req.flash('error'),
+            csrfToken: req.csrfToken() // Now available
+           
         });
     } catch (error) {
         console.error(error);

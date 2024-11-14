@@ -58,13 +58,14 @@ const upload = multer({
 // Handle Multer Errors Globally within the Router
 // -----------------------------
 
+// Handle Multer and Other Errors
 router.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     req.flash("error", err.message);
-    return res.redirect(req.get("Referrer") || "/");
+    return res.redirect("/listing/create"); // Redirect to create form
   } else if (err) {
     req.flash("error", err.message || "An unexpected error occurred.");
-    return res.redirect(req.get("Referrer") || "/");
+    return res.redirect("/user/profile1"); // Redirect to profile page
   }
   next();
 });
@@ -355,9 +356,6 @@ router.post(
         description: listing.description,
       });
 
-      // Log existing photos before upload
-      console.log("Before Upload - Existing Photos:", listing.photos);
-
       // Process removed photos
       const removedPhotos = req.body.removedPhotos
         ? JSON.parse(req.body.removedPhotos)
@@ -389,10 +387,6 @@ router.post(
         const newPhotoCount = req.files.length;
         const totalPhotos = existingPhotoCount + newPhotoCount;
 
-        console.log(`Existing Photos Count: ${existingPhotoCount}`);
-        console.log(`New Photos Count: ${newPhotoCount}`);
-        console.log(`Total Photos after Upload: ${totalPhotos}`);
-
         if (totalPhotos > 5) {
           // Delete the newly uploaded files to prevent storage clutter
           req.files.forEach((file) => {
@@ -419,17 +413,10 @@ router.post(
         const newPhotos = req.files.map((file) => `/uploads/${file.filename}`);
         listing.photos = listing.photos.concat(newPhotos);
 
-        console.log("After Upload - Updated Photos Array:", listing.photos);
       }
-
-      // Log the final photos array before saving
-      console.log("Final Photos Array:", listing.photos);
 
       // Save the updated listing
       await listing.save();
-
-      // Confirm save operation
-      console.log("Listing saved successfully.");
 
       // Set a success flash message
       req.flash("success", "Listing updated successfully!");
@@ -555,10 +542,6 @@ router.get("/:id", csrfProtection, async (req, res) => {
   }
 });
 
-// routes/listing.js
-
-// Existing imports and middleware...
-
 // GET Route: List All Listings with Optional Pagination
 router.get("/", async (req, res) => {
   try {
@@ -585,9 +568,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// EXPORT THE ROUTER
-module.exports = router;
-
 // GET Route: View Offers for a Listing
 router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res) => {
   try {
@@ -598,17 +578,19 @@ router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res
       .populate("userId", "name email")
       .lean();
 
-    // Set a success flash message if needed
+    // Determine the message based on offers
+    let message = '';
     if (offers.length > 0) {
-      req.flash("success", "Offers fetched successfully!");
+      message = "Offers fetched successfully!";
     } else {
-      req.flash("success", "No offers received yet.");
+      message = "No offers received yet.";
     }
 
     res.render("viewOffers", {
       listing,
       offers,
       user: await User.findById(req.session.user.id).lean(),
+      message // Pass the message directly
     });
   } catch (error) {
     console.error("Error fetching offers:", error);

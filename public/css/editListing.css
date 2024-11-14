@@ -267,7 +267,7 @@ button {
 /* Submit Listing Button */
 .submit-btn {
     background-color: #E9C071;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
     transition: box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease; 
 }
@@ -293,167 +293,145 @@ button {
     opacity: 0.9; 
 }
 
-/* Error Message Styling */
-.error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 15px;
+
+/* Delete Form */
+.delete-form {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
     border-radius: 5px;
-    margin-bottom: 20px;
+    font-size: 16px;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .form-row {
-        gap: 20px; 
-    }
+.delete-btn:hover {
+    background-color: #ff1a1a;
 }
 
-@media (max-width: 768px) {
-    .form-row {
-        flex-direction: column; 
-    }
-
-    .form-column {
-        gap: 15px; 
-    }
-
-    .helper-text {
-        font-size: 0.85rem; 
-    }
-
-    /* Photo Upload Section Adjustments */
-    .photo-upload-section label.upload-placeholder {
-        max-width: 100%;
-        padding: 30px;
-    }
-
-    .photo-preview img {
-        width: 80px;
-        height: 80px;
-    }
-
-    /* Adjustments for Photo Upload Container on Smaller Screens */
-    .photo-upload-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .upload-button {
-        width: 100%; 
-        max-width: 300px;
-    }
-}
-
-@media (max-width: 480px) {
-    .listing-page {
-        padding: 15px;
-        padding-top: calc(var(--header-height) + 10px); 
-    }
-
-    .page-header h1 {
-        font-size: 2.5rem; 
-    }
-
-    .upload-draft-link {
-        font-size: 0.9rem;
-    }
-
-    section h2 {
-        font-size: 1.2rem;
-    }
-
-    .form-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    button {
-        width: 100%;
-        max-width: 300px; 
-    }
-
-    .photo-upload-section label.upload-placeholder {
-        padding: 20px;
-    }
-
-    .photo-upload-section label.upload-placeholder p {
-        font-size: 1rem;
-    }
-
-    .upload-button {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-
-    .photo-thumbnails .thumbnail {
-        width: 70px;
-        height: 70px;
-    }
-}
-
-/* Utility Class to Hide Elements */
-.hidden-file-input {
+.confirmation-modal {
     display: none;
-}
-
-/* Modal Styles */
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1000; 
-    padding-top: 60px; 
+    position: fixed;
+    z-index: 2000;
     left: 0;
     top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.8);
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
 }
 
-/* Modal Content (Image) */
-.modal-content {
-    margin: auto;
-    display: block;
-    max-width: 80%;
-    max-height: 80%;
-    border-radius: 5px;
+.confirmation-modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 10px;
+        text-align: center;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        animation: fadeIn 0.3s;
 }
 
-/* Caption of Modal Image */
-#caption {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-    text-align: center;
-    color: #ccc;
-    padding: 10px 0;
-    height: 150px;
-}
 
-/* Close Button */
-.close {
-    position: absolute;
-    top: 30px;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
+.confirmation-modal .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
     font-weight: bold;
-    transition: color 0.3s;
+    position: absolute;
+    top: 15px;
+    right: 20px;
     cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
-    color: #bbb;
+.confirmation-modal .close:hover,
+.confirmation-modal .close:focus {
+    color: #000;
     text-decoration: none;
     cursor: pointer;
 }
 
-/* Responsive Styles */
-@media only screen and (max-width: 700px){
-    .modal-content {
-        width: 100%;
+.confirmation-modal .modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.confirm-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-btn:hover {
+    background-color: #ff1a1a;
+}
+
+.cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Fade In Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
     }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+    .confirmation-modal-content {
+        width: 90%;
+        /* Further reduce width on smaller screens */
+        padding: 20px;
+    }
+    
+        .confirm-btn,
+        .cancel-btn {
+            width: 100%;
+            /* Make buttons full-width on small screens */
+            padding: 10px 0;
+    }
+    
+        .confirmation-modal .modal-buttons {
+            flex-direction: column;
+            gap: 10px;
+    
+    }
+}
+
+.hidden-file-input {
+    display: none;
 }
