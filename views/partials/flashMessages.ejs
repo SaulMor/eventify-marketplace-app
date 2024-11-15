@@ -1,0 +1,18 @@
+<!-- views/partials/flashMessages.ejs -->
+
+<% if (success && success.length > 0) { %>
+    <div class="flash-message success" role="alert" aria-live="assertive">
+        <% success.forEach(function(msg){ %>
+            <p><%= msg %></p>
+        <% }) %>
+        <button class="flash-close-btn" aria-label="Close">&times;</button>
+    </div>
+<% } %>
+<% if (error && error.length > 0) { %>
+    <div class="flash-message error" role="alert" aria-live="assertive">
+        <% error.forEach(function(msg){ %>
+            <p><%= msg %></p>
+        <% }) %>
+        <button class="flash-close-btn" aria-label="Close">&times;</button>
+    </div>
+<% } %>

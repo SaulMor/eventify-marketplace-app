@@ -21,22 +21,6 @@
     <!-- Single Header Partial -->
     <%- include('partials/header') %>
 
-    <!-- Flash Messages -->
-    <% if (success && success.length > 0) { %>
-        <div class="flash-message success">
-            <% success.forEach(function(msg){ %>
-                <p><%= msg %></p>
-            <% }) %>
-        </div>
-    <% } %>
-    <% if (error && error.length > 0) { %>
-        <div class="flash-message error">
-            <% error.forEach(function(msg){ %>
-                <p><%= msg %></p>
-            <% }) %>
-        </div>
-    <% } %>
-
     <!-- Main Content -->
     <main>
         <section class="category-listings">

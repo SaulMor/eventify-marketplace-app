@@ -427,11 +427,23 @@ body {
 
 /* Flash Messages */
 .flash-message {
-    padding: 10px 20px;
-    margin: 20px auto;
+    position: fixed; 
+    top: 70px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100; 
+    width: 80%; 
+    max-width: 600px; 
+    padding: 15px 20px;
     border-radius: 4px;
     font-weight: bold;
-    max-width: 1200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0.95; 
+    animation: slideDown 0.5s ease-out; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    position: relative; 
 }
 
 .flash-message.error {
@@ -442,6 +454,36 @@ body {
 .flash-message.success {
     background-color: #d4edda;
     color: #155724;
+}
+
+.flash-message p {
+    margin: 0;
+    text-align: center; 
+    flex-grow: 1;
+    padding-right: 10px;
+}
+
+.flash-close-btn {
+    position: absolute; 
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: inherit;
+    background: none;
+    border: none;
+    outline: none;
+    font-weight: bold;
+}
+
+.flash-close-btn:hover {
+    color: #000;
+}
+
+.flash-close-btn:focus {
+    outline: 2px solid #4A90E2;
+    border-radius: 4px;
 }
 
 /* Additional Styles for Toggle Functionality */
