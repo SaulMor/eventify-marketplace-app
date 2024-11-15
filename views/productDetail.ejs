@@ -42,12 +42,21 @@
 
         <!-- Middle Section: Main Product Image -->
         <div class="product-main-image">
-            <img 
-                src="<%= product.photos[0] %>" 
-                alt="<%= product.title %>" 
-                class="product-image clickable-image" 
-                data-src="<%= product.photos[0] %>"
-            >
+            <% if (product.photos && product.photos.length > 0) { %>
+                <img 
+                    src="<%= product.photos[0] %>" 
+                    alt="<%= product.title %>" 
+                    class="product-image thumbnail clickable-image" 
+                    data-src="<%= product.photos[0] %>" 
+                >
+            <% } else { %>
+                <img 
+                    src="/media/images/default-product.jpg" 
+                    alt="Default Product Image" 
+                    class="product-image thumbnail clickable-image" 
+                    data-src="/media/images/default-product.jpg" 
+                >
+            <% } %>
         </div>
 
         <!-- Right Section: Product Info -->

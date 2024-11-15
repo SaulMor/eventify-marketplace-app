@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/listingDetail.css">
+    <link rel="stylesheet" href="/css/imageModal.css"> <!-- Include Shared Modal CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Google Fonts -->
@@ -28,44 +29,62 @@
     <div class="listing-detail-container">
         <!-- Left Section: Thumbnails -->
         <div class="photo-thumbnails">
-            <% listing.photos.forEach(function(photo) { %>
-                <img src="<%= photo %>" alt="Thumbnail" class="thumbnail">
+            <% listing.photos.forEach(function(photo, index) { %>
+                <img 
+                    src="<%= photo %>" 
+                    alt="Thumbnail <%= index + 1 %>" 
+                    class="thumbnail <%= index === 0 ? 'active' : '' %>" 
+                    data-src="<%= photo %>" 
+                >
             <% }); %>
         </div>
 
         <!-- Middle Section: Main Product Image -->
         <div class="product-main-image">
             <% if (listing.photos && listing.photos.length > 0) { %>
-                <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image">
+                <img 
+                    src="<%= listing.photos[0] %>" 
+                    alt="<%= listing.title %>" 
+                    class="product-image thumbnail clickable-image" 
+                    data-src="<%= listing.photos[0] %>" 
+                >
             <% } else { %>
-                <img src="/media/images/default-listing.jpg" alt="Default Listing Image" class="product-image">
+                <img 
+                    src="/media/images/default-listing.jpg" 
+                    alt="Default Listing Image" 
+                    class="product-image thumbnail clickable-image" 
+                    data-src="/media/images/default-listing.jpg" 
+                >
             <% } %>
         </div>
 
         <!-- Right Section: Product Info -->
         <div class="product-info">
            <!-- Seller Info Section -->
-<div class="seller-info">
-    <div class="profile-info">
-        <img src="<%= listing.userId.profilePic || '/media/images/blank-profile-picture.webp' %>" alt="Profile Picture" class="profile-pic">
-        <span class="seller-name"><%= listing.userId.username %></span>
-    </div>
-    <div class="product-rating">
-        <% if (listing.rating && listing.rating > 0) { %>
-            <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
-                <i class="fas fa-star"></i>
-            <% } %>
-            <% if (listing.rating % 1 !== 0) { %>
-                <i class="fas fa-star-half-alt"></i>
-            <% } %>
-            <% for (let i = Math.ceil(listing.rating); i < 5; i++) { %>
-                <i class="far fa-star"></i>
-            <% } %>
-        <% } else { %>
-            <span>No rating available</span>
-        <% } %>
-    </div>
-</div>
+           <div class="seller-info">
+               <div class="profile-info">
+                   <img 
+                       src="<%= listing.userId.profilePic || '/media/images/blank-profile-picture.webp' %>" 
+                       alt="Profile Picture" 
+                       class="profile-pic">
+                   <span class="seller-name"><%= listing.userId.username %></span>
+               </div>
+               <div class="product-rating">
+                   <% if (listing.rating && listing.rating > 0) { %>
+                       <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
+                           <i class="fas fa-star"></i>
+                       <% } %>
+                       <% if (listing.rating % 1 !== 0) { %>
+                           <i class="fas fa-star-half-alt"></i>
+                       <% } %>
+                       <% for (let i = Math.ceil(listing.rating); i < 5; i++) { %>
+                           <i class="far fa-star"></i>
+                       <% } %>
+                   <% } else { %>
+                       <span>No rating available</span>
+                   <% } %>
+               </div>
+           </div>
 
 
             <h1><%= listing.title %></h1>
@@ -93,7 +112,7 @@
                     <div class="option-box"><%= listing.category %></div>
                 </div>
                 
-            <!-- Colors Section -->
+                <!-- Colors Section -->
                 <div class="colors">
                     <div class="option-subheading">COLORS</div>
                     <div class="color-options">
@@ -116,6 +135,17 @@
 </main>
 
 <%- include('partials/footer') %>
+
+<!-- Image Modal Structure -->
+<div id="imageModal" class="image-modal" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle" style="display: none;">
+    <span class="close" id="closeImageModal" aria-label="Close Image Modal">&times;</span>
+    <img class="image-modal-content" id="modalImage" alt="Enlarged Product Image">
+    <div id="caption"></div>
+</div>
+
+<!-- Include JavaScript Files -->
+<script src="/js/modalHandler.js"></script> 
 <script src="/js/listingDetail.js"></script>
+<script src="/js/imageModalHandler.js"></script> 
 </body>
 </html>
