@@ -25,7 +25,7 @@ const csrfProtection = csrf();
 // Define storage for uploaded files
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/uploads/"); // Ensure this directory exists
+    cb(null, "public/uploads"); // Ensure this directory exists
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + path.extname(file.originalname));
@@ -126,9 +126,6 @@ router.post(
         delivery,
         color,
       } = req.body;
-
-      console.log("Form Data:", req.body);
-      console.log("Uploaded Files:", req.files);
 
       // Handle uploaded photos
       let photos = [];
@@ -275,160 +272,139 @@ router.post(
   ensureAuthenticated,
   authorizeListing,
   upload.array("photos", 5), // Handle up to 5 new images
-  csrfProtection,
+  csrfProtection, // Ensure CSRF protection middleware is correctly set up
   [
-    // Input Validation
-    body("title").trim().notEmpty().withMessage("Title is required"),
-    body("price")
-      .isFloat({ gt: 0 })
-      .withMessage("Price must be a positive number"),
-    body("category").notEmpty().withMessage("Category is required"),
-    body("condition").notEmpty().withMessage("Condition is required"),
-    body("description").notEmpty().withMessage("Description is required"),
-    // Add more validations as needed
+      // Input Validation
+      body("title").trim().notEmpty().withMessage("Title is required"),
+      body("price")
+          .isFloat({ gt: 0 })
+          .withMessage("Price must be a positive number"),
+      body("category").notEmpty().withMessage("Category is required"),
+      body("condition").notEmpty().withMessage("Condition is required"),
+      body("description").notEmpty().withMessage("Description is required"),
+      // Add more validations as needed
   ],
   async (req, res) => {
-    const errors = validationResult(req);
-    const listingId = req.params.id;
+      const errors = validationResult(req);
+      const listingId = req.params.id;
 
-    console.log("--- POST /listing/edit/:id ---");
-    console.log("Form Data:", req.body);
-    console.log("Uploaded Files:", req.files);
-
-    if (!errors.isEmpty()) {
-      const errorMessages = errors
-        .array()
-        .map((err) => err.msg)
-        .join(" ");
-      req.flash("error", errorMessages);
-      return res.status(400).redirect(`/listing/edit/${listingId}`);
-    }
-
-    try {
-      const listing = req.listing;
-
-      if (!listing) {
-        req.flash("error", "Listing not found.");
-        return res.redirect("/user/profile1");
+      if (!errors.isEmpty()) {
+          const errorMessages = errors
+              .array()
+              .map((err) => err.msg)
+              .join(" ");
+          req.flash("error", errorMessages);
+          return res.status(400).redirect(`/listing/edit/${listingId}`);
       }
 
-      // Check if the logged-in user is the owner of the listing
-      if (listing.userId.toString() !== req.session.user.id.toString()) {
-        req.flash("error", "You are not authorized to edit this listing.");
-        return res.redirect("/user/profile1");
-      }
+      try {
+          const listing = await Listing.findById(listingId); // Ensure you fetch the listing
 
-      const {
-        title,
-        location,
-        description,
-        condition,
-        category,
-        price,
-        quantity,
-        delivery,
-        color,
-      } = req.body;
+          if (!listing) {
+              req.flash("error", "Listing not found.");
+              return res.redirect("/user/profile1");
+          }
 
-      // Update listing fields with proper parsing
-      listing.title = title;
-      listing.price = parseFloat(price); // Ensure price is a number
-      listing.category = category;
-      listing.location = location;
-      listing.condition = condition;
-      listing.handmade = req.body.handmade || "no";
-      listing.quantity = parseInt(quantity, 10) || 1; // Ensure quantity is an integer
-      listing.delivery = req.body.delivery || "pickup";
-      listing.color = req.body.color || "N/A";
-      listing.description = description;
+          // Check if the logged-in user is the owner of the listing
+          if (listing.userId.toString() !== req.session.user.id.toString()) {
+              req.flash("error", "You are not authorized to edit this listing.");
+              return res.redirect("/user/profile1");
+          }
 
-      // Log updated fields before saving
-      console.log("Updated Listing Fields:", {
-        title: listing.title,
-        price: listing.price,
-        category: listing.category,
-        location: listing.location,
-        condition: listing.condition,
-        handmade: listing.handmade,
-        quantity: listing.quantity,
-        delivery: listing.delivery,
-        color: listing.color,
-        description: listing.description,
-      });
+          const {
+              title,
+              location,
+              description,
+              condition,
+              category,
+              price,
+              quantity,
+              delivery,
+              color,
+          } = req.body;
 
-      // Process removed photos
-      const removedPhotos = req.body.removedPhotos
-        ? JSON.parse(req.body.removedPhotos)
-        : [];
-      if (removedPhotos.length > 0) {
-        console.log("Photos to be removed:", removedPhotos);
-        listing.photos = listing.photos.filter(
-          (photo) => !removedPhotos.includes(photo)
-        );
+          // Update listing fields
+          listing.title = title;
+          listing.price = parseFloat(price);
+          listing.category = category;
+          listing.location = location;
+          listing.condition = condition;
+          listing.handmade = req.body.handmade || "no";
+          listing.quantity = parseInt(quantity, 10) || 1;
+          listing.delivery = delivery || "pickup";
+          listing.color = color || "N/A";
+          listing.description = description;
 
-        // Delete the removed photo files from the server
-        removedPhotos.forEach((photoPath) => {
-          const fullPath = path.join(__dirname, "..", "public", photoPath);
-          fs.unlink(fullPath, (err) => {
-            if (err) {
-              console.error("Error deleting photo:", err);
-            } else {
-              console.log(`Deleted photo: ${photoPath}`);
-            }
-          });
-        });
+          // Process removed photos
+          const removedPhotos = req.body.removedPhotos
+              ? (Array.isArray(req.body.removedPhotos) ? req.body.removedPhotos : [req.body.removedPhotos])
+              : [];
 
-        console.log("Photos after removal:", listing.photos);
-      }
+          if (removedPhotos.length > 0) {
+              console.log("Photos to be removed:", removedPhotos);
+              listing.photos = listing.photos.filter(
+                  (photo) => !removedPhotos.includes(photo)
+              );
 
-      // Handle uploaded photos
-      if (req.files && req.files.length > 0) {
-        const existingPhotoCount = listing.photos.length;
-        const newPhotoCount = req.files.length;
-        const totalPhotos = existingPhotoCount + newPhotoCount;
+              for (const photoPath of removedPhotos) {
+                  // Ensure photoPath does not start with a slash to prevent path traversal
+                  const sanitizedPhotoPath = photoPath.replace(/^\/+/, '');
+                  const fullPath = path.join(__dirname, "..", "public", sanitizedPhotoPath);
 
-        if (totalPhotos > 5) {
-          // Delete the newly uploaded files to prevent storage clutter
-          req.files.forEach((file) => {
-            fs.unlink(
-              path.join(__dirname, "..", "public", "uploads", file.filename),
-              (err) => {
-                if (err) console.error("Error deleting file:", err);
-                else
-                  console.log(
-                    `Deleted uploaded file due to exceeding limit: ${file.filename}`
-                  );
+                  try {
+                      await fs.promises.unlink(fullPath); // Asynchronous file deletion
+                      console.log(`Deleted photo: ${photoPath}`);
+                  } catch (err) {
+                      console.error(`Error deleting photo ${photoPath}:`, err);
+                      // Optionally, flash an error message or handle the error as needed
+                  }
               }
-            );
-          });
+          }
 
-          req.flash(
-            "error",
-            `You can only have a maximum of 5 photos. You have already uploaded ${existingPhotoCount} photos.`
-          );
-          return res.redirect(`/listing/edit/${listingId}`);
-        }
+          // Handle uploaded photos
+          if (req.files && req.files.length > 0) {
+              const existingPhotoCount = listing.photos.length;
+              const newPhotoCount = req.files.length;
+              const totalPhotos = existingPhotoCount + newPhotoCount;
 
-        // Append new photos to the existing array
-        const newPhotos = req.files.map((file) => `/uploads/${file.filename}`);
-        listing.photos = listing.photos.concat(newPhotos);
+              if (totalPhotos > 5) {
+                  // Delete newly uploaded files to prevent storage clutter
+                  for (const file of req.files) {
+                      const filePath = path.join(__dirname, "..", "public", "uploads/", file.filename);
 
+                      try {
+                          await fs.promises.unlink(filePath);
+                          console.log(`Deleted file due to exceeding limit: ${file.filename}`);
+                      } catch (err) {
+                          console.error(`Error deleting uploaded file ${file.filename}:`, err);
+                      }
+                  }
+
+                  req.flash(
+                      "error",
+                      `You can only have a maximum of 5 photos. You currently have ${existingPhotoCount} photo(s).`
+                  );
+                  return res.redirect(`/listing/edit/${listingId}`);
+              }
+
+              // Append new photos to the existing array
+              const newPhotos = req.files.map((file) => `/uploads/${file.filename}`);
+              listing.photos = listing.photos.concat(newPhotos);
+          }
+
+          // Save the updated listing
+          await listing.save();
+
+          req.flash("success", "Listing updated successfully!");
+          res.redirect("/user/profile1");
+      } catch (error) {
+          console.error("Error updating listing:", error);
+          req.flash("error", "Failed to update listing. Please try again.");
+          res.redirect(`/listing/edit/${listingId}`);
       }
-
-      // Save the updated listing
-      await listing.save();
-
-      // Set a success flash message
-      req.flash("success", "Listing updated successfully!");
-
-      res.redirect("/user/profile1");
-    } catch (error) {
-      console.error("Error updating listing:", error);
-      req.flash("error", "Failed to update listing. Please try again.");
-      res.redirect(`/listing/edit/${listingId}`);
-    }
   }
 );
+
 
 // DELETE Route: Delete a Listing
 router.delete(

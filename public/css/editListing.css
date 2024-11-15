@@ -240,6 +240,40 @@
     border: 1px solid #ccc;
 }
 
+
+/* Photo Thumbnail Wrapper */
+.photo-thumbnail-wrapper {
+    position: relative; 
+    display: inline-block; 
+}
+
+/* Delete Button Styles */
+.remove-photo-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 255, 255, 0.7); 
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    line-height: 18px;
+    text-align: center;
+    cursor: pointer;
+    color: #ff4d4d; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0;
+}
+
+/* Hover and Focus States for Delete Button */
+.remove-photo-btn:hover,
+.remove-photo-btn:focus {
+    background-color: rgba(255, 255, 255, 1); 
+    color: #ff1a1a; 
+    outline: none; 
+}
+
 /* Dragover State for Photo Upload Section */
 .photo-upload-section.dragover {
     background-color: #f0f8ff; 

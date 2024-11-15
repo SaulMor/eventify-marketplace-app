@@ -30,17 +30,19 @@
 
         <!-- Display Flash Messages -->
         <% if (error && error.length > 0) { %>
-            <div class="error-message">
+            <div class="flash-message error" role="alert" aria-live="assertive">
                 <% error.forEach(function(msg){ %>
                     <p><%= msg %></p>
                 <% }) %>
+                <button type="button" class="flash-close-btn" aria-label="Close">&times;</button>
             </div>
         <% } %>
         <% if (success && success.length > 0) { %>
-            <div class="success-message">
+            <div class="flash-message success" role="alert" aria-live="assertive">
                 <% success.forEach(function(msg){ %>
                     <p><%= msg %></p>
                 <% }) %>
+                <button type="button" class="flash-close-btn" aria-label="Close">&times;</button>
             </div>
         <% } %>
 
@@ -65,19 +67,27 @@
                     />
                     <!-- Thumbnails Preview Section -->
                     <div class="photo-thumbnails" data-initial-count="<%= listing.photos.length %>">
-                        <!-- Existing Thumbnails -->
+                        <!-- Existing Thumbnails with Delete Buttons -->
                         <% if (listing.photos && listing.photos.length > 0) { %>
-                            <% listing.photos.forEach(function(photo) { %>
-                                <img src="<%= photo %>" alt="<%= listing.title %>" class="thumbnail">
+                            <% listing.photos.forEach(function(photo, index) { %>
+                                <div class="photo-thumbnail-wrapper">
+                                    <img src="<%= photo %>" alt="<%= listing.title %>" class="thumbnail">
+                                    <button type="button" class="remove-photo-btn" data-photo="<%= photo %>" data-existing="true" aria-label="Remove photo">&times;</button>
+                                </div>
                             <% }); %>
                         <% } %>
                     </div>
+                    <!-- Dedicated Feedback Container -->
+                    <div class="upload-feedback" aria-live="polite"></div>
                 </div>
 
                 <!-- Helper Text -->
                 <p class="helper-text" id="photos-helper">
                     Upload clear images to showcase your listing effectively. Maximum of 5 photos.
                 </p>
+
+                <!-- Container for Removed Photos Hidden Inputs -->
+                <div id="removedPhotosContainer"></div>
             </section>
 
             <!-- Listing Details Section -->
