@@ -16,6 +16,7 @@ const dotenv = require('dotenv'); // For environment variables
 const methodOverride = require('method-override'); // Import method-override
 const csrfProtection = csrf();
 
+
 // Load environment variables
 dotenv.config();
 
@@ -25,10 +26,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 

@@ -8,55 +8,77 @@
     position: absolute;
     top: 100%;
     right: 0;
-    width: 200px;
+    width: 250px; /* Slightly wider */
     background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 15px; /* More rounded corners for a bubbly look */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1); /* Soft, big shadow */
     display: none;
     z-index: 100;
+    transform: scale(0.95);
+    transition: all 0.3s ease-in-out; /* Smooth animation */
 }
 
 .profile-container:hover .profile-dropdown {
     display: block;
+    transform: scale(1);
 }
 
 .username {
     font-weight: bold;
     text-transform: uppercase;
-    margin: 10px;
-    padding: 5px;
+    margin: 12px 20px;
+    padding: 8px 0;
+    font-size: 16px;
+    color: #333;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 .dropdown-items {
-    padding: 10px;
-    font-size: 14px;
+    padding: 12px 20px;
+    font-size: 15px;
+    color: #444;
 }
 
 .dropdown-items a {
     display: block;
     color: #333;
     text-decoration: none;
-    padding: 8px 0;
+    padding: 12px 0;
+    font-size: 15px;
+    border-bottom: 1px solid #f2f2f2;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dropdown-items a:hover {
     background-color: #f1f1f1;
+    color: #007bff; /* Highlight text on hover */
 }
 
 .logout-form {
-    margin: 10px 0;
+    padding: 12px 20px; /* Ensure the padding is uniform */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center; /* Ensure the logout button is centered */
 }
 
 .logout-form button {
-    width: 100%;
-    padding: 10px;
-    background-color: #d1d1d1;
+    width: 100%; /* Full width to ensure it's aligned */
+    padding: 14px;
+    background-color: #ff5a5f; /* Soft red for a friendly pop */
     color: #fff;
     border: none;
+    border-radius: 25px; /* Fully rounded button for the bubbly look */
+    font-size: 16px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .logout-form button:hover {
-    background-color: #939393;
+    background-color: #e04e53; /* Darker red when hovered */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+.logout-form button:active {
+    transform: translateY(1px); /* Slight button press */
 }
