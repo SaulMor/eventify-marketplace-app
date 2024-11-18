@@ -8,7 +8,7 @@ const ensureAuthenticated = require('../middleware/auth'); // Import the middlew
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
-// Profile Route (Protected)
+// GET Route: User Profile Page with Published Listings Only
 router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
         const userId = req.session.user.id; // Retrieve user ID from session
@@ -20,8 +20,8 @@ router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) =>
             return res.status(404).redirect('/auth/login');
         }
 
-        // Get listings posted by the user
-        const listings = await Listing.find({ userId: user._id }).lean();
+        // Get only published listings (isDraft: false) posted by the user
+        const listings = await Listing.find({ userId: user._id, isDraft: false }).sort({ updatedAt: -1 }).lean();
 
         res.render('profile1', { 
             user, 
@@ -35,7 +35,6 @@ router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) =>
     }
 });
 
-// Optionally, remove or update the /profile route if not needed
 router.get('/profile', ensureAuthenticated, csrfProtection, async (req, res) => {
     try {
         const userId = req.session.user.id; // Retrieve user ID from session

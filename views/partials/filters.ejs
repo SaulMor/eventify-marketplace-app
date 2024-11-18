@@ -1,124 +1,172 @@
 <!-- views/partials/filters.ejs -->
 
+<% 
+    // Initialize variables with default values to prevent ReferenceError
+    selectedCategories = typeof selectedCategories !== 'undefined' ? selectedCategories : [];
+    selectedColors = typeof selectedColors !== 'undefined' ? selectedColors : [];
+    selectedPrice = typeof selectedPrice !== 'undefined' ? selectedPrice : 'all';
+    customPrice = typeof customPrice !== 'undefined' ? customPrice : { minPrice: '', maxPrice: '' };
+%>
+
 <!-- Sidebar Filter Section -->
 <div class="filters">
-    <!-- Categories Section -->
-    <h3>
-        Categories 
-        <button type="button" aria-expanded="false" aria-controls="categories-section" class="toggle-btn">+</button>
-    </h3>
-    <div id="categories-section" class="category-wrapper hidden-filter">
-        <div class="category-group">
-            <h4>Holidays</h4>
-            <label><input type="checkbox" name="categories" value="Christmas" <%= selectedCategories && selectedCategories.includes('Christmas') ? 'checked' : '' %>> Christmas</label>
-            <label><input type="checkbox" name="categories" value="Easter" <%= selectedCategories && selectedCategories.includes('Easter') ? 'checked' : '' %>> Easter</label>
-            <label><input type="checkbox" name="categories" value="Halloween" <%= selectedCategories && selectedCategories.includes('Halloween') ? 'checked' : '' %>> Halloween</label>
-            <label><input type="checkbox" name="categories" value="Hanukkah" <%= selectedCategories && selectedCategories.includes('Hanukkah') ? 'checked' : '' %>> Hanukkah</label>
-            <label><input type="checkbox" name="categories" value="MothersFathers" <%= selectedCategories && selectedCategories.includes('MothersFathers') ? 'checked' : '' %>> Mother's/Father's Day</label>
-            <label><input type="checkbox" name="categories" value="NewYears" <%= selectedCategories && selectedCategories.includes('NewYears') ? 'checked' : '' %>> New Year's</label>
-            <label><input type="checkbox" name="categories" value="StPatricks" <%= selectedCategories && selectedCategories.includes('StPatricks') ? 'checked' : '' %>> St. Patrick's Day</label>
-            <label><input type="checkbox" name="categories" value="Thanksgiving" <%= selectedCategories && selectedCategories.includes('Thanksgiving') ? 'checked' : '' %>> Thanksgiving</label>
-            <label><input type="checkbox" name="categories" value="Valentines" <%= selectedCategories && selectedCategories.includes('Valentines') ? 'checked' : '' %>> Valentine's Day</label>
-        </div>
-    
-        <div class="category-group">
-            <h4>Personal & Family</h4>
-            <label><input type="checkbox" name="categories" value="BabyShowers" <%= selectedCategories && selectedCategories.includes('BabyShowers') ? 'checked' : '' %>> Baby Showers</label>
-            <label><input type="checkbox" name="categories" value="Birthdays" <%= selectedCategories && selectedCategories.includes('Birthdays') ? 'checked' : '' %>> Birthdays</label>
-            <label><input type="checkbox" name="categories" value="Funerals" <%= selectedCategories && selectedCategories.includes('Funerals') ? 'checked' : '' %>> Funerals</label>
-            <label><input type="checkbox" name="categories" value="Graduations" <%= selectedCategories && selectedCategories.includes('Graduations') ? 'checked' : '' %>> Graduations</label>
-            <label><input type="checkbox" name="categories" value="Weddings" <%= selectedCategories && selectedCategories.includes('Weddings') ? 'checked' : '' %>> Weddings</label>
-        </div>
-    </div>
-
-    <!-- Colors Section -->
-    <h3>
-        Color 
-        <button type="button" aria-expanded="false" aria-controls="colors-section" class="toggle-btn">+</button>
-    </h3>
-    <div id="colors-section" class="color-group hidden-filter">
-        <label>
-            <input type="checkbox" name="colors" value="black" <%= selectedColors && selectedColors.includes('black') ? 'checked' : '' %>>
-            <div class="color-circle color-black"></div>
-            Black
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="white" <%= selectedColors && selectedColors.includes('white') ? 'checked' : '' %>>
-            <div class="color-circle color-white"></div>
-            White
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="red" <%= selectedColors && selectedColors.includes('red') ? 'checked' : '' %>>
-            <div class="color-circle color-red"></div>
-            Red
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="orange" <%= selectedColors && selectedColors.includes('orange') ? 'checked' : '' %>>
-            <div class="color-circle color-orange"></div>
-            Orange
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="yellow" <%= selectedColors && selectedColors.includes('yellow') ? 'checked' : '' %>>
-            <div class="color-circle color-yellow"></div>
-            Yellow
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="green" <%= selectedColors && selectedColors.includes('green') ? 'checked' : '' %>>
-            <div class="color-circle color-green"></div>
-            Green
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="blue" <%= selectedColors && selectedColors.includes('blue') ? 'checked' : '' %>>
-            <div class="color-circle color-blue"></div>
-            Blue
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="purple" <%= selectedColors && selectedColors.includes('purple') ? 'checked' : '' %>>
-            <div class="color-circle color-purple"></div>
-            Purple
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="pink" <%= selectedColors && selectedColors.includes('pink') ? 'checked' : '' %>>
-            <div class="color-circle color-pink"></div>
-            Pink
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="gray" <%= selectedColors && selectedColors.includes('gray') ? 'checked' : '' %>>
-            <div class="color-circle color-gray"></div>
-            Gray
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="brown" <%= selectedColors && selectedColors.includes('brown') ? 'checked' : '' %>>
-            <div class="color-circle color-brown"></div>
-            Brown
-        </label>
-        <label>
-            <input type="checkbox" name="colors" value="lightgray" <%= selectedColors && selectedColors.includes('lightgray') ? 'checked' : '' %>>
-            <div class="color-circle color-lightgray"></div>
-            Light Gray
-        </label>
-    </div>
-
-    <!-- Price Section -->
-    <h3>
-        Price 
-        <button type="button" aria-expanded="false" aria-controls="price-section" class="toggle-btn">+</button>
-    </h3>
-    <div id="price-section" class="price-wrapper hidden-filter">
-        <label><input type="radio" name="price" value="all" <%= selectedPrice === 'all' ? 'checked' : '' %>> All Prices</label>
-        <label><input type="radio" name="price" value="under25" <%= selectedPrice === 'under25' ? 'checked' : '' %>> Under $25</label>
-        <label><input type="radio" name="price" value="25-50" <%= selectedPrice === '25-50' ? 'checked' : '' %>> $25 - $50</label>
-        <label><input type="radio" name="price" value="50-75" <%= selectedPrice === '50-75' ? 'checked' : '' %>> $50 - $75</label>
-        <label><input type="radio" name="price" value="100+" <%= selectedPrice === '100+' ? 'checked' : '' %>> $100+</label>
-
-        <div class="custom-price">
-            <h4>Custom</h4>
-            <div class="price-inputs">
-                <input type="number" name="min-price" placeholder="Min Price" min="0" value="<%= customPrice.minPrice || '' %>">
-                <span>TO</span>
-                <input type="number" name="max-price" placeholder="Max Price" min="0" value="<%= customPrice.maxPrice || '' %>">
-                <button type="submit" class="filter-apply">Apply</button>
+    <form action="/listing/drafts" method="GET">
+        <!-- Categories Section -->
+        <h3>
+            Categories 
+            <button type="button" aria-expanded="<%= selectedCategories.length > 0 ? 'true' : 'false' %>" aria-controls="categories-section" class="toggle-btn"><%= selectedCategories.length > 0 ? '-' : '+' %></button>
+        </h3>
+        <div id="categories-section" class="category-wrapper <%= selectedCategories.length > 0 ? '' : 'hidden-filter' %>">
+            <div class="category-group">
+                <h4>Holidays</h4>
+                <label>
+                    <input type="checkbox" name="categories" value="Christmas" <%= selectedCategories.includes('Christmas') ? 'checked' : '' %>> Christmas
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Easter" <%= selectedCategories.includes('Easter') ? 'checked' : '' %>> Easter
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Halloween" <%= selectedCategories.includes('Halloween') ? 'checked' : '' %>> Halloween
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Hanukkah" <%= selectedCategories.includes('Hanukkah') ? 'checked' : '' %>> Hanukkah
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="MothersFathers" <%= selectedCategories.includes('MothersFathers') ? 'checked' : '' %>> Mother's/Father's Day
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="NewYears" <%= selectedCategories.includes('NewYears') ? 'checked' : '' %>> New Year's
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="StPatricks" <%= selectedCategories.includes('StPatricks') ? 'checked' : '' %>> St. Patrick's Day
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Thanksgiving" <%= selectedCategories.includes('Thanksgiving') ? 'checked' : '' %>> Thanksgiving
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Valentines" <%= selectedCategories.includes('Valentines') ? 'checked' : '' %>> Valentine's Day
+                </label>
+            </div>
+        
+            <div class="category-group">
+                <h4>Personal & Family</h4>
+                <label>
+                    <input type="checkbox" name="categories" value="BabyShowers" <%= selectedCategories.includes('BabyShowers') ? 'checked' : '' %>> Baby Showers
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Birthdays" <%= selectedCategories.includes('Birthdays') ? 'checked' : '' %>> Birthdays
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Funerals" <%= selectedCategories.includes('Funerals') ? 'checked' : '' %>> Funerals
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Graduations" <%= selectedCategories.includes('Graduations') ? 'checked' : '' %>> Graduations
+                </label>
+                <label>
+                    <input type="checkbox" name="categories" value="Weddings" <%= selectedCategories.includes('Weddings') ? 'checked' : '' %>> Weddings
+                </label>
             </div>
         </div>
-    </div>
+
+        <!-- Colors Section -->
+        <h3>
+            Color 
+            <button type="button" aria-expanded="<%= selectedColors.length > 0 ? 'true' : 'false' %>" aria-controls="colors-section" class="toggle-btn"><%= selectedColors.length > 0 ? '-' : '+' %></button>
+        </h3>
+        <div id="colors-section" class="color-group <%= selectedColors.length > 0 ? '' : 'hidden-filter' %>">
+            <label>
+                <input type="checkbox" name="colors" value="black" <%= selectedColors.includes('black') ? 'checked' : '' %>>
+                <div class="color-circle color-black"></div>
+                Black
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="white" <%= selectedColors.includes('white') ? 'checked' : '' %>>
+                <div class="color-circle color-white"></div>
+                White
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="red" <%= selectedColors.includes('red') ? 'checked' : '' %>>
+                <div class="color-circle color-red"></div>
+                Red
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="orange" <%= selectedColors.includes('orange') ? 'checked' : '' %>>
+                <div class="color-circle color-orange"></div>
+                Orange
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="yellow" <%= selectedColors.includes('yellow') ? 'checked' : '' %>>
+                <div class="color-circle color-yellow"></div>
+                Yellow
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="green" <%= selectedColors.includes('green') ? 'checked' : '' %>>
+                <div class="color-circle color-green"></div>
+                Green
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="blue" <%= selectedColors.includes('blue') ? 'checked' : '' %>>
+                <div class="color-circle color-blue"></div>
+                Blue
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="purple" <%= selectedColors.includes('purple') ? 'checked' : '' %>>
+                <div class="color-circle color-purple"></div>
+                Purple
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="pink" <%= selectedColors.includes('pink') ? 'checked' : '' %>>
+                <div class="color-circle color-pink"></div>
+                Pink
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="gray" <%= selectedColors.includes('gray') ? 'checked' : '' %>>
+                <div class="color-circle color-gray"></div>
+                Gray
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="brown" <%= selectedColors.includes('brown') ? 'checked' : '' %>>
+                <div class="color-circle color-brown"></div>
+                Brown
+            </label>
+            <label>
+                <input type="checkbox" name="colors" value="lightgray" <%= selectedColors.includes('lightgray') ? 'checked' : '' %>>
+                <div class="color-circle color-lightgray"></div>
+                Light Gray
+            </label>
+        </div>
+
+        <!-- Price Section -->
+        <h3>
+            Price 
+            <button type="button" aria-expanded="<%= selectedPrice !== 'all' || customPrice.minPrice || customPrice.maxPrice ? 'true' : 'false' %>" aria-controls="price-section" class="toggle-btn"><%= selectedPrice !== 'all' || customPrice.minPrice || customPrice.maxPrice ? '-' : '+' %></button>
+        </h3>
+        <div id="price-section" class="price-wrapper <%= selectedPrice !== 'all' || customPrice.minPrice || customPrice.maxPrice ? '' : 'hidden-filter' %>">
+            <label>
+                <input type="radio" name="price" value="all" <%= selectedPrice === 'all' ? 'checked' : '' %>> All Prices
+            </label>
+            <label>
+                <input type="radio" name="price" value="under25" <%= selectedPrice === 'under25' ? 'checked' : '' %>> Under $25
+            </label>
+            <label>
+                <input type="radio" name="price" value="25-50" <%= selectedPrice === '25-50' ? 'checked' : '' %>> $25 - $50
+            </label>
+            <label>
+                <input type="radio" name="price" value="50-75" <%= selectedPrice === '50-75' ? 'checked' : '' %>> $50 - $75
+            </label>
+            <label>
+                <input type="radio" name="price" value="100+" <%= selectedPrice === '100+' ? 'checked' : '' %>> $100+
+            </label>
+
+            <div class="custom-price">
+                <h4>Custom</h4>
+                <div class="price-inputs">
+                    <input type="number" name="min-price" placeholder="Min Price" min="0" value="<%= customPrice.minPrice || '' %>">
+                    <span>TO</span>
+                    <input type="number" name="max-price" placeholder="Max Price" min="0" value="<%= customPrice.maxPrice || '' %>">
+                    <button type="submit" class="filter-apply">Apply</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>

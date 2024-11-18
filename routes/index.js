@@ -160,15 +160,12 @@ router.get("/", csrfProtection, async (req, res) => {
                 seasonalDescription = selectedEvent.text; // Adjust if there's a separate description
                 seasonalButtonText = selectedEvent.buttonText;
                 seasonalTargetUrl = selectedEvent.targetUrl; // Assign targetUrl
-                console.log(`Selected Event: ${selectedEvent.name}`);
-                console.log(`Using Class: ${seasonalClass}`);
             } else {
                 console.warn(`Image not found: ${selectedEvent.image}. Using default image.`);
                 // seasonalClass remains as 'default'
                 seasonalTargetUrl = "/shop"; // Fallback to default shop URL
             }
         } else {
-            console.log('No specific event selected. Using default seasonal image.');
             seasonalTargetUrl = "/shop"; // Default target URL
         }
   
@@ -180,7 +177,7 @@ router.get("/", csrfProtection, async (req, res) => {
             seasonalDescription,
             seasonalButtonText,
             seasonalTargetUrl, // Pass targetUrl to template
-            csrfToken: req.csrfToken() // **Important: Pass CSRF token**
+            csrfToken: req.csrfToken() 
         });
     } catch (error) {
         console.error(error);

@@ -304,21 +304,17 @@
 
             <!-- Buttons -->
             <div class="form-buttons">
-                <button type="submit" class="submit-btn">Update Listing</button>
-                <button
-                    type="button"
-                    class="draft-btn"
-                    onclick="alert('Save as Draft feature is coming soon!')"
-                >
-                    Save as Draft (Coming Soon)
-                </button>
+                <button type="submit" class="submit-btn" name="action" value="publish">Update Listing</button>
+                <button type="submit" class="draft-btn" name="action" value="save-draft">Save as Draft</button>
             </div>
         </form>
 
         <!-- Delete Listing Form -->
-        <form id="deleteForm" action="/listing/delete/<%= listing._id %>?_method=DELETE" method="POST" class="delete-form">
+        <form id="deleteForm" action="/listing/delete/<%= listing._id %>" method="POST" class="delete-form">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <button type="button" class="delete-btn" id="openDeleteModalBtn">Delete Listing</button>
+            <!-- Hidden input to override the method to DELETE -->
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="button" class="delete-btn" data-form-id="deleteForm">Delete Listing</button>
         </form>
     </div>
 </main>
@@ -326,7 +322,7 @@
 <%- include('partials/footer') %> 
 
 <!-- Confirmation Modal Structure -->
-<div id="confirmationModal" class="confirmation-modal">
+<div id="confirmationModal" class="confirmation-modal" style="display: none;">
     <div class="confirmation-modal-content">
         <span class="close" id="closeModalBtn">&times;</span>
         <h2>Confirm Deletion</h2>

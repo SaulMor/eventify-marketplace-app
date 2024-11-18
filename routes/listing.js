@@ -54,22 +54,6 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-// -----------------------------
-// Handle Multer Errors Globally within the Router
-// -----------------------------
-
-// Handle Multer and Other Errors
-router.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    req.flash("error", err.message);
-    return res.redirect("/listing/create"); // Redirect to create form
-  } else if (err) {
-    req.flash("error", err.message || "An unexpected error occurred.");
-    return res.redirect("/user/profile1"); // Redirect to profile page
-  }
-  next();
-});
-
 // ---------------------------------------
 // CREATE Listing Routes
 // ---------------------------------------
@@ -83,7 +67,7 @@ router.get("/create", ensureAuthenticated, csrfProtection, async (req, res) => {
   });
 });
 
-// POST Route: Handle Form Submission for Creating a Listing
+// POST Route: Handle Form Submission for Creating a Listing (with Draft Support)
 router.post(
   "/create",
   ensureAuthenticated,
@@ -125,6 +109,7 @@ router.post(
         quantity,
         delivery,
         color,
+        action, // Extract action from form
       } = req.body;
 
       // Handle uploaded photos
@@ -134,6 +119,9 @@ router.post(
       } else {
         photos = ["/media/images/default.jpg"];
       }
+
+      // Determine if the listing is a draft based on the action value
+      const draftStatus = action === 'save-draft';
 
       // Create a new listing document
       const newListing = new Listing({
@@ -149,16 +137,17 @@ router.post(
         photos,
         userId: req.session.user.id, // Correct association
         description,
+        isDraft: draftStatus, // Set draft status
       });
 
       // Save the listing to the database
       await newListing.save();
 
       // Set a success flash message
-      req.flash("success", "Listing created successfully!");
+      req.flash("success", draftStatus ? "Draft saved successfully!" : "Listing created successfully!");
 
-      // Redirect to the user's profile page
-      res.redirect("/user/profile1");
+      // Redirect based on draft status
+      res.redirect(draftStatus ? "/listing/drafts" : "/user/profile1");
     } catch (error) {
       console.error("Error creating listing:", error);
       req.flash("error", "Failed to create listing. Please try again.");
@@ -166,6 +155,133 @@ router.post(
     }
   }
 );
+
+// ---------------------------------------
+// DRAFTS MANAGEMENT ROUTES
+// ---------------------------------------
+
+// GET Route: List All Drafts for the User
+router.get("/drafts", ensureAuthenticated, csrfProtection, async (req, res) => {
+  try {
+    const userId = req.session.user.id;
+
+    // Extract filter parameters from query string (if any)
+    let selectedCategories = req.query.categories;
+    if (!selectedCategories) {
+      selectedCategories = [];
+    } else if (!Array.isArray(selectedCategories)) {
+      selectedCategories = [selectedCategories];
+    }
+
+    let selectedColors = req.query.colors;
+    if (!selectedColors) {
+      selectedColors = [];
+    } else if (!Array.isArray(selectedColors)) {
+      selectedColors = [selectedColors];
+    }
+
+    const selectedPrice = req.query.price || 'all';
+
+    const customPrice = {
+      minPrice: req.query['min-price'] || '',
+      maxPrice: req.query['max-price'] || ''
+    };
+
+    // Fetch drafts from the database
+    let drafts = await Listing.find({ userId: userId, isDraft: true }).sort({ updatedAt: -1 }).lean();
+
+    // Apply Filters
+    if (selectedCategories.length > 0) {
+      drafts = drafts.filter(draft => selectedCategories.includes(draft.category));
+    }
+
+    if (selectedColors.length > 0) {
+      drafts = drafts.filter(draft => selectedColors.includes(draft.color));
+    }
+
+    switch (selectedPrice) {
+      case 'under25':
+        drafts = drafts.filter(draft => draft.price < 25);
+        break;
+      case '25-50':
+        drafts = drafts.filter(draft => draft.price >= 25 && draft.price <= 50);
+        break;
+      case '50-75':
+        drafts = drafts.filter(draft => draft.price >= 50 && draft.price <= 75);
+        break;
+      case '100+':
+        drafts = drafts.filter(draft => draft.price >= 100);
+        break;
+      // 'all' case doesn't filter anything
+    }
+
+    if (customPrice.minPrice !== '' && customPrice.maxPrice !== '') {
+      const min = parseFloat(customPrice.minPrice);
+      const max = parseFloat(customPrice.maxPrice);
+      if (!isNaN(min) && !isNaN(max)) {
+        drafts = drafts.filter(draft => draft.price >= min && draft.price <= max);
+      }
+    }
+
+    // Render the template with all necessary variables
+    res.render("listDrafts", {
+      drafts: drafts,
+      user: req.session.user,
+      csrfToken: req.csrfToken(),
+      selectedCategories: selectedCategories,
+      selectedColors: selectedColors,
+      selectedPrice: selectedPrice,
+      customPrice: customPrice
+    });
+  } catch (error) {
+    console.error("Error fetching drafts:", error);
+    req.flash("error", "Failed to fetch drafts.");
+    res.redirect("/user/profile1");
+  }
+});
+
+// DELETE Route: Delete a Draft Listing
+router.delete('/drafts/delete/:id', ensureAuthenticated, csrfProtection, authorizeListing, async (req, res) => {
+
+  try {
+    const listingId = req.params.id;
+    const userId = req.session.user.id;
+
+    const listing = req.listing; // From authorizeListing middleware
+
+    // Ensure that this route only deletes drafts
+    if (!listing.isDraft) {
+      req.flash("error", "Cannot delete a published listing via this route.");
+      return res.redirect("/user/profile1");
+    }
+
+    // Remove associated photos from filesystem
+    if (listing.photos && listing.photos.length > 0) {
+      for (const photoPath of listing.photos) {
+        const sanitizedPhotoPath = path.basename(photoPath); // Prevent path traversal
+        const fullPath = path.join(__dirname, "..", "public", "uploads", sanitizedPhotoPath);
+
+        try {
+          await fs.promises.unlink(fullPath);
+        } catch (err) {
+          console.error(`Error deleting photo ${photoPath}:`, err);
+          // Continue deleting other photos
+        }
+      }
+    }
+
+    // Remove the listing from the database
+    await Listing.findByIdAndDelete(listingId);
+
+    // Set a success flash message
+    req.flash("success", "Draft listing deleted successfully.");
+    res.redirect("/listing/drafts");
+  } catch (error) {
+    console.error("Error deleting draft:", error);
+    req.flash("error", "Failed to delete draft. Please try again.");
+    res.redirect("/listing/drafts");
+  }
+});
 
 // POST /listing/:id/favorite - Toggle Favorite Status
 router.post('/:id/favorite', ensureAuthenticated, csrfProtection, async (req, res) => {
@@ -266,13 +382,13 @@ router.get(
   }
 );
 
-// POST Route: Handle Form Submission for Editing a Listing
+// POST Route: Handle Form Submission for Editing a Listing (with Draft Support)
 router.post(
   "/edit/:id",
   ensureAuthenticated,
   authorizeListing,
   upload.array("photos", 5), // Handle up to 5 new images
-  csrfProtection, // Ensure CSRF protection middleware is correctly set up
+  csrfProtection, 
   [
       // Input Validation
       body("title").trim().notEmpty().withMessage("Title is required"),
@@ -282,6 +398,9 @@ router.post(
       body("category").notEmpty().withMessage("Category is required"),
       body("condition").notEmpty().withMessage("Condition is required"),
       body("description").notEmpty().withMessage("Description is required"),
+      body("quantity")
+          .isInt({ gt: 0 })
+          .withMessage("Quantity must be a positive integer"),
       // Add more validations as needed
   ],
   async (req, res) => {
@@ -321,7 +440,11 @@ router.post(
               quantity,
               delivery,
               color,
+              action, // Extract action from form
           } = req.body;
+
+          // Determine if the listing is a draft based on the action value
+          const draftStatus = action === 'save-draft';
 
           // Update listing fields
           listing.title = title;
@@ -334,6 +457,7 @@ router.post(
           listing.delivery = delivery || "pickup";
           listing.color = color || "N/A";
           listing.description = description;
+          listing.isDraft = draftStatus; // Set draft status
 
           // Process removed photos
           const removedPhotos = req.body.removedPhotos
@@ -341,19 +465,17 @@ router.post(
               : [];
 
           if (removedPhotos.length > 0) {
-              console.log("Photos to be removed:", removedPhotos);
               listing.photos = listing.photos.filter(
                   (photo) => !removedPhotos.includes(photo)
               );
 
               for (const photoPath of removedPhotos) {
                   // Ensure photoPath does not start with a slash to prevent path traversal
-                  const sanitizedPhotoPath = photoPath.replace(/^\/+/, '');
-                  const fullPath = path.join(__dirname, "..", "public", sanitizedPhotoPath);
+                  const sanitizedPhotoPath = path.basename(photoPath); // Prevent path traversal
+                  const fullPath = path.join(__dirname, "..", "public", "uploads", sanitizedPhotoPath);
 
                   try {
                       await fs.promises.unlink(fullPath); // Asynchronous file deletion
-                      console.log(`Deleted photo: ${photoPath}`);
                   } catch (err) {
                       console.error(`Error deleting photo ${photoPath}:`, err);
                       // Optionally, flash an error message or handle the error as needed
@@ -374,7 +496,6 @@ router.post(
 
                       try {
                           await fs.promises.unlink(filePath);
-                          console.log(`Deleted file due to exceeding limit: ${file.filename}`);
                       } catch (err) {
                           console.error(`Error deleting uploaded file ${file.filename}:`, err);
                       }
@@ -395,8 +516,11 @@ router.post(
           // Save the updated listing
           await listing.save();
 
-          req.flash("success", "Listing updated successfully!");
-          res.redirect("/user/profile1");
+          // Set a success flash message
+          req.flash("success", listing.isDraft ? "Draft updated successfully!" : "Listing updated successfully!");
+
+          // Redirect based on draft status
+          res.redirect(listing.isDraft ? "/listing/drafts" : "/user/profile1");
       } catch (error) {
           console.error("Error updating listing:", error);
           req.flash("error", "Failed to update listing. Please try again.");
@@ -410,6 +534,7 @@ router.post(
 router.delete(
   "/delete/:id",
   ensureAuthenticated,
+  csrfProtection,
   authorizeListing,
   async (req, res) => {
     try {
@@ -518,7 +643,7 @@ router.get("/:id", csrfProtection, async (req, res) => {
   }
 });
 
-// GET Route: List All Listings with Optional Pagination
+// GET Route: List All Published Listings with Optional Pagination
 router.get("/", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -531,7 +656,10 @@ router.get("/", async (req, res) => {
       lean: true,
     };
 
-    const result = await Listing.paginate({}, options);
+    // Fetch only published listings
+    const query = { isDraft: false };
+
+    const result = await Listing.paginate(query, options);
     res.render("index", { 
       listings: result.docs, 
       pagination: result, 
@@ -543,6 +671,7 @@ router.get("/", async (req, res) => {
     res.status(500).render("error", { message: "Internal Server Error" });
   }
 });
+
 
 // GET Route: View Offers for a Listing
 router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res) => {
@@ -573,6 +702,22 @@ router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res
     req.flash("error", "An error occurred while fetching offers.");
     res.redirect("/user/profile1");
   }
+});
+
+// -----------------------------
+// Handle Multer Errors Globally within the Router
+// -----------------------------
+
+// Handle Multer and Other Errors
+router.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    req.flash("error", err.message);
+    return res.redirect("/listing/create"); // Redirect to create form
+  } else if (err) {
+    req.flash("error", err.message || "An unexpected error occurred.");
+    return res.redirect("/user/profile1"); // Redirect to profile page
+  }
+  next();
 });
 
 // EXPORT THE ROUTER

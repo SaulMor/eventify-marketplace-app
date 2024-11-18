@@ -7,27 +7,48 @@ const User = require('../models/User');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
+
 // Category Page Route
 router.get('/:category', csrfProtection, async (req, res) => {
     const category = req.params.category.toLowerCase(); // Convert to lowercase
     try {
-        let filter = {};
+        const { page = 1, limit = 10 } = req.query;
+
+        // Build the filter object
+        let filter = { isDraft: false }; // Exclude drafts by default
         if (category !== 'all') {
             filter.category = category;
         }
 
-        const listings = await Listing.find(filter).lean();
-        const user = req.session.user ? await User.findById(req.session.user.id).lean() : null;
-        
+        const options = {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            sort: { createdAt: -1 }, // Newest first
+            populate: { path: 'userId', select: 'name email profilePic' },
+            lean: true,
+        };
+
+        // Fetch listings with pagination
+        const result = await Listing.paginate(filter, options);
+
+        // Capitalize category name for display
         let categoryName = category.charAt(0).toUpperCase() + category.slice(1);
         if (category === 'all') {
             categoryName = 'All Listings';
         }
-        
+
         res.render('category', { 
-            listings,
-            user,
+            listings: result.docs,
+            user: req.session.user || null,
             categoryName,
+            pagination: {
+                totalPages: result.totalPages,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+            },
             csrfToken: req.csrfToken() // Pass CSRF token
         });
     } catch (error) {
