@@ -1,0 +1,58 @@
+/* how-to-sell.css */
+
+.how-to-sell-wrapper {
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.steps-guide {
+    margin-top: 40px;
+}
+
+.step {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 5px;
+}
+
+.step h3 {
+    color: #333;
+    font-size: 1.2em;
+}
+
+.step p {
+    font-size: 1em;
+    color: #555;
+}
+
+.seller-support {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.contact-btn {
+    padding: 16px 40px;  /* Proper padding for a comfortable button size */
+    background-color: #e9c071cc;  /* Normal background color */
+    color: black;  /* Text color for good contrast */
+    font-size: 1.3em;  /* Legible font size */
+    border: none;
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 30px;  /* Space above the button */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);  /* Light shadow for depth */
+    display: inline-block;  /* Makes sure the button aligns well */
+    text-decoration: none;  /* Removes underline */
+}
+
+.contact-btn:hover {
+    background-color: #e18b28;  /* Hover background color */
+    color: white;  /* Change text color to white on hover */
+    transform: translateY(-4px);  /* Slight lift on hover */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);  /* Darker shadow on hover */
+}

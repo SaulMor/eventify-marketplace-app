@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to Sell - Eventify</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Files (Order Matters) -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/about-us.css"> <!-- Custom CSS for this page -->
+</head>
+<body>
+    
+    <!-- Including header partial -->
+    <%- include('partials/header') %>
+   
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <main>
+        <div class="about-us-wrapper">
+            <h1>Meet Our Development Team</h1>
+            <p>At Celebration Creations, our development team works collaboratively to create cutting-edge solutions. From building robust backends to crafting seamless front-end experiences, each of us plays a crucial role in delivering high-quality products. Get to know the team behind the magic!</p>
+            
+            <!-- Team Members -->
+            <section class="team-members">
+                <!-- Meg Sissel -->
+                <div class="team-member">
+                    <h2>Meg Sissel</h2>
+                    <p class="role">UI Designer/Frontend Developer</p>
+                    <div class="responsibilities">
+                        <h3>Responsibilities:</h3>
+                        <ul>
+                            <li>Designs intuitive user interfaces and prototypes that prioritize usability, accessibility, and a seamless user experience across all platforms.</li>
+                            <li>Implements interactive UI elements and ensures consistency across the platform, optimizing visual appeal and user engagement.</li>
+                            <li>Collaborates with the backend team to ensure smooth integration of UI designs with database structures and server-side technologies.</li>
+                            <li>Regularly tests and refines user interfaces to enhance responsiveness, fix bugs, and adapt designs based on user feedback.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Saul Moreno-Avila -->
+                <div class="team-member">
+                    <h2>Saul Moreno-Avila</h2>
+                    <p class="role">Full-stack Developer</p>
+                    <div class="responsibilities">
+                        <h3>Responsibilities:</h3>
+                        <ul>
+                            <li>Handles both frontend and backend development, building scalable and dynamic platforms that meet the needs of our users.</li>
+                            <li>Ensures smooth integration between the frontend design and backend services, allowing for seamless user interactions and data flow.</li>
+                            <li>Develops and maintains database management systems, APIs, and server-side components, ensuring optimal functionality and system performance.</li>
+                            <li>Identifies performance bottlenecks and resolves issues promptly, enhancing the overall reliability and speed of the platform.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Kareem Abulsoud -->
+                <div class="team-member">
+                    <h2>Kareem Abulsoud</h2>
+                    <p class="role">Database Administrator/QA Testing</p>
+                    <div class="responsibilities">
+                        <h3>Responsibilities:</h3>
+                        <ul>
+                            <li>Manages and optimizes the database infrastructure, ensuring that data is securely stored and easily accessed by the application.</li>
+                            <li>Assists the development team with backend processes, ensuring that data flows smoothly between the database and frontend components.</li>
+                            <li>Conducts rigorous quality assurance testing, ensuring that all features meet functionality, performance, and security standards.</li>
+                            <li>Works closely with the development team to identify and resolve issues in the database and application, providing solutions to ensure system integrity.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %> <!-- Footer for all users -->
+
+</body>
+</html>

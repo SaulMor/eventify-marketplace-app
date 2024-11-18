@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>How to Sell - Eventify</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Files (Order Matters) -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/how-to-sell.css"> <!-- Custom CSS for this page -->
+</head>
+<body>
+    
+    <!-- Including header partial -->
+    <%- include('partials/header') %>
+   
+    <!-- Flash Messages -->
+    <% if (success && success.length > 0) { %>
+        <div class="flash-message success">
+            <%= success %>
+        </div>
+    <% } %>
+    <% if (error && error.length > 0) { %>
+        <div class="flash-message error">
+            <%= error %>
+        </div>
+    <% } %>
+
+    <!-- Main Content -->
+    <main>
+        <!-- How to Sell Section -->
+        <div class="how-to-sell-wrapper">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>How to Sell on Eventify</h1>
+                <p>Ready to turn your products into cash? Follow these easy steps to get started with selling on Eventify!</p>
+            </section>
+
+            <!-- Step-by-step Guide -->
+            <section class="steps-guide">
+                <h2>Follow These Simple Steps to Sell</h2>
+
+                <div class="step">
+                    <h3>Step 1: Create Your Account</h3>
+                    <p>If you don't already have an account on Eventify, sign up for one! You'll need an account to list your items for sale.</p>
+                </div>
+
+                <div class="step">
+                    <h3>Step 2: Start a New Listing</h3>
+                    <p>Once you’re logged in, click on the "Sell On Eventify" button in your dashboard. Fill in the details about your item, upload clear photos, and set your price.</p>
+                </div>
+
+                <div class="step">
+                    <h3>Step 3: Manage Your Listings</h3>
+                    <p>You can always edit your listings by going to your dashboard and selecting the "Edit Listing" option. Update details, prices, and photos whenever necessary!</p>
+                </div>
+
+                <div class="step">
+                    <h3>Step 4: Get Paid</h3>
+                    <p>Once your item is sold or you recieve an offer, we’ll notify you and send you the payment. You’ll have options for how you want to receive the money—direct deposit or another method.</p>
+                </div>
+            </section>
+
+            <!-- Seller Support Section -->
+            <section class="seller-support">
+                <h2>Need Help?</h2>
+                <p>If you have any issues or need further assistance, our support team is here for you! Don't hesitate to reach out.</p>
+                <a href="/helpcenter" class="contact-btn">Contact Support</a> <!-- Updated link to Contact Us page -->
+            </section>
+
+        </div> <!-- End of how-to-sell-wrapper -->
+    </main>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %> <!-- Footer for all users -->
+
+</body>
+</html>

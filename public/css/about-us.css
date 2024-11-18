@@ -1,0 +1,85 @@
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Add margin-top to ensure the content is below the header */
+main {
+    max-width: 1200px;
+    margin: 80px auto 20px auto; /* Adjust top margin to provide space below header */
+    padding: 20px;
+}
+
+/* Wrapper for about-us section */
+.about-us-wrapper {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.about-us-wrapper h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.about-us-wrapper p {
+    font-size: 1.2em;
+    color: #666;
+    margin-bottom: 40px;
+}
+
+/* Team Section */
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.team-member {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 30%;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.team-member h2 {
+    font-size: 1.8em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.role {
+    font-size: 1.2em;
+    color: #e18b28;
+    margin-bottom: 20px;
+}
+
+.responsibilities h3 {
+    font-size: 1.5em;
+    color: #e18b28;
+    margin-bottom: 10px;
+}
+
+.responsibilities ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.responsibilities ul li {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Adjust layout for smaller screens */
+@media screen and (max-width: 768px) {
+    .team-member {
+        width: 80%;
+        margin: 0 auto;
+    }
+}
