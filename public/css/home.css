@@ -14,18 +14,40 @@ main {
     text-align: center;
     padding: 100px 20px;
     position: relative;
+    z-index: 1;  /* Ensure the content is on top of the image */
+}
+
+.hero h1, .hero p {
+    position: relative;
+    z-index: 2; /* Ensures text stays on top */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Shadow for better contrast */
 }
 
 .hero h1 {
     font-size: 48px;
     margin-bottom: 20px;
+    line-height: 1.2;
 }
 
 .hero p {
     font-size: 24px;
     margin-bottom: 30px;
+    line-height: 1.4;
 }
 
+/* Add a semi-transparent background behind text to improve contrast */
+.hero:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 1; /* Behind text */
+}
+
+/* Authentication Buttons */
 .auth-buttons .btn-login,
 .auth-buttons .btn-signup {
     padding: 10px 20px;
@@ -50,6 +72,7 @@ main {
 .auth-buttons .btn-signup:hover {
     opacity: 0.9;
 }
+
 /* Seasonal Deals Section */
 .seasonal-deals {
     width: 100%;
@@ -65,7 +88,6 @@ main {
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 
 .seasonal-deals .seasonal-overlay {
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
@@ -99,9 +121,8 @@ main {
 }
 
 .seasonal-deals .seasonal-overlay .btn-shop-now:hover {
-    background-color: #c5a24f;
-        /* Darker shade on hover */
-        color: #fff;
+    background-color: #c5a24f; /* Darker shade on hover */
+    color: #fff;
 }
 
 /* Default Seasonal Deals */

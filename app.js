@@ -16,6 +16,7 @@ const dotenv = require('dotenv'); // For environment variables
 const methodOverride = require('method-override'); // Import method-override
 const csrfProtection = csrf();
 
+
 // Load environment variables
 dotenv.config();
 
@@ -25,10 +26,7 @@ const app = express();
 // MongoDB Connection 
 // -----------------------------
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('MongoDB is Connected'))
     .catch((error) => console.error('MongoDB connection error:', error));
 
@@ -203,6 +201,11 @@ app.get('/listingDetail', (req, res) => {
     res.render('listingDetail'); // Make sure this matches the EJS file in 'views' folder
 });
 
+app.get('/about-us', (req, res) => {
+    res.render('about-us'); // Make sure this matches the EJS file in 'views' folder
+});
+
+
 app.get('/settings', (req, res) => {
     res.render('settings'); // Make sure this matches the EJS file in 'views' folder
 });
@@ -238,6 +241,15 @@ app.use('/favorites', favoritesRouter); // Mount them under /favorites
 // message/offfer route
 const sendOfferRoute = require('./routes/sendOffer');
 app.use('/sendOffer', sendOfferRoute); // Mount under send-offer route.
+
+app.get('/how-to-sell', (req, res) => {
+    res.render('how-to-sell', {
+        success: req.flash('success'),
+        error: req.flash('error'),
+    });
+});
+
+
 
 // -----------------------------
 // Error Handling Middleware
