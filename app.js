@@ -120,8 +120,15 @@ app.use(session({
 // Flash Messages
 app.use(flash());
 
-// Method Override Middleware
-app.use(methodOverride('_method')); // This will look for a query parameter like ?_method=DELETE
+// Method Override Middleware to detect _method in the body
+app.use(methodOverride(function (req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        const method = req.body._method;
+        delete req.body._method;
+        return method;
+    }
+}));
+
 
 // Make flash messages and user info available in all views
 app.use((req, res, next) => {
