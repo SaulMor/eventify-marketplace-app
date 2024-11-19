@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const ensureAuthenticated = require("../middleware/auth");
 const csrf = require("csurf");
-const csrfProtection = csrf({ cookie: true });
+const csrfProtection = csrf();
 
 const User = require("../models/User");
 const Listing = require("../models/Listing");
@@ -164,7 +164,11 @@ router.post(
       // Check if the listing exists
       const listing = await Listing.findById(listingId);
       if (!listing) {
-        req.flash("error", "Listing not found.");
+        const errorMessage = "Listing not found.";
+        if (req.headers.accept && req.headers.accept.includes("application/json")) {
+          return res.status(404).json({ error: errorMessage });
+        }
+        req.flash("error", errorMessage);
         return res.redirect("back");
       }
 
@@ -173,7 +177,11 @@ router.post(
 
       // Check if the listing is already in favorites
       if (user.favorites.includes(listingId)) {
-        req.flash("error", "Listing is already in your favorites.");
+        const errorMessage = "Listing is already in your favorites.";
+        if (req.headers.accept && req.headers.accept.includes("application/json")) {
+          return res.status(400).json({ error: errorMessage });
+        }
+        req.flash("error", errorMessage);
         return res.redirect("back");
       }
 
@@ -181,11 +189,26 @@ router.post(
       user.favorites.push(listingId);
       await user.save();
 
-      req.flash("success", "Listing added to your favorites.");
+      // **Update Session Data**
+      if (!Array.isArray(req.session.user.favorites)) {
+        req.session.user.favorites = [];
+      }
+      req.session.user.favorites.push(listingId);
+
+      const successMessage = "Listing added to your favorites.";
+      if (req.headers.accept && req.headers.accept.includes("application/json")) {
+        return res.status(200).json({ message: successMessage });
+      }
+
+      req.flash("success", successMessage);
       res.redirect("back");
     } catch (error) {
       console.error("Error adding to favorites:", error);
-      req.flash("error", "An error occurred while adding to favorites.");
+      const errorMessage = "An error occurred while adding to favorites.";
+      if (req.headers.accept && req.headers.accept.includes("application/json")) {
+        return res.status(500).json({ error: errorMessage });
+      }
+      req.flash("error", errorMessage);
       res.redirect("back");
     }
   }
@@ -202,13 +225,31 @@ router.post(
       const listingId = req.params.listingId;
 
       // Remove the listing from user's favorites
-      await User.findByIdAndUpdate(userId, { $pull: { favorites: listingId } });
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        { $pull: { favorites: listingId } },
+        { new: true }
+      ).lean();
 
-      req.flash("success", "Listing removed from your favorites.");
+      // **Update Session Data**
+      if (Array.isArray(req.session.user.favorites)) {
+        req.session.user.favorites = updatedUser.favorites.map(id => id.toString());
+      }
+
+      const successMessage = "Listing removed from your favorites.";
+      if (req.headers.accept && req.headers.accept.includes("application/json")) {
+        return res.status(200).json({ message: successMessage });
+      }
+
+      req.flash("success", successMessage);
       res.redirect("/favorites");
     } catch (error) {
       console.error("Error removing from favorites:", error);
-      req.flash("error", "An error occurred while removing from favorites.");
+      const errorMessage = "An error occurred while removing from favorites.";
+      if (req.headers.accept && req.headers.accept.includes("application/json")) {
+        return res.status(500).json({ error: errorMessage });
+      }
+      req.flash("error", errorMessage);
       res.redirect("back");
     }
   }

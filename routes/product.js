@@ -14,7 +14,7 @@ const ensureAuthenticated = require("../middleware/auth");
 const csrfProtection = csrf();
 
 // Route to render product detail page based on ownership
-router.get("/:id", ensureAuthenticated, async (req, res) => {
+router.get("/:id", ensureAuthenticated, csrfProtection, async (req, res) => {
   try {
     const listingId = req.params.id;
 
@@ -26,7 +26,7 @@ router.get("/:id", ensureAuthenticated, async (req, res) => {
 
     // Fetch the listing and populate seller information
     const listing = await Listing.findById(listingId)
-      .populate('userId', 'name email profilePic')
+      .populate("userId", "name email profilePic")
       .lean();
 
     if (!listing) {
@@ -34,22 +34,41 @@ router.get("/:id", ensureAuthenticated, async (req, res) => {
       return res.redirect("/");
     }
 
-    const user = req.session.user || null;
-    const isSeller = user && user.id.toString() === listing.userId._id.toString();
+    let user = null;
+    let isFavorited = false;
+
+    if (req.session.user && req.session.user.id) {
+      // Fetch the latest user data from the database
+      user = await User.findById(req.session.user.id).lean();
+
+      if (user && user.favorites) {
+        // Determine if the current listing is favorited
+        isFavorited = user.favorites.some(
+          (favId) => favId.toString() === listingId.toString()
+        );
+      }
+
+      // Optional: Update session data to keep it in sync
+      req.session.user = user;
+    }
+
+    const isSeller =
+      user && user.id.toString() === listing.userId._id.toString();
 
     if (isSeller) {
       // Render seller-specific listing detail page
-      res.render("listingDetail", { 
-        listing, 
+      res.render("listingDetail", {
+        listing,
         user,
-        csrfToken: req.csrfToken() 
+        csrfToken: req.csrfToken(),
       });
     } else {
       // Render standard product detail page for buyers
-      res.render("productDetail", { 
-        product: listing, 
+      res.render("productDetail", {
+        product: listing,
         user,
-        csrfToken: req.csrfToken()
+        isFavorited, // Pass this flag to the template
+        csrfToken: req.csrfToken(),
       });
     }
   } catch (error) {
@@ -59,7 +78,7 @@ router.get("/:id", ensureAuthenticated, async (req, res) => {
 });
 
 // Route to list all products with optional pagination
-router.get("/", async (req, res) => {
+router.get("/", csrfProtection, async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
@@ -67,16 +86,16 @@ router.get("/", async (req, res) => {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: { created: -1 },
-      populate: { path: 'userId', select: 'name email' },
+      populate: { path: "userId", select: "name email" },
       lean: true,
     };
 
     const result = await Listing.paginate({}, options);
-    res.render("index", { 
-      listings: result.docs, 
-      pagination: result, 
+    res.render("index", {
+      listings: result.docs,
+      pagination: result,
       user: req.session.user || null,
-      csrfToken: req.csrfToken()
+      csrfToken: req.csrfToken(),
     }); // Pass listings, pagination info, and user to EJS template
   } catch (error) {
     console.error("Error fetching products:", error);

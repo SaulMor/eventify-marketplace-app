@@ -11,10 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault(); // Prevent default button behavior
 
       const button = e.currentTarget;
-      const listingId = button.getAttribute("data-listing-id") || getListingIdFromURL();
+      const listingId =
+        button.getAttribute("data-listing-id") || getListingIdFromURL();
+      const isFavorited = button.classList.contains("favorited");
+      const action = isFavorited ? "remove" : "add";
+      const endpoint = `/favorites/${action}/${listingId}`;
 
       try {
-        const response = await fetch(`/listing/${listingId}/favorite`, {
+        const response = await fetch(endpoint, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -24,16 +28,20 @@ document.addEventListener("DOMContentLoaded", () => {
           body: `_csrf=${encodeURIComponent(csrfToken)}`,
         });
 
+        // **Parse the JSON response**
+        const result = await response.json();
+
         if (response.ok) {
-          const result = await response.json();
-          if (result.message === "Added to favorites.") {
+          if (result.message === "Listing added to your favorites.") {
             // Update button to reflect favorited state
             button.classList.add("favorited");
             button.querySelector("i").className = "fas fa-heart";
             button.querySelector("span").textContent = "Remove from Favorites";
             // Optionally, update the favorites count in the header
             updateFavoritesCount(1);
-          } else if (result.message === "Removed from favorites.") {
+          } else if (
+            result.message === "Listing removed from your favorites."
+          ) {
             // Update button to reflect unfavorited state
             button.classList.remove("favorited");
             button.querySelector("i").className = "far fa-heart";
@@ -41,10 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
               "Like it and save it for later";
             // Optionally, update the favorites count in the header
             updateFavoritesCount(-1);
+          } else {
+            console.warn("Unexpected message:", result.message);
+            alert("An unexpected response was received.");
           }
         } else {
-          const errorData = await response.json();
-          alert(errorData.error || "An error occurred.");
+          // Handle non-OK responses
+          alert(result.error || "An error occurred.");
         }
       } catch (error) {
         console.error("Error:", error);
@@ -70,10 +81,14 @@ document.addEventListener("DOMContentLoaded", () => {
     addToCartForm.addEventListener("submit", async function (e) {
       e.preventDefault(); // Prevent traditional form submission
 
-      const listingId = addToCartForm.querySelector("input[name='listingId']").value;
+      const listingId = addToCartForm.querySelector(
+        "input[name='listingId']"
+      ).value;
       const quantityInput = document.getElementById("quantity"); // Select the quantity input by ID
       const quantity = parseInt(quantityInput.value, 10);
-      const csrfToken = addToCartForm.querySelector("input[name='_csrf']").value;
+      const csrfToken = addToCartForm.querySelector(
+        "input[name='_csrf']"
+      ).value;
 
       // Validate the quantity on the client-side
       if (isNaN(quantity) || quantity < 1) {
@@ -83,11 +98,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const response = await fetch('/cart/add', {
-          method: 'POST',
+        const response = await fetch("/cart/add", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
-            'CSRF-Token': csrfToken, // Include CSRF token in headers
+            "Content-Type": "application/json",
+            "CSRF-Token": csrfToken, // Include CSRF token in headers
           },
           body: JSON.stringify({
             listingId: listingId,
@@ -105,18 +120,17 @@ document.addEventListener("DOMContentLoaded", () => {
             updateCartCount(data.cartCount);
           }
         } else {
-          displayError(addToCartForm, data.error || 'Failed to add to cart.');
+          displayError(addToCartForm, data.error || "Failed to add to cart.");
         }
       } catch (error) {
-        console.error('Error adding to cart:', error);
-        displayError(addToCartForm, 'An error occurred while adding to cart.');
+        console.error("Error adding to cart:", error);
+        displayError(addToCartForm, "An error occurred while adding to cart.");
       }
     });
   }
 
   // Updated Utility Function to Show Add to Cart Modal
   function showAddToCartModal(message) {
-    console.log("showAddToCartModal called"); // Debugging log
     const modal = document.getElementById("addToCartModal");
     const modalMessage = document.getElementById("addToCartMessage");
     const continueButton = document.getElementById("continueButton");
