@@ -1,39 +1,55 @@
-/* public/css/filters.css */
+/* Layout of category container with filters and listings side by side */
+.category-container {
+    display: flex;
+    flex-direction: row; 
+    align-items: flex-start; 
+    gap: 20px; 
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
 /* Filters Section Styling */
 .filters {
-    padding: 15px;
-    background-color: #f9f9f9;
+    padding: 20px;
+    background-color: #f4f4f4;
     border: 1px solid #ddd;
     font-family: 'LaoMuangKhong-Regular', sans-serif;
-    border-radius: 8px;
+    border-radius: 12px;
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    flex: 0 0 300px; /* Fix width of filter section */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .filters h3 {
-    user-select: none;
-    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: #333;
 }
 
 .filters h3:hover {
-    color: #4A90E2; 
+    color: #4A90E2;
 }
 
 .filters h4 {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-size: 1rem;
+    color: #666;
 }
 
 .filters label {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
-    cursor: pointer;
-    font-size: 0.95rem;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    color: #333;
 }
 
 .category-group {
@@ -43,70 +59,59 @@
 .color-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 /* Color Classes */
-.color-black { background-color: black; }
-.color-white { background-color: white; }
-.color-red { background-color: red; }
-.color-orange { background-color: orange; }
-.color-yellow { background-color: yellow; }
-.color-green { background-color: green; }
-.color-blue { background-color: blue; }
-.color-purple { background-color: purple; }
-.color-pink { background-color: pink; }
-.color-gray { background-color: gray; }
-.color-brown { background-color: brown; }
-.color-lightgray { background-color: lightgray; }
-
 .color-circle {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
     border: 1px solid #c9c8c8;
     cursor: pointer;
     display: inline-block;
-    margin-right: 5px;
-    transition: border 0.3s ease;
+    margin-right: 8px;
+    transition: border 0.3s ease, transform 0.3s ease;
 }
 
 .color-circle.selected {
     border: 2px solid #4A90E2;
+    transform: scale(1.1);
 }
 
 .custom-price {
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
+    margin-top: 12px;
 }
 
 .custom-price label {
-    margin-bottom: 10px;
-    font-size: 0.95rem;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    color: #333;
 }
 
 .price-inputs {
     display: flex;
-    align-items: center; 
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
 }
 
 .filter-apply {
     align-self: center;
-    padding: 5px 10px;
-    color: black;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
+    padding: 8px 15px;
+    color: #fff;
+    border: none;
+    background-color: #4A90E2;
     font-family: 'LaoMuangKhong-Regular', sans-serif;
-    border-radius: 4px;
+    border-radius: 6px;
     transition: background-color 0.3s ease;
+    font-size: 1rem;
 }
 
 .filter-apply:hover {
-    background-color: #f0f0f0;
+    background-color: #357ABD;
 }
 
 .hidden-filter {
@@ -117,34 +122,171 @@
 }
 
 .toggle-btn {
-    font-size: 1rem;
-    padding: 0 10px;
+    font-size: 1.1rem;
+    padding: 0 12px;
+    font-weight: bold;
     user-select: none;
     background: none;
     border: none;
     cursor: pointer;
+    color: #333;
 }
 
 .toggle-btn:hover {
-    color: rgb(4, 69, 139);
+    color: #4A90E2;
 }
 
 .custom-price input[type="number"] {
-    width: 80px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 100px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 .custom-price span {
     font-weight: bold;
 }
 
-/* Optional: Selected Color Circle Styling */
-.color-group label .color-circle {
-    margin-right: 5px;
+/* Listings Section Styling */
+.category-listings {
+    flex: 3;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
-.color-group label:hover .color-circle {
-    opacity: 0.7;
+.category-listings h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.listing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+}
+
+.listing-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.listing-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.listing-info {
+    padding: 15px;
+}
+
+.listing-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.listing-info p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #666;
+}
+
+.listing-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.listing-price .current-price {
+    font-size: 1.3rem;
+    color: #333;
+    font-weight: bold;
+}
+
+.listing-price .original-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 1rem;
+}
+
+.btn-view {
+    display: inline-block;
+    padding: 10px 18px;
+    background-color: #4A90E2;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-view:hover {
+    background-color: #357ABD;
+}
+
+.no-listings {
+    font-size: 1.3rem;
+    color: #888;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Color Classes */
+.color-circle.color-black {
+    background-color: black;
+}
+
+.color-circle.color-white {
+    background-color: white;
+    border: 1px solid #ddd; /* Border for visibility on white */
+}
+
+.color-circle.color-red {
+    background-color: red;
+}
+
+.color-circle.color-orange {
+    background-color: orange;
+}
+
+.color-circle.color-yellow {
+    background-color: yellow;
+}
+
+.color-circle.color-green {
+    background-color: green;
+}
+
+.color-circle.color-blue {
+    background-color: blue;
+}
+
+.color-circle.color-purple {
+    background-color: purple;
+}
+
+.color-circle.color-pink {
+    background-color: pink;
+}
+
+.color-circle.color-gray {
+    background-color: gray;
+}
+
+.color-circle.color-brown {
+    background-color: brown;
 }
