@@ -1,85 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Character encoding and viewport settings for responsive design -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Title of the Settings page -->
     <title>Settings</title>
-    
-    <!-- Linking CSS stylesheets for styling the settings, header, and footer -->
     <link rel="stylesheet" href="/css/settings.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
 </head>
 <body>
-    <!-- Include header partial for consistent navigation across pages -->
     <%- include('partials/header') %>
 
     <div class="settings-container">
-        <!-- Main heading for the Settings page -->
         <h2>Settings</h2>
-        
-        <!-- Breadcrumb navigation indicating the current page -->
         <div class="breadcrumb">Eventify / Settings / Edit Profile</div>
-        
+
         <div class="profile-section">
-            <!-- Left menu for navigation between profile settings -->
             <div class="left-menu">
                 <ul>
-                    <li class="active">Edit Profile</li> <!-- Current active section -->
+                    <li class="active">Edit Profile</li>
                     <li><a href="/helpcenter">Help Center</a></li>
-                    <!-- <li class="disabled">My Addresses (Soon)</li>  -->
-                    <!-- <li class="disabled">My Payment Methods (Soon)</li>  -->
-                    <!-- <li class="disabled">My Listings (Soon)</li> Future option, currently disabled -->
-                    <li><a href="/listing/drafts">My Drafts</a></li> 
-                    <!-- <li class="disabled">Balance (Soon)</li> Future option, currently disabled -->
-                    <!-- <li class="disabled">Account Info (Soon)</li> Future option, currently disabled -->
+                    <li><a href="/listing/drafts">My Drafts</a></li>
                 </ul>
             </div>
-            
-            <!-- Main section for displaying and editing profile details -->
+
             <div class="profile-details">
-                <!-- Container for profile photo and banner settings -->
                 <div class="profile-photo-banner">
                     <div class="profile-photo">
-                        <div class="photo-icon">👤</div> <!-- Placeholder for profile photo -->
+                        <div class="photo-icon">👤</div>
                         <div class="photo-upload-container">
-                            <!-- Button to upload a new profile photo -->
                             <button class="upload-btn">Upload Profile Photo</button>
                         </div>
                     </div>
                     <div class="profile-banner">
-                        <div class="banner-preview">Banner Image Preview</div> <!-- Preview area for banner image -->
+                        <div class="banner-preview">Banner Image Preview</div>
                         <div class="banner-upload-container">
-                            <!-- Button to upload a new profile banner -->
                             <button class="upload-btn">Upload Profile Banner</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Form for editing profile information -->
-                <form class="profile-form">
-                    <label for="profile-name">Profile Name</label>
-                    <!-- Input field for the profile name -->
-                    <input id="profile-name" type="text" value="Tester" />
-                    
-                    <label for="username">Username</label>
-                    <!-- Input field for the username (disabled) -->
-                    <input id="username" type="text" value="Username Is Something" disabled />
-                    
-                    <label for="password">Password</label>
-                    <!-- Input field for password -->
-                    <input id="password" type="password" value="***********" />
-                    <!-- Update button (disabled) indicating upcoming feature -->
-                    <button class="update-btn" disabled>Update Now (Coming Soon)</button>
+                <!-- Profile Form with Password Update Option -->
+                <form class="profile-form" action="/settings" method="POST">
+                    <label for="profile-name">
+                        Profile Name
+                        <h2><%= user.name || 'Username' %></h2>
+                    </label>
+                    <input id="profile-name" type="text" name="name" value="<%= user.name || 'Username' %>" />
+
+                    <label for="email">
+                        Email
+                        <h2><%= user.email || 'Email' %></h2>
+                    </label>
+                    <input id="email" type="email" name="email" value="<%= user.email || 'Email' %>" />
+
+                    <label for="password">New Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter new password" />
+
+                    <label for="confirm-password">Confirm Password</label>
+                    <input id="confirm-password" type="password" name="confirm-password" placeholder="Confirm new password" />
+
+                    <button class="update-btn" type="submit">Update Now</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Include footer partial for consistent footer content -->
     <%- include('partials/footer') %>
 </body>
 </html>
