@@ -51,7 +51,7 @@
                         <% } %>
                     </div>
                     <!-- Username -->
-                    <h2><%= user.name || 'Username' %></h2>
+                    <h2><%= user.name.charAt(0).toUpperCase() + user.name.slice(1) || 'Username' %></h2>
                 </div>
                 <!-- Settings Icon -->
                 <div class="settings">

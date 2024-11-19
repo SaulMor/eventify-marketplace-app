@@ -21,7 +21,9 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-image: url('/media/images/bannerimage.webp'); /* Add your banner image here */
 }
+
 
 .banner-overlay {
     position: absolute;
