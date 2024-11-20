@@ -144,6 +144,32 @@
                                 </select>
                             </div>
                         </div>
+
+                         <!-- Event Field -->
+                         <div class="form-group horizontal-group">
+                            <label for="event">Event (Optional)</label>
+                            <div class="input-helper-wrapper">
+                                <p class="helper-text" id="event-helper">
+                                    Select the event this listing is associated with. Leave blank if not applicable.
+                                </p>
+                                <select
+                                    id="event"
+                                    name="event"
+                                    aria-describedby="event-helper"
+                                >
+                                    <option value="">Select Event (Optional)</option>
+                                    <% if (events && events.length > 0) { %>
+                                        <% events.forEach(function(event) { %>
+                                            <option value="<%= event._id %>" <%= listing.event && listing.event.toString() === event._id.toString() ? 'selected' : '' %>>
+                                                <%= event.name %>
+                                            </option>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <option value="" disabled>No active events available</option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Column -->

@@ -125,49 +125,9 @@ main {
     color: #fff;
 }
 
-/* Default Seasonal Deals */
-.seasonal-deals.default {
-    background-image: url('/media/images/default-seasonal.jpg');
-}
-
-/* New Year */
-.seasonal-deals.new-year {
-    background-image: url('/media/images/newyear-banner.jpg');
-}
-
-/* Valentine's Day */
-.seasonal-deals.valentines-day {
-    background-image: url('/media/images/valentines-banner.jpg');
-}
-
-/* Easter */
-.seasonal-deals.easter {
-    background-image: url('/media/images/easter-banner.jpg');
-}
-
-/* Halloween */
-.seasonal-deals.halloween {
-    background-image: url('/media/images/halloween-banner.jpg');
-}
-
 /* Thanksgiving */
 .seasonal-deals.thanksgiving {
     background-image: url('/media/images/thanksgiving-banner.jpg');
-}
-
-/* Black Friday */
-.seasonal-deals.black-friday {
-    background-image: url('/media/images/blackfriday-banner.jpg');
-}
-
-/* Cyber Monday */
-.seasonal-deals.cyber-monday {
-    background-image: url('/media/images/cybermonday-banner.jpg');
-}
-
-/* Christmas */
-.seasonal-deals.christmas {
-    background-image: url('/media/images/christmas-banner.jpg');
 }
 
 /* Featured Listings Section */

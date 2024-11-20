@@ -10,6 +10,7 @@ const csrf = require('csurf');
 const mongoose = require("mongoose");
 const Listing = require("../models/Listing");
 const User = require("../models/User");
+const Event = require("../models/Event"); // Import Event model
 const Offer = require("../models/Offer");
 
 const ensureAuthenticated = require("../middleware/auth");
@@ -60,11 +61,25 @@ const upload = multer({
 
 // GET Route: Render the Create Listing Form
 router.get("/create", ensureAuthenticated, csrfProtection, async (req, res) => {
-  res.render("createListing", {
-    error: null,
-    listing: {},
-    csrfToken: req.csrfToken(),
-  });
+  try {
+    // Fetch active events based on the current date
+    const currentDate = new Date();
+    const activeEvents = await Event.find({
+      'activeDates.start': { $lte: currentDate },
+      'activeDates.end': { $gte: currentDate }
+    }).lean();
+
+    res.render("createListing", {
+      error: null,
+      listing: {},
+      csrfToken: req.csrfToken(),
+      events: activeEvents // Pass active events to the template
+    });
+  } catch (error) {
+    console.error('Error fetching active events:', error);
+    req.flash("error", "Unable to load events. Please try again later.");
+    res.redirect("/");
+  }
 });
 
 // POST Route: Handle Form Submission for Creating a Listing (with Draft Support)
@@ -110,6 +125,7 @@ router.post(
         delivery,
         color,
         action, // Extract action from form
+        event, // Event ID from form
       } = req.body;
 
       // Handle uploaded photos
@@ -123,35 +139,52 @@ router.post(
       // Determine if the listing is a draft based on the action value
       const draftStatus = action === 'save-draft';
 
+      // Validate category if necessary
+      const allowedCategories = ['wedding', 'birthday', 'halloween', 'academic', 'corporate', 'cultural', 'entertainment', 'holiday', 'luxury', 'seasonal'];
+      if (!allowedCategories.includes(category)) {
+        req.flash('error', 'Invalid category selected.');
+        return res.redirect('/listing/create');
+      }
+
+      // If an event is selected, verify its validity
+      let eventId = null;
+      if (event) {
+        const selectedEvent = await Event.findById(event).lean();
+        if (selectedEvent) {
+          eventId = selectedEvent._id;
+        } else {
+          req.flash('error', 'Selected event does not exist.');
+          return res.redirect('/listing/create');
+        }
+      }
+
       // Create a new listing document
       const newListing = new Listing({
         title,
-        price: parseFloat(price), // Ensure price is a number
+        description,
+        photos,
+        price,
+        originalPrice: req.body.originalPrice || undefined, // Handle optional field
+        userId: req.session.user.id,
         category,
+        event: eventId, // Associate with event if selected
+        isDraft: draftStatus,
         location,
         condition,
         handmade: req.body.handmade || "no",
-        quantity: parseInt(quantity, 10) || 1, // Ensure quantity is an integer
-        delivery: req.body.delivery || "pickup",
-        color: req.body.color || "N/A",
-        photos,
-        userId: req.session.user.id, // Correct association
-        description,
-        isDraft: draftStatus, // Set draft status
+        quantity: parseInt(quantity, 10) || 1,
+        delivery: delivery || "pickup",
+        color: color || "N/A",
       });
 
-      // Save the listing to the database
       await newListing.save();
 
-      // Set a success flash message
       req.flash("success", draftStatus ? "Draft saved successfully!" : "Listing created successfully!");
-
-      // Redirect based on draft status
       res.redirect(draftStatus ? "/listing/drafts" : "/user/profile1");
     } catch (error) {
       console.error("Error creating listing:", error);
       req.flash("error", "Failed to create listing. Please try again.");
-      res.status(500).redirect("/listing/create");
+      res.redirect("/listing/create");
     }
   }
 );
@@ -368,11 +401,19 @@ router.get(
   async (req, res) => {
     try {
       const listing = req.listing; // From authorizeListing middleware
-      console.log("--- GET /listing/edit/:id ---");
+
+      // Fetch active events based on the current date
+      const currentDate = new Date();
+      const activeEvents = await Event.find({
+        'activeDates.start': { $lte: currentDate },
+        'activeDates.end': { $gte: currentDate }
+      }).lean();
+
       res.render("editListing", {
         listing,
         user: req.session.user || null,
         csrfToken: req.csrfToken(),
+        events: activeEvents // Pass active events to the template
       });
     } catch (error) {
       console.error("Error fetching listing for edit:", error);
@@ -441,6 +482,7 @@ router.post(
               delivery,
               color,
               action, // Extract action from form
+              event, // Event ID from form
           } = req.body;
 
           // Determine if the listing is a draft based on the action value
@@ -458,6 +500,26 @@ router.post(
           listing.color = color || "N/A";
           listing.description = description;
           listing.isDraft = draftStatus; // Set draft status
+
+          // Validate category if necessary
+          const allowedCategories = ['wedding', 'birthday', 'halloween', 'academic', 'corporate', 'cultural', 'entertainment', 'holiday', 'luxury', 'seasonal'];
+          if (!allowedCategories.includes(category)) {
+            req.flash('error', 'Invalid category selected.');
+            return res.redirect(`/listing/edit/${listingId}`);
+          }
+
+          // If an event is selected, verify its validity
+          if (event) {
+            const selectedEvent = await Event.findById(event).lean();
+            if (selectedEvent) {
+              listing.event = selectedEvent._id;
+            } else {
+              req.flash('error', 'Selected event does not exist.');
+              return res.redirect(`/listing/edit/${listingId}`);
+            }
+          } else {
+            listing.event = null; // Remove event association if not selected
+          }
 
           // Process removed photos
           const removedPhotos = req.body.removedPhotos
@@ -528,7 +590,6 @@ router.post(
       }
   }
 );
-
 
 // DELETE Route: Delete a Listing
 router.delete(
@@ -652,7 +713,7 @@ router.get("/", async (req, res) => {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: { created: -1 },
-      populate: { path: 'userId', select: 'name email profilePic' }, // Ensure profilePic is included
+      populate: { path: 'userId', select: 'name email profilePic' },
       lean: true,
     };
 
@@ -671,7 +732,6 @@ router.get("/", async (req, res) => {
     res.status(500).render("error", { message: "Internal Server Error" });
   }
 });
-
 
 // GET Route: View Offers for a Listing
 router.get("/:id/offers", ensureAuthenticated, authorizeListing, async (req, res) => {
