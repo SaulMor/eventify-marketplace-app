@@ -1,5 +1,4 @@
 <!-- views/category.ejs -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,6 +14,8 @@
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/footer.css">
     <link rel="stylesheet" href="/css/home.css"> <!-- Reuse home.css for consistency -->
+    <link rel="stylesheet" href="/css/filters.css">
+    <link rel="stylesheet" href="/css/search.css">
 </head>
 <body>
     
@@ -23,32 +24,64 @@
 
     <!-- Main Content -->
     <main>
-        <section class="category-listings">
-            <h2><%= categoryName %> Listings</h2>
-            <div class="listing-grid">
-                <% if (listings && listings.length > 0) { %>
-                    <% listings.forEach(function(listing) { %>
-                        <div class="listing-card">
-                            <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
-                            <div class="listing-info">
-                                <h3><%= listing.title %></h3>
-                                <p><%= listing.description.substring(0, 100) %>...</p>
-                                <div class="listing-price">
-                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
-                                    <% if (listing.originalPrice) { %>
-                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
-                                    <% } %>
+
+        <div class="search-sort-bar">
+            <form id="favorites-search-sort-form" method="GET" action="/category">
+                <input type="text" name="search" class="search-input" placeholder="Search your favorites..." value="">
+        
+                <div class="sort-dropdown">
+                    <label for="sort">Sort by:</label>
+                    <select id="sort" name="sort">
+                        <option value="">-- Select --</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="date-newest">Date: Newest First</option>
+                        <option value="date-oldest">Date: Oldest First</option>
+                        <!-- Add more sort options as needed -->
+                    </select>
+                </div>
+        
+                <button type="submit" class="apply-filters-btn">Apply</button>
+            </form>
+        </div>
+         
+        <div class="category-container">
+            <!-- Sidebar Filters -->
+            <aside class="filters">
+                <form id="category-filter-form" method="GET" action="/category">
+                    <%- include('partials/filters') %>  <!-- Added the filters partial here -->
+                </form>
+            </aside>
+
+            <!-- Listings Section -->
+            <section class="category-listings">
+                <h2><%= categoryName %> Listings</h2>
+                <div class="listing-grid">
+                    <% if (listings && listings.length > 0) { %>
+                        <% listings.forEach(function(listing) { %>
+                            <div class="listing-card">
+                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>">
+                                <div class="listing-info">
+                                    <h3><%= listing.title %></h3>
+                                    <p><%= listing.description.substring(0, 100) %>...</p>
+                                    <div class="listing-price">
+                                        <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                                        <% if (listing.originalPrice) { %>
+                                            <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                                        <% } %>
+                                    </div>
                                 </div>
-                                <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                                <a href="/listing/<%= listing.id %>" class="btn-view">View Details</a>
                             </div>
-                        </div>
-                    <% }); %>
-                <% } else { %>
-                    <p>No listings available in this category.</p>
-                <% } %>
-            </div>
-        </section>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="no-listings">No listings available for this category.</div>
+                    <% } %>
+                </div>
+            </section>
+        </div>
     </main>
+    
 
     <!-- Footer -->
     <%- include('partials/footer') %>
@@ -56,5 +89,6 @@
     <!-- JavaScript Files -->
     <script src="/js/header.js"></script>
     <script src="/js/auth.js"></script>
+    <script src="/js/filter.js"></script>
 </body>
 </html>

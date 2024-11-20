@@ -1,0 +1,52 @@
+/* Search and Sort Bar Styling */
+.search-sort-bar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.search-sort-bar form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.search-sort-bar .search-input {
+    flex: 1 1 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-sort-bar .sort-dropdown {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.search-sort-bar .sort-dropdown label {
+    font-weight: bold;
+}
+
+.search-sort-bar .sort-dropdown select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.search-sort-bar .apply-filters-btn {
+    padding: 10px 20px;
+    background-color: #E9C071;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-sort-bar .apply-filters-btn:hover {
+    background-color: #357ABD;
+}

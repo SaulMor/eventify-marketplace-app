@@ -1,161 +1,105 @@
-<!-- views/profile1.ejs -->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>User Profile - Eventify</title>
-        <!-- Font Awesome for Icons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-        <!-- Google Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
-        <!-- CSS Stylesheets -->
-        <link rel="stylesheet" href="/css/header.css">
-        <link rel="stylesheet" href="/css/footer.css">
-        <link rel="stylesheet" href="/css/profile1.css">
-    </head>
-    <body>
-    
-        <!-- Including header partial -->
-        <%- include('partials/header') %> 
-    
-        <!-- Display Flash Messages -->
-        <%- include('partials/flashMessages') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Eventify</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/profile1.css">
+    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/filters.css">
+    <link rel="stylesheet" href="/css/search.css">
+</head>
+<body>
+
+    <!-- Including header partial -->
+    <%- include('partials/header') %>
+
+    <!-- Display Flash Messages -->
+    <%- include('partials/flashMessages') %>
+
+    <!-- Main Content -->
+    <main class="profile-main">
+        <!-- Banner Section -->
+        <div class="banner">
+            <div class="banner-overlay"></div>
+            <!-- Profile Image Positioned Over Banner -->
+            <div class="profile-image-container">
+                <img src="<%= user.profileImageUrl || '/media/images/blank-profile-picture.webp' %>" alt="Profile Image" class="profile-image">
+            </div>
+        </div>
+
+        <!-- Profile Information Section -->
+        <div class="profile-info">
+            <div class="profile-details">
+                <!-- User Rating -->
+                <div class="profile-rating">
+                    <% for (let i = 0; i < Math.floor(user.rating); i++) { %>
+                        <i class="fa fa-star"></i>
+                    <% } %>
+                    <% if (user.rating % 1 >= 0.5) { %>
+                        <i class="fa fa-star-half-alt"></i>
+                    <% } %>
+                    <% for (let i = Math.ceil(user.rating); i < 5; i++) { %>
+                        <i class="fa fa-star-o"></i>
+                    <% } %>
+                </div>
+                <!-- Username -->
+                <h2><%= user.name.charAt(0).toUpperCase() + user.name.slice(1) || 'Username' %></h2>
+            </div>
+            <!-- Settings Icon -->
+            <div class="settings">
+                <a href="/settings"><i class="fa fa-cog"></i></a>
+            </div>
+        </div>
+
+        <div class="search-sort-bar">
+            <form id="favorites-search-sort-form" method="GET" action="/profile1">
+                <input type="text" name="search" class="search-input" placeholder="Search your favorites..." value="">
         
-        <!-- Main Content -->
-        <main class="profile-main">
-            <!-- Banner Section -->
-            <div class="banner">
-                <div class="banner-overlay"></div>
-                <!-- Profile Image Positioned Over Banner -->
-                <div class="profile-image-container">
-                    <img src="<%= user.profileImageUrl || '/media/images/blank-profile-picture.webp' %>" alt="Profile Image" class="profile-image">
-                </div>
-            </div>
-    
-            <!-- Profile Information Section -->
-            <div class="profile-info">
-                <div class="profile-details">
-                    <!-- User Rating -->
-                    <div class="profile-rating">
-                        <% for(let i = 0; i < Math.floor(user.rating); i++) { %>
-                            <i class="fa fa-star"></i>
-                        <% } %>
-                        <% if(user.rating % 1 >= 0.5) { %>
-                            <i class="fa fa-star-half-alt"></i>
-                        <% } %>
-                        <% for(let i = Math.ceil(user.rating); i < 5; i++) { %>
-                            <i class="fa fa-star-o"></i>
-                        <% } %>
-                    </div>
-                    <!-- Username -->
-                    <h2><%= user.name || 'Username' %></h2>
-                </div>
-                <!-- Settings Icon -->
-                <div class="settings">
-                    <a href="/settings"><i class="fa fa-cog"></i></a>
-                </div>
-            </div>
-    
-            <!-- Search and Sort Bar -->
-            <div class="search-sort">
-                <input type="text" class="search-input" placeholder="Search listings...">
-                <div class="sort-by">
-                    <label for="sort">Sort by: </label>
+                <div class="sort-dropdown">
+                    <label for="sort">Sort by:</label>
                     <select id="sort" name="sort">
-                        <option value="relevance">Relevance</option>
-                        <option value="price">Price</option>
-                        <option value="rating">Rating</option>
+                        <option value="">-- Select --</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="date-newest">Date: Newest First</option>
+                        <option value="date-oldest">Date: Oldest First</option>
+                        <!-- Add more sort options as needed -->
                     </select>
                 </div>
-            </div>
-    
-            <!-- Main Container for Filters and Product List -->
+        
+                <button type="submit" class="apply-filters-btn">Apply</button>
+            </form>
+        </div>
+        
+       
+        <div class="category-container">
+            <!-- Sidebar Filters -->
+            <aside class="filters">
+                <form id="category-filter-form" method="GET" action="/category">
+                    <%- include('partials/filters') %>  <!-- Added the filters partial here -->
+                </form>
+            </aside>
+
+            <!-- Product Listings Section -->
             <div class="index-main-wrapper">
-                <div class="container">
-                    <!-- Sidebar Filter Section -->
-                    <div class="filters">
-                        <!-- Categories Section -->
-                        <h3>
-                            Categories 
-                            <button aria-expanded="false" aria-controls="categories-section" class="toggle-btn">+</button>
-                        </h3>
-                        <div id="categories-section" class="category-wrapper hidden">
-                            <div class="category-group">
-                                <h4>Holidays</h4>
-                                <label><input type="checkbox" name="holiday" value="Christmas"> Christmas</label>
-                                <label><input type="checkbox" name="holiday" value="Easter"> Easter</label>
-                                <label><input type="checkbox" name="holiday" value="Halloween"> Halloween</label>
-                                <label><input type="checkbox" name="holiday" value="Hanukkah"> Hanukkah</label>
-                                <label><input type="checkbox" name="holiday" value="MothersFathers"> Mother's/Father's Day</label>
-                                <label><input type="checkbox" name="holiday" value="NewYears"> New Year's</label>
-                                <label><input type="checkbox" name="holiday" value="StPatricks"> St. Patrick's Day</label>
-                                <label><input type="checkbox" name="holiday" value="Thanksgiving"> Thanksgiving</label>
-                                <label><input type="checkbox" name="holiday" value="Valentines"> Valentine's Day</label>
-                            </div>
-                        
-                            <div class="category-group">
-                                <h4>Personal & Family</h4>
-                                <label><input type="checkbox" name="personal" value="BabyShowers"> Baby Showers</label>
-                                <label><input type="checkbox" name="personal" value="Birthdays"> Birthdays</label>
-                                <label><input type="checkbox" name="personal" value="Funerals"> Funerals</label>
-                                <label><input type="checkbox" name="personal" value="Graduations"> Graduations</label>
-                                <label><input type="checkbox" name="personal" value="Weddings"> Weddings</label>
-                            </div>
-                        </div>
-                    
-                        <!-- Colors Section -->
-                        <h3>
-                            Color 
-                            <button aria-expanded="false" aria-controls="colors-section" class="toggle-btn">+</button>
-                        </h3>
-                        <div id="colors-section" class="color-group hidden">
-                            <div class="color-circle" style="background-color: black;"></div>
-                            <div class="color-circle" style="background-color: white;"></div>
-                            <div class="color-circle" style="background-color: red;"></div>
-                            <div class="color-circle" style="background-color: orange;"></div>
-                            <div class="color-circle" style="background-color: yellow;"></div>
-                            <div class="color-circle" style="background-color: green;"></div>
-                            <div class="color-circle" style="background-color: blue;"></div>
-                            <div class="color-circle" style="background-color: purple;"></div>
-                            <div class="color-circle" style="background-color: pink;"></div>
-                            <div class="color-circle" style="background-color: gray;"></div>
-                            <div class="color-circle" style="background-color: brown;"></div>
-                            <div class="color-circle" style="background-color: lightgray;"></div>
-                        </div>
-                    
-                        <!-- Price Section -->
-                        <h3>
-                            Price 
-                            <button aria-expanded="false" aria-controls="price-section" class="toggle-btn">+</button>
-                        </h3>
-                        <div id="price-section" class="price-wrapper hidden">
-                            <label><input type="radio" name="price" value="all"> All Prices</label>
-                            <label><input type="radio" name="price" value="under25"> Under $25</label>
-                            <label><input type="radio" name="price" value="25-50"> $25 - $50</label>
-                            <label><input type="radio" name="price" value="50-75"> $50 - $75</label>
-                            <label><input type="radio" name="price" value="100+"> $100+</label>
-                    
-                            <div class="custom-price">
-                                <h4>Custom</h4>
-                                <div class="price-inputs">
-                                    <input type="number" name="min-price" placeholder="Min Price" min="0">
-                                    <span>TO</span>
-                                    <input type="number" name="max-price" placeholder="Max Price" min="0">
-                                    <button class="filter-apply">Apply</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
+                <!-- Container for Listings -->
+                <div class="container" style="padding: 0;">
                     <!-- Product List -->
                     <div class="product-list">
-                        <% if (listings.length > 0) { %>
+                        <% if (listings && listings.length > 0) { %>
                             <% listings.forEach(listing => { %>
                                 <div class="product-card">
-                                    <a href="/listing/<%= listing._id %>/detail" class="product-link"> <!-- Updated Link -->
+                                    <a href="/listing/<%= listing._id %>/detail" class="product-link">
                                         <div class="product-image-container">
                                             <% if (listing.photos && listing.photos.length > 0) { %>
                                                 <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image" loading="lazy">
@@ -168,7 +112,7 @@
                                             <p class="product-price">$<%= listing.price %></p>
                                             <p class="product-category"><%= listing.category %></p>
                                             <div class="product-user">
-                                                <span class="username"><%= user.name %></span>
+                                                <span class="username"><%= user.name || 'Username' %></span>
                                                 <div class="product-rating">
                                                     <% if (listing.rating) { %>
                                                         <% for (let i = 0; i < Math.floor(listing.rating); i++) { %>
@@ -195,13 +139,16 @@
                     </div>
                 </div>
             </div>            
-        </main>
-    
-        <!-- Including footer partial -->
-        <%- include('partials/footer') %>
-    
-        <!-- External JavaScript for handling interactivity -->
-        <script src="/js/uploadHandler.js"></script>
-        <script src="/js/profileToggle.js"></script> <!-- Script to handle filter toggling -->
-    </body>
+        </div>
+    </main>
+
+    <!-- Including footer partial -->
+    <%- include('partials/footer') %>
+
+    <!-- External JavaScript for handling interactivity -->
+    <script src="/js/uploadHandler.js"></script>
+    <script src="/js/profileToggle.js"></script> <!-- Script to handle filter toggling -->
+    <script src="/js/filter.js"></script>
+
+</body>
 </html>
