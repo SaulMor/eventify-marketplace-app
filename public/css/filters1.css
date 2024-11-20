@@ -1,0 +1,106 @@
+/* Filters Sidebar */
+.filters {
+    width: 250px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filters h3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.filters .toggle-btn {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+.hidden-filter {
+    display: none;
+}
+
+.category-group,
+.color-group,
+.price-wrapper {
+    margin-bottom: 20px;
+}
+
+.category-group h4,
+.color-group h4,
+.price-wrapper h4 {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #555;
+}
+
+.filters label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.color-circle {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.color-black {
+    background-color: black;
+}
+
+.color-white {
+    background-color: white;
+    border: 1px solid #ddd;
+}
+
+.color-red {
+    background-color: red;
+}
+
+.color-orange {
+    background-color: orange;
+}
+
+.color-yellow {
+    background-color: yellow;
+}
+
+.color-green {
+    background-color: green;
+}
+
+.color-blue {
+    background-color: blue;
+}
+
+.color-purple {
+    background-color: purple;
+}
+
+.color-pink {
+    background-color: pink;
+}
+
+.color-gray {
+    background-color: gray;
+}
+
+.color-brown {
+    background-color: brown;
+}
+
+.color-lightgray {
+    background-color: lightgray;
+}
