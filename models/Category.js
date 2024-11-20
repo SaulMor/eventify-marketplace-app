@@ -1,3 +1,3 @@
-// models/Category.ejs
+// models/Category.js
 const mongoose = require('mongoose'); 
 
