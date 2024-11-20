@@ -76,7 +76,7 @@ app.use(
             imgSrc: [
                 "'self'",
                 'data:',
-                'https://yourdomain.com' // Replace with your actual domain
+                'http://localhost:3000' // Added for local testing
             ],
             connectSrc: [
                 "'self'",
