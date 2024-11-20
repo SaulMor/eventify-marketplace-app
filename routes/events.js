@@ -4,85 +4,32 @@ const express = require("express");
 const router = express.Router();
 const Listing = require("../models/Listing"); // Import Listing model
 const User = require("../models/User"); // Import User model
+const Event = require('../models/Event');
 const csrf = require('csurf');
 const csrfProtection = csrf();
 
-// Define Seasons and Specials (Same as in index.js)
-const events = [
-    {
-        name: "New Year",
-        months: [1], // January
-        image: "/media/images/newyear-banner.jpg",
-        text: "New Year Specials! Start your year with amazing deals.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Valentine's Day",
-        months: [2], // February
-        image: "/media/images/valentines-banner.jpg",
-        text: "Valentine's Day Deals! Show your love with our exclusive offers.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Easter",
-        months: [4], // April
-        image: "/media/images/easter-banner.jpg",
-        text: "Easter Specials! Hop into our fantastic deals.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Halloween",
-        months: [10], // October
-        image: "/media/images/halloween-banner.jpg",
-        text: "Halloween Specials! Get ready for the spookiest deals.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Thanksgiving",
-        months: [11], // November
-        image: "/media/images/thanksgiving-banner.jpg",
-        text: "Thanksgiving Deals! Give thanks with our exclusive offers.",
-        buttonText: "Shop Now",
-        targetUrl: "/events/thanksgiving"
-    },
-    {
-        name: "Black Friday",
-        months: [11], // November
-        image: "/media/images/blackfriday-banner.jpg",
-        text: "Black Friday Specials! Unbeatable prices just for you.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Cyber Monday",
-        months: [11], // November
-        image: "/media/images/cybermonday-banner.jpg",
-        text: "Cyber Monday Deals! Shop the best online offers.",
-        buttonText: "Shop Now",
-    },
-    {
-        name: "Christmas",
-        months: [12], // December
-        image: "/media/images/christmas-banner.jpg",
-        text: "Christmas Deals! Up to 40% off on all items.",
-        buttonText: "Shop Now",
-    },
-    // Add more seasons/events as needed
-];
-
-// Helper Function to Convert Event Name to Kebab-Case
-const toKebabCase = (str) => str.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '');
-
 // Event-specific route
-router.get("/:eventName", csrfProtection, async (req, res) => {
+router.get("/:eventSlug", csrfProtection, async (req, res) => {
     try {
-        const eventName = req.params.eventName;
-        const event = events.find(e => toKebabCase(e.name) === eventName);
+        const eventSlug = req.params.eventSlug.toLowerCase();
+
+        // Fetch the event by slug
+        const event = await Event.findOne({ slug: eventSlug }).lean();
 
         if (!event) {
+            req.flash("error", "Event not found.");
             return res.status(404).render("404", { message: "Event not found." });
         }
 
-        const listings = await Listing.find({ event: event.name }).lean();
+        // Check if the event is currently active
+        const currentDate = new Date();
+        if (currentDate < event.activeDates.start || currentDate > event.activeDates.end) {
+            req.flash("error", "This event is not currently active.");
+            return res.redirect("/");
+        }
+
+        // Fetch listings associated with this event
+        const listings = await Listing.find({ event: event._id, isDraft: false }).lean();
 
         const user = req.session.user
             ? await User.findById(req.session.user.id).lean()
