@@ -29,103 +29,103 @@
     <!-- Main Content -->
     <main>
         <!-- Unified Form for Search, Sort, and Filters -->
-        <form id="category-form" method="GET" action="/category/<%= categoryParam || 'all' %>">
-            <!-- Search and Sort Bar -->
-            <div class="search-sort-bar">
-                <input type="text" name="search" class="search-input" placeholder="Search listings..." value="<%= search || '' %>">
+        <!-- views/category.ejs -->
+<form id="category-form" method="GET" action="/category/<%= categoryParam || 'all' %>">
+    <!-- Search and Sort Bar -->
+    <div class="search-sort-bar">
+        <input type="text" name="search" class="search-input" placeholder="Search listings..." value="<%= search || '' %>">
 
-                <div class="sort-dropdown">
-                    <label for="sort">Sort by:</label>
-                    <select id="sort" name="sort">
-                        <option value="">-- Select --</option>
-                        <option value="price-asc" <%= sort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
-                        <option value="price-desc" <%= sort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
-                        <option value="date-newest" <%= sort === 'date-newest' ? 'selected' : '' %>>Date: Newest First</option>
-                        <option value="date-oldest" <%= sort === 'date-oldest' ? 'selected' : '' %>>Date: Oldest First</option>
-                        <!-- Add more sort options as needed -->
-                    </select>
-                </div>
+        <div class="sort-dropdown">
+            <label for="sort">Sort by:</label>
+            <select id="sort" name="sort">
+                <option value="">-- Select --</option>
+                <option value="price-asc" <%= sort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                <option value="price-desc" <%= sort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                <option value="date-newest" <%= sort === 'date-newest' ? 'selected' : '' %>>Date: Newest First</option>
+                <option value="date-oldest" <%= sort === 'date-oldest' ? 'selected' : '' %>>Date: Oldest First</option>
+            </select>
+        </div>
+    </div>
 
-                <button type="submit" class="apply-filters-btn">Apply</button>
-            </div>
+    <!-- Apply Button (moved below search) -->
+    <button type="submit" class="apply-filters-btn">Apply All Filters</button>
 
-            <!-- Container for Filters and Listings -->
-            <div class="category-container">
-                <!-- Sidebar Filters -->
-                <aside class="filters">
-                    <%- include('partials/filters', {
-                        selectedCategories: selectedCategories,
-                        selectedColors: selectedColors,
-                        selectedPrice: selectedPrice,
-                        customPrice: customPrice
-                    }) %>
-                </aside>
+    <!-- Container for Filters and Listings -->
+    <div class="category-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters">
+            <%- include('partials/filters', {
+                selectedCategories: selectedCategories,
+                selectedColors: selectedColors,
+                selectedPrice: selectedPrice,
+                customPrice: customPrice
+            }) %>
+        </aside>
+        
+        <!-- Listings Section -->
+        <section class="category-listings">
+            <h2><%= categoryName %> Listings</h2>
 
-                <!-- Listings Section -->
-                <section class="category-listings">
-                    <h2><%= categoryName %> Listings</h2>
-                    
-                    <!-- Active Filters Display (Optional) -->
-                    <% if (selectedCategories.length > 0 || selectedColors.length > 0 || selectedPrice !== 'all' || customPrice.minPrice || customPrice.maxPrice) { %>
-                        <div class="active-filters">
-                            <h4>Active Filters:</h4>
-                            <ul>
-                                <% selectedCategories.forEach(category => { %>
-                                    <li>Category: <%= category.charAt(0).toUpperCase() + category.slice(1) %> 
-                                        <a href="/category/<%= categoryParam %>?removeCategory=<%= category %>" class="remove-filter">&times;</a>
-                                    </li>
-                                <% }); %>
-                                <% selectedColors.forEach(color => { %>
-                                    <li>Color: <%= color.charAt(0).toUpperCase() + color.slice(1) %> 
-                                        <a href="/category/<%= categoryParam %>?removeColor=<%= color %>" class="remove-filter">&times;</a>
-                                    </li>
-                                <% }); %>
-                                <% if (selectedPrice !== 'all') { %>
-                                    <li>Price: <%= selectedPrice %> 
-                                        <a href="/category/<%= categoryParam %>?removePrice=true" class="remove-filter">&times;</a>
-                                    </li>
-                                <% } %>
-                                <% if (customPrice.minPrice || customPrice.maxPrice) { %>
-                                    <li>Custom Price: <%= customPrice.minPrice || '0' %> - <%= customPrice.maxPrice || '∞' %> 
-                                        <a href="/category/<%= categoryParam %>?removeCustomPrice=true" class="remove-filter">&times;</a>
-                                    </li>
-                                <% } %>
-                            </ul>
-                        </div>
-                    <% } %>
-
-                    <!-- Listing Grid -->
-                    <div class="listing-grid">
-                        <% if (listings && listings.length > 0) { %>
-                            <% listings.forEach(function(listing) { %>
-                                <div class="listing-card">
-                                    <!-- Link for the Listing Image -->
-                                    <a href="/listing/<%= listing._id %>" class="listing-link">
-                                        <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>" class="listing-image">
-                                    </a>
-                                    <div class="listing-info">
-                                        <!-- Link for the Listing Title -->
-                                        <a href="/listing/<%= listing._id %>" class="listing-link">
-                                            <h3 class="listing-title"><%= listing.title %></h3>
-                                        </a>
-                                        <p class="listing-description"><%= listing.description.substring(0, 100) %>...</p>
-                                        <div class="listing-price">
-                                            <span class="current-price">$<%= listing.price.toFixed(2) %></span>
-                                            <% if (listing.originalPrice) { %>
-                                                <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
-                                            <% } %>
-                                        </div>
-                                    </div>
-                                    <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
-                                </div>
-                            <% }); %>
-                        <% } else { %>
-                            <div class="no-listings">No listings available for this category.</div>
+            <!-- Active Filters Display (Optional) -->
+            <% if (selectedCategories.length > 0 || selectedColors.length > 0 || selectedPrice !== 'all' || customPrice.minPrice || customPrice.maxPrice) { %>
+                <div class="active-filters">
+                    <h4>Active Filters:</h4>
+                    <ul>
+                        <% selectedCategories.forEach(category => { %>
+                            <li>Category: <%= category.charAt(0).toUpperCase() + category.slice(1) %> 
+                                <a href="/category/<%= categoryParam %>?removeCategory=<%= category %>" class="remove-filter">&times;</a>
+                            </li>
+                        <% }); %>
+                        <% selectedColors.forEach(color => { %>
+                            <li>Color: <%= color.charAt(0).toUpperCase() + color.slice(1) %> 
+                                <a href="/category/<%= categoryParam %>?removeColor=<%= color %>" class="remove-filter">&times;</a>
+                            </li>
+                        <% }); %>
+                        <% if (selectedPrice !== 'all') { %>
+                            <li>Price: <%= selectedPrice %> 
+                                <a href="/category/<%= categoryParam %>?removePrice=true" class="remove-filter">&times;</a>
+                            </li>
                         <% } %>
-                    </div>
-                </section>
+                        <% if (customPrice.minPrice || customPrice.maxPrice) { %>
+                            <li>Custom Price: <%= customPrice.minPrice || '0' %> - <%= customPrice.maxPrice || '∞' %> 
+                                <a href="/category/<%= categoryParam %>?removeCustomPrice=true" class="remove-filter">&times;</a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <!-- Listing Grid -->
+            <div class="listing-grid">
+                <% if (listings && listings.length > 0) { %>
+                    <% listings.forEach(function(listing) { %>
+                        <div class="listing-card">
+                            <a href="/listing/<%= listing._id %>" class="listing-link">
+                                <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>" class="listing-image">
+                            </a>
+                            <div class="listing-info">
+                                <a href="/listing/<%= listing._id %>" class="listing-link">
+                                    <h3 class="listing-title"><%= listing.title %></h3>
+                                </a>
+                                <p class="listing-description"><%= listing.description.substring(0, 100) %>...</p>
+                                <div class="listing-price">
+                                    <span class="current-price">$<%= listing.price.toFixed(2) %></span>
+                                    <% if (listing.originalPrice) { %>
+                                        <span class="original-price">$<%= listing.originalPrice.toFixed(2) %></span>
+                                    <% } %>
+                                </div>
+                            </div>
+                            <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="no-listings">No listings available for this category.</div>
+                <% } %>
             </div>
-        </form>
+        </section>
+    </div>
+</form>
+
     </main>
 
     <!-- Footer Partial -->
