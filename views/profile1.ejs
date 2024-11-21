@@ -1,3 +1,4 @@
+<!-- views/profile1.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,55 +62,66 @@
             </div>
         </div>
 
-        <div class="search-sort-bar">
-            <form id="favorites-search-sort-form" method="GET" action="/profile1">
-                <input type="text" name="search" class="search-input" placeholder="Search your favorites..." value="">
-        
+        <!-- Unified Form for Search, Sort, and Filters -->
+        <form id="profile1-form" method="GET" action="/user/profile1">
+            <!-- Search and Sort Bar -->
+            <div class="search-sort-bar">
+                <input type="text" name="search" class="search-input" placeholder="Search your favorites..." value="<%= search || '' %>">
+
                 <div class="sort-dropdown">
                     <label for="sort">Sort by:</label>
                     <select id="sort" name="sort">
                         <option value="">-- Select --</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
-                        <option value="date-newest">Date: Newest First</option>
-                        <option value="date-oldest">Date: Oldest First</option>
+                        <option value="price-asc" <%= sort === 'price-asc' ? 'selected' : '' %>>Price: Low to High</option>
+                        <option value="price-desc" <%= sort === 'price-desc' ? 'selected' : '' %>>Price: High to Low</option>
+                        <option value="date-newest" <%= sort === 'date-newest' ? 'selected' : '' %>>Date: Newest First</option>
+                        <option value="date-oldest" <%= sort === 'date-oldest' ? 'selected' : '' %>>Date: Oldest First</option>
                         <!-- Add more sort options as needed -->
                     </select>
                 </div>
-        
-                <button type="submit" class="apply-filters-btn">Apply</button>
-            </form>
-        </div>
-        
-       
-        <div class="category-container">
-            <!-- Sidebar Filters -->
-            <aside class="filters">
-                <form id="category-filter-form" method="GET" action="/category">
-                    <%- include('partials/filters') %>  <!-- Added the filters partial here -->
-                </form>
-            </aside>
 
-            <!-- Product Listings Section -->
-            <div class="index-main-wrapper">
-                <!-- Container for Listings -->
-                <div class="container" style="padding: 0;">
-                    <!-- Product List -->
-                    <div class="product-list">
-                        <% if (listings && listings.length > 0) { %>
-                            <% listings.forEach(listing => { %>
-                                <div class="product-card">
-                                    <a href="/listing/<%= listing._id %>/detail" class="product-link">
-                                        <div class="product-image-container">
-                                            <% if (listing.photos && listing.photos.length > 0) { %>
-                                                <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image" loading="lazy">
-                                            <% } else { %>
-                                                <img src="/media/images/default-listing.jpg" alt="Default Listing Photo" class="product-image" loading="lazy">
-                                            <% } %>
-                                        </div>
+                <button type="submit" class="apply-filters-btn">Apply</button>
+            </div>
+
+            <!-- Container for Filters and Listings -->
+            <div class="category-container">
+                <!-- Sidebar Filters -->
+                <aside class="filters">
+                    <%- include('partials/filters', {
+                        selectedCategories: selectedCategories,
+                        selectedColors: selectedColors,
+                        selectedPrice: selectedPrice,
+                        customPrice: customPrice
+                    }) %>
+                </aside>
+
+                <!-- Product Listings Section -->
+                <div class="index-main-wrapper">
+                    <!-- Container for Listings -->
+                    <div class="container" style="padding: 0;">
+                        <!-- Product List -->
+                        <div class="product-list">
+                            <% if (listings && listings.length > 0) { %>
+                                <% listings.forEach(listing => { %>
+                                    <div class="product-card">
+                                        <!-- Link for the Product Image -->
+                                        <a href="/listing/<%= listing._id %>/detail" class="product-link">
+                                            <div class="product-image-container">
+                                                <% if (listing.photos && listing.photos.length > 0) { %>
+                                                    <img src="<%= listing.photos[0] %>" alt="<%= listing.title %>" class="product-image" loading="lazy">
+                                                <% } else { %>
+                                                    <img src="/media/images/default-listing.jpg" alt="Default Listing Photo" class="product-image" loading="lazy">
+                                                <% } %>
+                                            </div>
+                                        </a>
+                                    
+                                        <!-- Product Information -->
                                         <div class="product-info">
-                                            <h3 class="product-title"><%= listing.title %></h3>
-                                            <p class="product-price">$<%= listing.price %></p>
+                                            <!-- Link for the Product Title -->
+                                            <a href="/listing/<%= listing._id %>/detail" class="product-link">
+                                                <h3 class="product-title"><%= listing.title %></h3>
+                                            </a>
+                                            <p class="product-price">$<%= listing.price.toFixed(2) %></p>
                                             <p class="product-category"><%= listing.category %></p>
                                             <div class="product-user">
                                                 <span class="username"><%= user.name || 'Username' %></span>
@@ -130,16 +142,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
-                                </div>
-                            <% }) %>
-                        <% } else { %>
-                            <p>No listings found.</p>
-                        <% } %>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p>No listings found.</p>
+                            <% } %>
+                        </div>
                     </div>
-                </div>
-            </div>            
-        </div>
+                </div>            
+            </div>
+        </form>
     </main>
 
     <!-- Including footer partial -->
@@ -149,6 +161,5 @@
     <script src="/js/uploadHandler.js"></script>
     <script src="/js/profileToggle.js"></script> <!-- Script to handle filter toggling -->
     <script src="/js/filter.js"></script>
-
 </body>
 </html>
