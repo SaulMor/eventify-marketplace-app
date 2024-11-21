@@ -1,6 +1,8 @@
+/* public/css/filters1.css */
+
 /* Filters Sidebar */
 .filters {
-    width: 250px;
+    width: 100%; /* Make it take full width of the sidebar */
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
