@@ -101,7 +101,8 @@
                 </div>
                 
                 <!-- Buy Now Button -->
-                <button class="buy-now-btn" aria-label="Buy <%= product.title %> Now">Buy Now</button>
+                <a href="/cart/<%= product.id %>" class="buy-now-btn" aria-label="Buy <%= product.title %> Now">Buy Now</a>
+
                 
                 <!-- Quantity Form Field -->
                 <form action="/cart/updateQuantity" method="POST" class="quantity-form">
