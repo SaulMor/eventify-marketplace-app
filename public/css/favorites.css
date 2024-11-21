@@ -110,12 +110,6 @@ body {
     align-items: flex-start; 
 }
 
-/* Sidebar Filters */
-.sidebar {
-    width: 300px;
-    flex-shrink: 0;
-}
-
 /* Product List Section */
 .product-list {
     flex-grow: 1;
@@ -278,28 +272,7 @@ body {
         flex-direction: column;
     }
 
-    .sidebar {
-        width: 100%;
-    }
-
     .product-list {
         grid-template-columns: 1fr;
     }
-}
-
-.category-wrapper,
-.color-group,
-.price-wrapper {
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-    max-height: 500px;
-    opacity: 1;
-    overflow: hidden;
-}
-
-.category-wrapper.hidden-filter,
-.color-group.hidden-filter,
-.price-wrapper.hidden-filter {
-    max-height: 0;
-    opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
 }
