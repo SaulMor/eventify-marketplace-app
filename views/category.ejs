@@ -100,12 +100,12 @@
                             <% listings.forEach(function(listing) { %>
                                 <div class="listing-card">
                                     <!-- Link for the Listing Image -->
-                                    <a href="/listing/<%= listing._id %>/detail" class="listing-link">
+                                    <a href="/listing/<%= listing._id %>" class="listing-link">
                                         <img src="<%= listing.photos[0] || '/media/images/default.jpg' %>" alt="<%= listing.title %>" class="listing-image">
                                     </a>
                                     <div class="listing-info">
                                         <!-- Link for the Listing Title -->
-                                        <a href="/listing/<%= listing._id %>/detail" class="listing-link">
+                                        <a href="/product/<%= listing._id %>/detail" class="listing-link">
                                             <h3 class="listing-title"><%= listing.title %></h3>
                                         </a>
                                         <p class="listing-description"><%= listing.description.substring(0, 100) %>...</p>
@@ -116,7 +116,7 @@
                                             <% } %>
                                         </div>
                                     </div>
-                                    <a href="/listing/<%= listing._id %>/detail" class="btn-view">View Details</a>
+                                    <a href="/listing/<%= listing._id %>" class="btn-view">View Details</a>
                                 </div>
                             <% }); %>
                         <% } else { %>
