@@ -14,6 +14,25 @@ router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) =>
     try {
         const userId = req.session.user.id; // Retrieve user ID from session
 
+        // Extract filter query parameters
+        const searchQuery = req.query.search ? req.query.search.toLowerCase() : "";
+        const sortOption = req.query.sort || "";
+        const selectedCategories = req.query.categories
+            ? Array.isArray(req.query.categories)
+                ? req.query.categories
+                : [req.query.categories]
+            : [];
+        const selectedColors = req.query.colors
+            ? Array.isArray(req.query.colors)
+                ? req.query.colors
+                : [req.query.colors]
+            : [];
+        const selectedPrice = req.query.price || "all";
+        const customPrice = {
+            minPrice: req.query.minPrice || "",
+            maxPrice: req.query.maxPrice || "",
+        };
+
         // Find the user in the local database
         const user = await User.findById(userId).lean();
         if (!user) {
@@ -21,13 +40,94 @@ router.get('/profile1', ensureAuthenticated, csrfProtection, async (req, res) =>
             return res.status(404).redirect('/auth/login');
         }
 
-        // Get only published listings (isDraft: false) posted by the user
-        const listings = await Listing.find({ userId: user._id, isDraft: false }).sort({ updatedAt: -1 }).lean();
+        // Build the query object
+        let query = { userId: user._id, isDraft: false };
+
+        // Apply search filter
+        if (searchQuery) {
+            query.$or = [
+                { title: { $regex: searchQuery, $options: 'i' } },
+                { category: { $regex: searchQuery, $options: 'i' } },
+                { description: { $regex: searchQuery, $options: 'i' } },
+            ];
+        }
+
+        // Apply category filters
+        if (selectedCategories.length > 0) {
+            query.category = { $in: selectedCategories };
+        }
+
+        // Apply color filters using regular expressions
+        if (selectedColors.length > 0) {
+            const colorRegexes = selectedColors.map(color => new RegExp(`\\b${color}\\b`, 'i'));
+            query.color = { $in: colorRegexes };
+        }
+
+        // Apply price filters
+        if (selectedPrice !== "all") {
+            switch (selectedPrice) {
+                case "under25":
+                    query.price = { $lt: 25 };
+                    break;
+                case "25-50":
+                    query.price = { $gte: 25, $lte: 50 };
+                    break;
+                case "50-75":
+                    query.price = { $gte: 50, $lte: 75 };
+                    break;
+                case "100+":
+                    query.price = { $gt: 100 };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Apply custom price range if provided
+        if (customPrice.minPrice && customPrice.maxPrice) {
+            const min = parseFloat(customPrice.minPrice);
+            const max = parseFloat(customPrice.maxPrice);
+            if (!isNaN(min) && !isNaN(max)) {
+                query.price = { ...query.price, $gte: min, $lte: max };
+            }
+        }
+
+        // Fetch listings based on the query
+        let listings = await Listing.find(query).lean();
+
+        // Apply sorting
+        if (sortOption) {
+            switch (sortOption) {
+                case "price-asc":
+                    listings.sort((a, b) => a.price - b.price);
+                    break;
+                case "price-desc":
+                    listings.sort((a, b) => b.price - a.price);
+                    break;
+                case "date-newest":
+                    listings.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+                    break;
+                case "date-oldest":
+                    listings.sort((a, b) => new Date(a.updatedAt) - new Date(b.updatedAt));
+                    break;
+                // Add more sort options as needed
+                default:
+                    break;
+            }
+        }
 
         res.render('profile1', { 
             user, 
             listings, 
-            csrfToken: req.csrfToken() 
+            csrfToken: req.csrfToken(),
+            success: req.flash("success"),
+            error: req.flash("error"),
+            search: req.query.search || "",
+            sort: sortOption,
+            selectedCategories,
+            selectedColors,
+            selectedPrice,
+            customPrice,
         });
     } catch (error) {
         console.error('Error retrieving profile:', error);
