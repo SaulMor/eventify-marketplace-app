@@ -1,0 +1,80 @@
+/* category.css */
+
+/* Styles for the Active Filters Section */
+.active-filters {
+    background-color: #f9f9f9; /* Light background for contrast */
+    border: 1px solid #e0e0e0; /* Subtle border */
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.active-filters h4 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.active-filters ul {
+    list-style: none; /* Remove default list styling */
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+}
+
+.active-filters li {
+    background-color: #e0f7fa; /* Light cyan background */
+    color: #006064; /* Dark cyan text */
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.active-filters li .remove-filter {
+    margin-left: 8px;
+    background-color: #b2ebf2; /* Slightly darker cyan for the remove button */
+    color: #006064;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.active-filters li .remove-filter:hover,
+.active-filters li .remove-filter:focus {
+    background-color: #80deea; /* Darker cyan on hover/focus */
+    color: #004d40;
+}
+
+.active-filters li .remove-filter::after {
+    content: " Remove";
+    display: none;
+}
+
+.active-filters li .remove-filter:hover::after,
+.active-filters li .remove-filter:focus::after {
+    display: inline;
+    margin-left: 5px;
+    font-size: 0.9em;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .active-filters ul {
+        flex-direction: column;
+    }
+
+    .active-filters li {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
