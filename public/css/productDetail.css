@@ -53,7 +53,7 @@ body {
     object-fit: cover;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-        /* Indicates clickable thumbnails */
+    /* Indicates clickable thumbnails */
         border: 2px solid transparent;
         /* For active thumbnail indicator */
         transition: border-color 0.3s ease;
@@ -76,15 +76,15 @@ body {
 .product-image {
     width: 100%;
     max-width: 800px;
-        /* Ensures the image doesn't exceed this width */
+    /* Ensures the image doesn't exceed this width */
         max-height: 600px;
         /* Limits the maximum height */
     height: auto; 
     object-fit: contain;
-        /* Maintains aspect ratio without cropping */
+    /* Maintains aspect ratio without cropping */
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-        /* Optional: Adds rounded corners */
+    /* Optional: Adds rounded corners */
 }
 
 /* Product information */
@@ -318,25 +318,27 @@ body {
     font-size: 1rem;
 }
 
-/* Option Subheading */
-.option-subheading {
-    background-color: #ffffff; 
+/* Shared Styles for Option and Color Boxes */
+.option-box,
+.color-box {
+    background-color: #f1f1f1;
     padding: 5px 10px;
-    font-weight: normal;
     margin-bottom: 5px;
+    border-radius: 4px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Option Box */
-.option-box {
-    background-color: #e0e0e0;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-}
-
-/* Categories: Stack vertically */
-.categories {
+/* Specific styles for Color Box */
+.color-box {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: not-allowed;
+}
+
+/* Hide input within color-box */
+.color-box input {
+    display: none;
 }
 
 /* Colors Options Container */
@@ -346,57 +348,65 @@ body {
     gap: 10px;
 }
 
-/* Color Box */
-.color-box {
-    background-color: #e0e0e0; 
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px; 
-    transition: background-color 0.3s, box-shadow 0.3s;
-    position: relative; 
+.color-circle.color-black {
+    background-color: black;
 }
 
-/* Style the radio input */
-.color-box input {
-    display: none; 
-    cursor: pointer;
+.color-circle.color-white {
+    background-color: white;
+    border: 1px solid #ddd;
+    /* Border for visibility on white */
+}
+
+.color-circle.color-red {
+    background-color: red;
+}
+
+.color-circle.color-orange {
+    background-color: orange;
+}
+
+.color-circle.color-yellow {
+    background-color: yellow;
+}
+
+.color-circle.color-green {
+    background-color: green;
+}
+
+.color-circle.color-blue {
+    background-color: blue;
+}
+
+.color-circle.color-purple {
+    background-color: purple;
+}
+
+.color-circle.color-pink {
+    background-color: pink;
+}
+
+.color-circle.color-gray {
+    background-color: gray;
+}
+
+.color-circle.color-brown {
+    background-color: brown;
+}
+
+.color-circle.color-lightgray {
+    background-color: lightgray;
 }
 
 /* Color Circle */
 .color-circle {
-    width: 15px;
-    height: 15px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    display: inline-block;
-    border: 1px solid #ccc; 
+    border: 1px solid #c9c8c8;
+    cursor: not-allowed;
 }
 
-/* Specific Color Classes */
-.color-circle.white {
-    background-color: #ffffff; 
-    border: 1px solid #ccc; 
-}
-
-.color-circle.blue {
-    background-color: #0000ff; 
-    border: 1px solid #ccc;
-}
-
-.color-circle.red {
-    background-color: #ff0000; 
-    border: 1px solid #ccc;
-}
-
-.color-circle.green {
-    background-color: #00ff00; 
-    border: 1px solid #ccc;
-}
-
-/* Add more color classes as needed */
-
-/* Color Name */
 .color-name {
     font-size: 1rem;
     color: #000;

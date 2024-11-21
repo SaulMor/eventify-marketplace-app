@@ -149,30 +149,32 @@
             <div class="product-options">
                 <!-- Categories Section -->
                 <div class="categories">
-                    <div class="option-subheading">Categories:</div>
+                    <div class="option-subheading">CATEGORIES</div>
                     <div class="option-box"><%= product.category %></div>
                 </div>
                 
                 <!-- Colors Section -->
-                <% if(product.colors && product.colors.length > 0) { %>
+                <% if(product.color && product.color !== 'N/A') { %>
                     <div class="colors">
-                        <div class="option-subheading">Colors:</div>
+                        <div class="option-subheading">COLORS</div>
                         <div class="color-options">
-                            <% product.colors.forEach(function(color) { %>
+                            <% product.color.split(',').forEach(function(color) { %>
                                 <label class="color-box">
                                     <input 
                                         type="radio" 
                                         name="color" 
-                                        value="<%= color %>" 
-                                        aria-label="<%= color %>"
-                                        required
+                                        value="<%= color.trim() %>" 
+                                        aria-label="<%= color.trim() %>"
+                                        disabled
                                     >
-                                    <span class="color-circle <%= color.toLowerCase() %>"></span>
-                                    <span class="color-name"><%= color %></span>
+                                    <span class="color-circle color-<%= color.trim().toLowerCase() %>"></span>
+                                    <span class="color-name"><%= color.trim() %></span>
                                 </label>
                             <% }); %>
                         </div>
                     </div>
+                <% } else { %>
+                    <span>N/A</span>
                 <% } %>
             </div>
         </div>
