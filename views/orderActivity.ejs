@@ -1,97 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta Tags -->
-    <meta charset="UTF-8" /> <!-- Character encoding for the document -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsive design for mobile devices -->
-    <title>Your Order Activity - Eventify</title> <!-- Page title -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Order Activity - Eventify</title>
 
     <!-- ========================= -->
     <!--        CSS Files         -->
     <!-- ========================= -->
-    <link rel="stylesheet" href="/css/header.css" /> <!-- Header styles -->
-    <link rel="stylesheet" href="/css/footer.css" /> <!-- Footer styles -->
-    <link rel="stylesheet" href="/css/orderActivity.css" /> <!-- Order activity styles -->
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/orderActivity.css" />
 
-    <!-- ========================= -->
-    <!--   FontAwesome for Icons  -->
-    <!-- ========================= -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" /> <!-- FontAwesome CDN -->
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-    <!-- ========================= -->
-    <!--    Google Fonts Setup    -->
-    <!-- ========================= -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" /> <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /> <!-- Cross-origin preconnect for fonts -->
-
-    <!-- Font Import -->
-    <link href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap" rel="stylesheet" /> <!-- Import custom font -->
+    <!-- Google Fonts Setup -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lao+Muang+Khong&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-    <%- include('partials/header') %> <!-- Include the header partial -->
+    <%- include('partials/header') %>
 
     <main>
         <div class="container">
-            <!-- ========================= -->
-            <!--     Sidebar Navigation    -->
-            <!-- ========================= -->
+            <!-- Sidebar Navigation -->
             <nav class="sidebar">
-                <h2>Order Activity</h2> <!-- Sidebar title -->
+                <h2>Order Activity</h2>
                 <ul>
-                    <li class="active" onclick="showPurchases()">My Purchases</li> <!-- Active purchase tab -->
-                    <li onclick="showSales()">My Sales</li> <!-- Sales tab -->
+                    <li class="active" onclick="showPurchases()">My Purchases</li>
                     <li><a href="/helpcenter">Help Center</a></li>
-                    
                 </ul>
             </nav>
 
-            <!-- ========================= -->
-            <!--    Main Order Details     -->
-            <!-- ========================= -->
+            <!-- Main Order Details -->
             <div class="order-details" id="orderDetails">
-                <!-- ========================= -->
-                <!--      Purchases Section    -->
-                <!-- ========================= -->
+                <!-- Purchases Section -->
                 <div id="purchases" class="scrollable-section">
-                    <!-- Example Order Card -->
+                    <h2>Your Purchases</h2> <!-- Added header here -->
+                    
                     <div class="order-card">
                         <div class="order-info">
-                            <img src="https://via.placeholder.com/100" alt="Order image" class="order-img" /> <!-- Placeholder image for order -->
+                            <img src="/media/images/weddingdecorwhite.jpg" alt="Wedding Decor White" class="order-img" />
                             <div class="order-text">
-                                <h3>Order Number ######</h3> <!-- Placeholder for order number -->
-                                <p>Title for item (##)</p> <!-- Placeholder for item title -->
-                                <button class="track-btn" disabled>Track Now (Coming Soon)</button> <!-- Disabled track button -->
+                                <h3>Order Number: 123457</h3>
+                                <p>Wedding Decor White</p>
+                                <p>Price: $28.00</p>
                             </div>
                         </div>
                         <div class="order-meta">
-                            <p>Date ##/##/####</p> <!-- Placeholder for order date -->
-                            <p>Shipping: <span class="free">FREE</span></p> <!-- Free shipping indicator -->
-                            <p>Estimated Delivery: 5-8 Business Days</p> <!-- Delivery estimate -->
-                            <button class="rate-btn" disabled>Rate Seller (Coming Soon)</button> <!-- Disabled rate button -->
+                            <p id="orderDate1">Date: 11/20/2024</p>
+                            <p>Shipping: <span class="free">FREE</span></p>
+                            <p>Estimated Delivery: 5-8 Business Days</p>
+                            <!-- Star rating system -->
+                            <div class="star-rating" onclick="openRatingPopup(1)">
+                                <i class="fa fa-star" data-rating="1"></i>
+                                <i class="fa fa-star" data-rating="2"></i>
+                                <i class="fa fa-star" data-rating="3"></i>
+                                <i class="fa fa-star" data-rating="4"></i>
+                                <i class="fa fa-star" data-rating="5"></i>
+                            </div>
                         </div>
                     </div>
+
                     <!-- Repeat Order Cards as Needed -->
                 </div>
 
-                <!-- ========================= -->
-                <!--      Sales Section        -->
-                <!-- ========================= -->
-                <div id="sales" class="scrollable-section" style="display: none;">
+                    
                     <div class="order-card">
                         <div class="order-info">
-                            <img src="https://via.placeholder.com/100" alt="Sale image" class="order-img" /> <!-- Placeholder image for sale -->
+                            <img src="/media/images/birthdayballoonscard.jpg" alt="Birthday Balloons" class="order-img" />
                             <div class="order-text">
-                                <h3>Sale Order Number ######</h3> <!-- Placeholder for sale order number -->
-                                <p>Item Sold (##)</p> <!-- Placeholder for sold item title -->
-                                <button class="track-btn" disabled>Track Sale (Coming Soon)</button> <!-- Disabled track sale button -->
+                                <h3>Order Number: 123456</h3>
+                                <p>Birthday Balloons (25 pcs)</p>
+                                <p>Price: $8.00</p>
                             </div>
                         </div>
                         <div class="order-meta">
-                            <p>Date ##/##/####</p> <!-- Placeholder for sale date -->
-                            <p>Shipping: <span class="free">FREE</span></p> <!-- Free shipping indicator -->
-                            <p>Estimated Delivery: 5-8 Business Days</p> <!-- Delivery estimate -->
-                            <button class="rate-btn" disabled>Rate Buyer (Coming Soon)</button> <!-- Disabled rate button -->
+                            <p id="orderDate2">Date: 11/20/2024</p>
+                            <p>Shipping: <span class="free">FREE</span></p>
+                            <p>Estimated Delivery: 5-8 Business Days</p>
+                            <!-- Star rating system -->
+                            <div class="star-rating" onclick="openRatingPopup(1)">
+                                <i class="fa fa-star" data-rating="1"></i>
+                                <i class="fa fa-star" data-rating="2"></i>
+                                <i class="fa fa-star" data-rating="3"></i>
+                                <i class="fa fa-star" data-rating="4"></i>
+                                <i class="fa fa-star" data-rating="5"></i>
+                            </div>
                         </div>
                     </div>
                     <!-- Repeat Sale Cards as Needed -->
@@ -100,27 +98,16 @@
         </div>
     </main>
 
-    <%- include('partials/footer') %> <!-- Include the footer partial -->
+    <%- include('partials/footer') %>
 
-    <!-- ========================= -->
-    <!--     JavaScript Functions   -->
-    <!-- ========================= -->
+    <!-- JavaScript to dynamically update the date -->
     <script>
-        // Function to display the purchases section
-        function showPurchases() {
-            document.getElementById('purchases').style.display = 'block'; // Show purchases
-            document.getElementById('sales').style.display = 'none'; // Hide sales
-            document.querySelector('.sidebar .active').classList.remove('active'); // Remove active class from current tab
-            document.querySelector('.sidebar ul li:nth-child(1)').classList.add('active'); // Set active class for purchases tab
-        }
+        // Get today's date and format it as 'MM/DD/YYYY'
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString('en-US');
 
-        // Function to display the sales section
-        function showSales() {
-            document.getElementById('purchases').style.display = 'none'; // Hide purchases
-            document.getElementById('sales').style.display = 'block'; // Show sales
-            document.querySelector('.sidebar .active').classList.remove('active'); // Remove active class from current tab
-            document.querySelector('.sidebar ul li:nth-child(2)').classList.add('active'); // Set active class for sales tab
-        }
+        // Set the order date dynamically for orderDate2
+        document.getElementById('orderDate2').innerText = `Date: ${formattedDate}`;
     </script>
 </body>
 </html>

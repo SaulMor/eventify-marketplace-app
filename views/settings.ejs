@@ -27,14 +27,6 @@
             object-fit: cover;
         }
 
-        .upload-input {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
         .profile-photo .photo-icon {
             font-size: 50px;
             color: #888;
@@ -69,16 +61,6 @@
                         <% } else { %>
                             <div class="photo-icon">👤</div>
                         <% } %>
-
-                        <!-- File upload button -->
-                        <form action="/settings" method="POST" enctype="multipart/form-data">
-                            <input 
-                                type="file" 
-                                name="profile-photo" 
-                                id="profile-photo" 
-                                class="upload-input" 
-                                onchange="this.form.submit()" />
-                        </form>
                     </div>
                 </div>
 
@@ -109,25 +91,5 @@
     </div>
 
     <%- include('partials/footer') %>
-
-    <!-- Optional: Preview selected image -->
-    <script>
-        document.getElementById('profile-photo').addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const imgElement = document.querySelector('.profile-photo img') || document.createElement('img');
-                    imgElement.src = e.target.result;
-                    imgElement.alt = "Profile Photo";
-
-                    const profilePhoto = document.querySelector('.profile-photo');
-                    profilePhoto.innerHTML = '';
-                    profilePhoto.appendChild(imgElement);
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-    </script>
 </body>
 </html>
