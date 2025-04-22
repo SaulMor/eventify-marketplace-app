@@ -20,7 +20,6 @@ dist/
 build/
 
 # Uploaded files
-public/uploads/
 
 # Service account keys
 serviceAccountKey.json
